@@ -1,0 +1,266 @@
+/* Sports Betting & Casino Platform Design System */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --radius: 0.75rem;
+    
+    /* Animations */
+    --transition-gaming: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --animation-glow: 0 0 20px hsl(217 91% 60% / 0.5);
+  }
+
+  /* Light Gaming Theme */
+  .light {
+    --background: 0 0% 98%;
+    --foreground: 220 15% 8%;
+    --card: 0 0% 100%;
+    --card-foreground: 220 15% 8%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 15% 8%;
+    
+    /* Keep orange primary for consistency */
+    --primary: 15 100% 50%;
+    --primary-foreground: 0 0% 100%;
+    
+    --secondary: 210 40% 94%;
+    --secondary-foreground: 220 15% 8%;
+    --muted: 210 40% 94%;
+    --muted-foreground: 215 16% 46%;
+    
+    /* Keep green accent */
+    --accent: 142 71% 45%;
+    --accent-foreground: 0 0% 100%;
+    
+    --success: 142 71% 45%;
+    --success-foreground: 0 0% 100%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --gold: 45 100% 51%;
+    --gold-foreground: 220 15% 8%;
+    --warning: 15 100% 50%;
+    --warning-foreground: 0 0% 100%;
+    
+    --border: 214 32% 88%;
+    --input: 214 32% 91%;
+    --ring: 15 100% 50%;
+    
+    /* Light theme gradients - keep gaming colors */
+    --gradient-primary: linear-gradient(135deg, hsl(15 100% 50%), hsl(15 100% 45%));
+    --gradient-success: linear-gradient(135deg, hsl(142 71% 45%), hsl(142 71% 40%));
+    --gradient-gold: linear-gradient(135deg, hsl(45 100% 51%), hsl(38 92% 50%));
+    --gradient-card: linear-gradient(145deg, hsl(0 0% 100%), hsl(210 40% 96%));
+    --gradient-hero: linear-gradient(135deg, hsl(0 0% 98%) 0%, hsl(210 40% 94%) 100%);
+    
+    /* Light gaming shadows */
+    --shadow-gaming: 0 25px 50px -12px hsl(15 100% 50% / 0.2);
+    --shadow-card: 0 10px 30px -10px hsl(220 15% 0% / 0.1);
+    --shadow-gold: 0 10px 30px -10px hsl(45 100% 51% / 0.2);
+    
+    /* Light sidebar */
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 220 15% 8%;
+    --sidebar-primary: 15 100% 50%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 210 40% 96%;
+    --sidebar-accent-foreground: 220 15% 8%;
+    --sidebar-border: 214 32% 88%;
+    --sidebar-ring: 15 100% 50%;
+  }
+
+  /* Dark Gaming Theme (Default) */
+  .dark, :root {
+    --background: 0 0% 6%;
+    --foreground: 210 40% 98%;
+    --card: 0 0% 9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 0 0% 9%;
+    --popover-foreground: 210 40% 98%;
+    
+    /* Orange Primary */
+    --primary: 15 100% 50%;
+    --primary-foreground: 210 40% 98%;
+    
+    --secondary: 0 0% 12%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 0 0% 12%;
+    --muted-foreground: 215 20% 65%;
+    --accent: 142 71% 45%;
+    --accent-foreground: 210 40% 98%;
+    
+    /* Success/Win Green */
+    --success: 142 71% 45%;
+    --success-foreground: 210 40% 98%;
+    
+    /* Danger/Loss Red */
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 210 40% 98%;
+    
+    /* Gold for Premium */
+    --gold: 45 100% 51%;
+    --gold-foreground: 0 0% 6%;
+    
+    /* Warning Orange */
+    --warning: 15 100% 50%;
+    --warning-foreground: 0 0% 6%;
+    
+    --border: 220 15% 20%;
+    --input: 220 15% 18%;
+    --ring: 217 91% 60%;
+    
+    /* Dark gaming gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(217 91% 60%), hsl(217 91% 45%));
+    --gradient-success: linear-gradient(135deg, hsl(142 76% 36%), hsl(142 76% 28%));
+    --gradient-gold: linear-gradient(135deg, hsl(45 100% 51%), hsl(38 92% 50%));
+    --gradient-card: linear-gradient(145deg, hsl(220 15% 12%), hsl(220 15% 8%));
+    --gradient-hero: linear-gradient(135deg, hsl(220 15% 8%) 0%, hsl(217 91% 20%) 100%);
+    
+    /* Dark gaming shadows */
+    --shadow-gaming: 0 25px 50px -12px hsl(217 91% 60% / 0.25);
+    --shadow-card: 0 10px 30px -10px hsl(220 15% 0% / 0.3);
+    --shadow-gold: 0 10px 30px -10px hsl(45 100% 51% / 0.3);
+    
+    /* Dark sidebar */
+    --sidebar-background: 220 15% 8%;
+    --sidebar-foreground: 210 40% 98%;
+    --sidebar-primary: 217 91% 60%;
+    --sidebar-primary-foreground: 210 40% 98%;
+    --sidebar-accent: 220 15% 15%;
+    --sidebar-accent-foreground: 210 40% 98%;
+    --sidebar-border: 220 15% 20%;
+    --sidebar-ring: 217 91% 60%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans;
+    font-family: 'Inter', sans-serif;
+  }
+
+  /* Grid Pattern Background */
+  .bg-grid-pattern {
+    background-image: 
+      linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+    background-size: 20px 20px;
+  }
+
+  /* Gaming Typography */
+  .font-gaming {
+    font-family: 'Orbitron', monospace;
+  }
+
+  /* Custom scrollbar for gaming theme */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: hsl(var(--muted));
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: hsl(var(--primary));
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--primary) / 0.8);
+  }
+}
+
+@layer components {
+  /* Gaming Card Effects */
+  .gaming-card {
+    @apply bg-gradient-to-br from-card to-muted border border-border rounded-xl;
+    @apply transition-all duration-300 hover:shadow-lg hover:shadow-primary/20;
+    @apply hover:border-primary/30;
+  }
+
+  .gaming-card-premium {
+    @apply gaming-card relative overflow-hidden;
+    background: linear-gradient(145deg, hsl(var(--card)), hsl(var(--muted)));
+  }
+
+  .gaming-card-premium::before {
+    content: '';
+    @apply absolute inset-0 bg-gradient-to-r from-primary/5 to-accent/5;
+    @apply opacity-0 transition-opacity duration-300;
+  }
+
+  .gaming-card-premium:hover::before {
+    @apply opacity-100;
+  }
+
+  /* Glowing Effects */
+  .glow-primary {
+    box-shadow: 0 0 20px hsl(var(--primary) / 0.3);
+  }
+
+  .glow-success {
+    box-shadow: 0 0 20px hsl(var(--success) / 0.3);
+  }
+
+  .glow-gold {
+    box-shadow: 0 0 20px hsl(var(--gold) / 0.3);
+  }
+
+  /* Betting Odds Styling */
+  .odds-positive {
+    @apply text-success font-semibold;
+  }
+
+  .odds-negative {
+    @apply text-destructive font-semibold;
+  }
+
+  .odds-neutral {
+    @apply text-primary font-semibold;
+  }
+
+  /* Live Indicator */
+  .live-indicator {
+    @apply animate-pulse;
+    animation: live-pulse 2s infinite;
+  }
+
+  @keyframes live-pulse {
+    0%, 100% { 
+      box-shadow: 0 0 0 0 hsl(var(--destructive) / 0.7);
+    }
+    70% {
+      box-shadow: 0 0 0 10px hsl(var(--destructive) / 0);
+    }
+  }
+
+  /* Gaming Animations */
+  .gaming-hover {
+    @apply transition-all duration-300 hover:scale-105 hover:shadow-lg;
+  }
+
+  .gaming-hover:hover {
+    transform: translateY(-2px) scale(1.02);
+  }
+
+  /* Gradient Text */
+  .gradient-text-primary {
+    background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent)));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .gradient-text-gold {
+    background: linear-gradient(135deg, hsl(var(--gold)), hsl(var(--warning)));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+}
