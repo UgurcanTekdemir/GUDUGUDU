@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button';
 import { Facebook, Twitter, Instagram, Youtube, Mail, Phone, MessageCircle, Shield, Award, Clock } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import bankLogoCompact from '@/assets/bank-logo-compact.png';
-import { useI18n } from '@/hooks/useI18n';
+import { useI18n } from '../../hooks/useI18n';
 const Footer = () => {
   const { currentLanguage, t } = useI18n();
   return <footer className="bg-black text-white">
@@ -17,16 +17,10 @@ const Footer = () => {
           <strong style={{
           color: '#fbb204'
         }}>
-            {currentLanguage === 'tr' 
-              ? 'Gudubet™ | Önde Gelen Casino ve Bahis Platformu'
-              : 'Gudubet™ | Leading Casino and Betting Platform'
-            }
+            {t('footer.banner.title', 'Gudubet™ | Leading Casino and Betting Platform')}
           </strong>
           <br />
-          {currentLanguage === 'tr'
-            ? 'Gudubet ile en iyi casino ve bahis deneyimini yaşayın! 2000 TL hoş geldin bonusuyla hemen kazanmaya başlayın.'
-            : 'Experience the best casino and betting with Gudubet! Start winning with 2000 TL welcome bonus.'
-          }
+          {t('footer.banner.subtitle', 'Experience the best casino and betting with Gudubet! Start winning with 2000 TL welcome bonus.')}
         </div>
       </div>
 
@@ -36,39 +30,39 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
           {/* Email */}
           <div>
-            <div className="text-orange-400 text-sm mb-2">EMAIL</div>
+            <div className="text-orange-400 text-sm mb-2">{t('footer.contact.email', 'EMAIL')}</div>
             <div className="text-orange-400">support@gudubet.com</div>
           </div>
 
           {/* Legal/General Rules */}
           <div>
             <h3 className="text-orange-400 text-lg font-semibold mb-4 border-b border-orange-400 pb-2">
-              {currentLanguage === 'tr' ? 'Genel Kurallar' : 'Legal & Rules'}
+              {t('footer.legal.title', 'Legal & Rules')}
             </h3>
             <div className="space-y-2 text-sm">
               <Link 
                 to="/terms-and-conditions"
                 className="block hover:text-orange-400 transition-colors cursor-pointer"
               >
-                {currentLanguage === 'tr' ? 'Kurallar ve Şartlar' : 'Terms & Conditions'}
+                {t('footer.legal.terms', 'Terms & Conditions')}
               </Link>
               <Link 
                 to="/privacy-policy"
                 className="block hover:text-orange-400 transition-colors cursor-pointer"
               >
-                {currentLanguage === 'tr' ? 'Gizlilik Politikası' : 'Privacy Policy'}
+                {t('footer.legal.privacy', 'Privacy Policy')}
               </Link>
               <Link 
                 to="/cookie-policy"
                 className="block hover:text-orange-400 transition-colors cursor-pointer"
               >
-                {currentLanguage === 'tr' ? 'Çerez Politikası' : 'Cookie Policy'}
+                {t('footer.legal.cookies', 'Cookie Policy')}
               </Link>
               <Link 
                 to="/partnership"
                 className="block hover:text-orange-400 transition-colors cursor-pointer"
               >
-                {currentLanguage === 'tr' ? 'Ortaklık' : 'Partnership'}
+                {t('footer.legal.partnership', 'Partnership')}
               </Link>
             </div>
             <div className="space-y-2 text-sm mt-4">
@@ -76,13 +70,13 @@ const Footer = () => {
                 to="/responsible-gaming"
                 className="block hover:text-orange-400 transition-colors cursor-pointer"
               >
-                {currentLanguage === 'tr' ? 'Sorumlu Oyun' : 'Responsible Gaming'}
+                {t('footer.legal.responsibleGaming', 'Responsible Gaming')}
               </Link>
               <Link 
                 to="/age-warning"
                 className="block hover:text-orange-400 transition-colors cursor-pointer"
               >
-                {currentLanguage === 'tr' ? '18+ Yaş Uyarısı' : '18+ Age Warning'}
+                {t('footer.legal.ageWarning', '18+ Age Warning')}
               </Link>
             </div>
           </div>
@@ -90,26 +84,26 @@ const Footer = () => {
           {/* About Us */}
           <div>
             <h3 className="text-orange-400 text-lg font-semibold mb-4 border-b border-orange-400 pb-2">
-              {currentLanguage === 'tr' ? 'Hakkımızda' : 'About Us'}
+              {t('footer.about.title', 'About Us')}
             </h3>
             <div className="space-y-2 text-sm">
               <Link 
                 to="/contact-us"
                 className="block hover:text-orange-400 transition-colors cursor-pointer"
               >
-                {currentLanguage === 'tr' ? 'Bize ulaşın' : 'Contact Us'}
+                {t('footer.about.contact', 'Contact Us')}
               </Link>
               <Link 
                 to="/help-center"
                 className="block hover:text-orange-400 transition-colors cursor-pointer"
               >
-                {currentLanguage === 'tr' ? 'Gudubet Yardım Merkezi' : 'Gudubet Help Center'}
+                {t('footer.about.helpCenter', 'Gudubet Help Center')}
               </Link>
               <Link 
                 to="/betting-rules"
                 className="block hover:text-orange-400 transition-colors cursor-pointer"
               >
-                {currentLanguage === 'tr' ? 'Bahis Kuralları' : 'Betting Rules'}
+                {t('footer.about.bettingRules', 'Betting Rules')}
               </Link>
             </div>
             

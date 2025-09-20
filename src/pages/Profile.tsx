@@ -27,6 +27,7 @@ import {
   Save
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { useI18n } from '@/hooks/useI18n';
 import { supabase } from '@/integrations/supabase/client';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/sections/Footer';
@@ -70,6 +71,7 @@ const Profile = () => {
     confirm: false
   });
   const { toast } = useToast();
+  const { t } = useI18n();
   const navigate = useNavigate();
   
   // Get the current session user for loss bonus
@@ -255,7 +257,7 @@ const Profile = () => {
               <h1 className="text-2xl sm:text-3xl font-bold">
                 {profile?.first_name || profile?.last_name 
                   ? `${profile.first_name || ''} ${profile.last_name || ''}`.trim()
-                  : 'Kullanıcı Profili'
+                  : t('profile.user_profile')
                 }
               </h1>
               <p className="text-muted-foreground">{user.email}</p>
@@ -269,12 +271,12 @@ const Profile = () => {
               <DropdownMenuTrigger asChild>
                 <Button variant="outline" className="w-full justify-between">
                   <span className="flex items-center gap-2">
-                    {activeTab === 'general' && <><User className="w-4 h-4" /> Genel Bilgiler</>}
-                    {activeTab === 'security' && <><Shield className="w-4 h-4" /> Güvenlik</>}
-                    {activeTab === 'financial' && <><Wallet className="w-4 h-4" /> Finansal</>}
-                    {activeTab === 'history' && <><History className="w-4 h-4" /> Geçmiş</>}
-                    {activeTab === 'bonuses' && <><Gift className="w-4 h-4" /> Bonuslar</>}
-                    {activeTab === 'settings' && <><Settings className="w-4 h-4" /> Ayarlar</>}
+                    {activeTab === 'general' && <><User className="w-4 h-4" /> {t('profile.general_info')}</>}
+                    {activeTab === 'security' && <><Shield className="w-4 h-4" /> {t('profile.security')}</>}
+                    {activeTab === 'financial' && <><Wallet className="w-4 h-4" /> {t('profile.financial')}</>}
+                    {activeTab === 'history' && <><History className="w-4 h-4" /> {t('profile.history')}</>}
+                    {activeTab === 'bonuses' && <><Gift className="w-4 h-4" /> {t('profile.bonuses')}</>}
+                    {activeTab === 'settings' && <><Settings className="w-4 h-4" /> {t('profile.settings')}</>}
                   </span>
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
@@ -284,27 +286,27 @@ const Profile = () => {
               <DropdownMenuContent className="w-full bg-background border shadow-lg">
                 <DropdownMenuItem onClick={() => setActiveTab('general')} className="cursor-pointer">
                   <User className="w-4 h-4 mr-2" />
-                  Genel Bilgiler
+                  {t('profile.general_info')}
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => setActiveTab('security')} className="cursor-pointer">
                   <Shield className="w-4 h-4 mr-2" />
-                  Güvenlik
+                  {t('profile.security')}
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => setActiveTab('financial')} className="cursor-pointer">
                   <Wallet className="w-4 h-4 mr-2" />
-                  Finansal
+                  {t('profile.financial')}
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => setActiveTab('history')} className="cursor-pointer">
                   <History className="w-4 h-4 mr-2" />
-                  Geçmiş
+                  {t('profile.history')}
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => setActiveTab('bonuses')} className="cursor-pointer">
                   <Gift className="w-4 h-4 mr-2" />
-                  Bonuslar
+                  {t('profile.bonuses')}
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => setActiveTab('settings')} className="cursor-pointer">
                   <Settings className="w-4 h-4 mr-2" />
-                  Ayarlar
+                  {t('profile.settings')}
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -316,7 +318,7 @@ const Profile = () => {
               <CardHeader className="flex flex-col space-y-4 sm:flex-row sm:items-center sm:justify-between sm:space-y-0 pt-32">
                 <CardTitle className="flex items-center gap-2 text-lg">
                   <User className="w-5 h-5" />
-                  Kişisel Bilgiler
+                  {t('profile.personal_info')}
                 </CardTitle>
                 <Button 
                   variant="outline" 
@@ -328,12 +330,12 @@ const Profile = () => {
                   {isEditing ? (
                     <>
                       <Save className="w-4 h-4 mr-2" />
-                      {saving ? 'Kaydediliyor...' : 'Kaydet'}
+                      {saving ? t('profile.saving') : t('profile.save')}
                     </>
                   ) : (
                     <>
                       <Edit className="w-4 h-4 mr-2" />
-                      Düzenle
+                      {t('profile.edit')}
                     </>
                   )}
                 </Button>
@@ -341,7 +343,7 @@ const Profile = () => {
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="firstName">Ad</Label>
+                    <Label htmlFor="firstName">{t('profile.first_name')}</Label>
                     <Input
                       id="firstName"
                       value={profile?.first_name || ''}
@@ -350,7 +352,7 @@ const Profile = () => {
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="lastName">Soyad</Label>
+                    <Label htmlFor="lastName">{t('profile.last_name')}</Label>
                     <Input
                       id="lastName"
                       value={profile?.last_name || ''}
@@ -361,7 +363,7 @@ const Profile = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="email">E-posta</Label>
+                  <Label htmlFor="email">{t('profile.email')}</Label>
                   <div className="flex items-center gap-2">
                     <Input
                       id="email"
@@ -371,11 +373,11 @@ const Profile = () => {
                     />
                     <CheckCircle className="w-5 h-5 text-green-500" />
                   </div>
-                  <p className="text-sm text-muted-foreground">E-posta adresi değiştirilemez</p>
+                  <p className="text-sm text-muted-foreground">{t('profile.email_cannot_change')}</p>
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="phone">Telefon Numarası</Label>
+                  <Label htmlFor="phone">{t('profile.phone_number')}</Label>
                   <div className="flex items-center gap-2">
                     <Input
                       id="phone"
@@ -387,13 +389,13 @@ const Profile = () => {
                     {profile?.phone_verified ? (
                       <CheckCircle className="w-5 h-5 text-green-500" />
                     ) : (
-                      <Button variant="outline" size="sm">Doğrula</Button>
+                      <Button variant="outline" size="sm">{t('profile.verify')}</Button>
                     )}
                   </div>
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="birthDate">Doğum Tarihi</Label>
+                  <Label htmlFor="birthDate">{t('profile.birth_date')}</Label>
                   <Input
                     id="birthDate"
                     type="date"
@@ -407,31 +409,31 @@ const Profile = () => {
 
                 <h3 className="font-semibold flex items-center gap-2">
                   <MapPin className="w-4 h-4" />
-                  Adres Bilgileri
+                  {t('profile.address_info')}
                 </h3>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="country">Ülke</Label>
+                    <Label htmlFor="country">{t('profile.country')}</Label>
                     <Select 
                       value={profile?.country || ''} 
                       onValueChange={(value) => setProfile(prev => prev ? {...prev, country: value} : null)}
                       disabled={!isEditing}
                     >
                       <SelectTrigger>
-                        <SelectValue placeholder="Ülke seçiniz" />
+                        <SelectValue placeholder={profile?.country ? undefined : t('profile.select_country')} />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="turkey">Türkiye</SelectItem>
-                        <SelectItem value="usa">Amerika Birleşik Devletleri</SelectItem>
-                        <SelectItem value="germany">Almanya</SelectItem>
-                        <SelectItem value="france">Fransa</SelectItem>
-                        <SelectItem value="uk">Birleşik Krallık</SelectItem>
+                        <SelectItem value="turkey">{t('profile.country_turkey')}</SelectItem>
+                        <SelectItem value="usa">{t('profile.country_usa')}</SelectItem>
+                        <SelectItem value="germany">{t('profile.country_germany')}</SelectItem>
+                        <SelectItem value="france">{t('profile.country_france')}</SelectItem>
+                        <SelectItem value="uk">{t('profile.country_uk')}</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="city">Şehir</Label>
+                    <Label htmlFor="city">{t('profile.city')}</Label>
                     <Input
                       id="city"
                       value={profile?.city || ''}
@@ -442,7 +444,7 @@ const Profile = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="address">Adres</Label>
+                  <Label htmlFor="address">{t('profile.address')}</Label>
                   <Input
                     id="address"
                     value={profile?.address || ''}
@@ -452,7 +454,7 @@ const Profile = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="postalCode">Posta Kodu</Label>
+                  <Label htmlFor="postalCode">{t('profile.postal_code')}</Label>
                   <Input
                     id="postalCode"
                     value={profile?.postal_code || ''}
@@ -470,12 +472,12 @@ const Profile = () => {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Shield className="w-5 h-5" />
-                  Şifre Değiştirme
+                  {t('profile.change_password')}
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="currentPassword">Mevcut Şifre</Label>
+                  <Label htmlFor="currentPassword">{t('profile.current_password')}</Label>
                   <div className="relative">
                     <Input
                       id="currentPassword"
@@ -495,7 +497,7 @@ const Profile = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="newPassword">Yeni Şifre</Label>
+                  <Label htmlFor="newPassword">{t('profile.new_password')}</Label>
                   <div className="relative">
                     <Input
                       id="newPassword"
@@ -515,7 +517,7 @@ const Profile = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="confirmPassword">Yeni Şifre Tekrar</Label>
+                  <Label htmlFor="confirmPassword">{t('profile.confirm_new_password')}</Label>
                   <div className="relative">
                     <Input
                       id="confirmPassword"
@@ -535,25 +537,25 @@ const Profile = () => {
                 </div>
 
                 <Button onClick={handlePasswordChange} className="w-full">
-                  Şifreyi Güncelle
+                  {t('profile.update_password')}
                 </Button>
               </CardContent>
             </Card>
 
             <Card>
               <CardHeader>
-                <CardTitle>İki Adımlı Doğrulama</CardTitle>
+                <CardTitle>{t('profile.two_factor_auth')}</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="font-medium">2FA Durumu</p>
-                    <p className="text-sm text-muted-foreground">Hesabınız için ek güvenlik</p>
+                    <p className="font-medium">{t('profile.two_factor_status')}</p>
+                    <p className="text-sm text-muted-foreground">{t('profile.additional_security')}</p>
                   </div>
-                  <Badge variant="outline">Kapalı</Badge>
+                  <Badge variant="outline">{t('profile.disabled')}</Badge>
                 </div>
                 <Button variant="outline" className="mt-4">
-                  2FA'yı Etkinleştir
+                  {t('profile.enable_2fa')}
                 </Button>
               </CardContent>
             </Card>
@@ -566,22 +568,22 @@ const Profile = () => {
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <Wallet className="w-5 h-5" />
-                    Bakiye
+                    {t('profile.balance')}
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
                     <div className="flex justify-between items-center">
-                      <span>Gerçek Bakiye</span>
+                      <span>{t('profile.real_balance')}</span>
                       <span className="font-bold text-lg">₺0.00</span>
                     </div>
                     <div className="flex justify-between items-center">
-                      <span>Bonus Bakiye</span>
+                      <span>{t('profile.bonus_balance')}</span>
                       <span className="font-bold text-lg text-green-600">₺0.00</span>
                     </div>
                     <Separator />
                     <div className="flex justify-between items-center">
-                      <span className="font-semibold">Toplam</span>
+                      <span className="font-semibold">{t('profile.total')}</span>
                       <span className="font-bold text-xl">₺0.00</span>
                     </div>
                   </div>
@@ -590,7 +592,7 @@ const Profile = () => {
 
               <Card>
                 <CardHeader>
-                  <CardTitle>Hızlı İşlemler</CardTitle>
+                  <CardTitle>{t('profile.quick_actions')}</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-3">
                   <Button 
@@ -598,21 +600,21 @@ const Profile = () => {
                     variant="default"
                     onClick={() => navigate('/user/deposit')}
                   >
-                    Para Yatır
+                    {t('profile.deposit')}
                   </Button>
                   <Button 
                     className="w-full" 
                     variant="outline"
                     onClick={() => navigate('/user/withdraw')}
                   >
-                    Para Çek
+                    {t('profile.withdraw')}
                   </Button>
                   <Button 
                     className="w-full" 
                     variant="secondary"
                     onClick={() => navigate('/deposit-withdrawal')}
                   >
-                    İşlem Geçmişi
+                    {t('profile.transaction_history')}
                   </Button>
                 </CardContent>
               </Card>
@@ -625,13 +627,13 @@ const Profile = () => {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <History className="w-5 h-5" />
-                  Bahis & Oyun Geçmişi
+                  {t('profile.betting_game_history')}
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="text-center py-8">
                   <History className="w-12 h-12 mx-auto text-muted-foreground mb-4" />
-                  <p className="text-muted-foreground">Henüz bahis geçmişiniz bulunmuyor</p>
+                  <p className="text-muted-foreground">{t('profile.no_betting_history')}</p>
                 </div>
               </CardContent>
             </Card>
@@ -644,7 +646,7 @@ const Profile = () => {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Gift className="w-5 h-5" />
-                  Kayıp Bonusu
+                  {t('profile.loss_bonus')}
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -654,10 +656,9 @@ const Profile = () => {
                       <div className="flex items-center gap-3">
                         <Gift className="w-8 h-8 text-green-600" />
                         <div className="flex-1">
-                          <h4 className="font-semibold text-green-800">Kayıp Bonusunuz Hazır!</h4>
+                          <h4 className="font-semibold text-green-800">{t('profile.loss_bonus_ready')}</h4>
                           <p className="text-green-600 text-sm">
-                            Son 30 günde ₺{lossBonusData.totalLoss} kayıp yaşadınız. 
-                            %20 kayıp bonusu hakkınız: <strong>₺{lossBonusData.bonusAmount}</strong>
+                            {t('profile.loss_bonus_description').replace('{0}', lossBonusData.totalLoss.toString()).replace('{1}', lossBonusData.bonusAmount.toString())}
                           </p>
                         </div>
                       </div>
@@ -667,15 +668,15 @@ const Profile = () => {
                       disabled={isClaimingLossBonus}
                       className="w-full"
                     >
-                      {isClaimingLossBonus ? 'Bonus Alınıyor...' : `₺${lossBonusData.bonusAmount} Kayıp Bonusu Al`}
+                      {isClaimingLossBonus ? t('profile.claiming_bonus') : `${lossBonusData.bonusAmount} ${t('profile.claim_loss_bonus')}`}
                     </Button>
                   </div>
                 ) : (
                   <div className="text-center py-8">
                     <Gift className="w-12 h-12 mx-auto text-muted-foreground mb-4" />
-                    <p className="text-muted-foreground mb-2">Kayıp bonusu hakkınız bulunmuyor</p>
+                    <p className="text-muted-foreground mb-2">{t('profile.no_loss_bonus')}</p>
                     <p className="text-sm text-muted-foreground">
-                      Oyunlarda kayıp yaşadığınızda %20 kayıp bonusu hakkı kazanırsınız
+                      {t('profile.loss_bonus_info')}
                     </p>
                   </div>
                 )}
@@ -687,13 +688,13 @@ const Profile = () => {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Gift className="w-5 h-5" />
-                  Aktif Bonuslar
+                  {t('profile.active_bonuses')}
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="text-center py-8">
                   <Gift className="w-12 h-12 mx-auto text-muted-foreground mb-4" />
-                  <p className="text-muted-foreground">Aktif bonusunuz bulunmuyor</p>
+                  <p className="text-muted-foreground">{t('profile.no_active_bonuses')}</p>
                 </div>
               </CardContent>
             </Card>
@@ -705,30 +706,30 @@ const Profile = () => {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Settings className="w-5 h-5" />
-                  Uygulama Ayarları
+                  {t('profile.app_settings')}
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="font-medium">Dil</p>
-                    <p className="text-sm text-muted-foreground">Uygulama dili</p>
+                    <p className="font-medium">{t('profile.language')}</p>
+                    <p className="text-sm text-muted-foreground">{t('profile.app_language')}</p>
                   </div>
                   <Select defaultValue="tr">
                     <SelectTrigger className="w-32">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="tr">Türkçe</SelectItem>
-                      <SelectItem value="en">English</SelectItem>
+                      <SelectItem value="tr">{t('profile.turkish')}</SelectItem>
+                      <SelectItem value="en">{t('profile.english')}</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
 
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="font-medium">Para Birimi</p>
-                    <p className="text-sm text-muted-foreground">Varsayılan para birimi</p>
+                    <p className="font-medium">{t('profile.currency')}</p>
+                    <p className="text-sm text-muted-foreground">{t('profile.default_currency')}</p>
                   </div>
                   <Select defaultValue="try">
                     <SelectTrigger className="w-32">
@@ -744,17 +745,17 @@ const Profile = () => {
 
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="font-medium">Tema</p>
-                    <p className="text-sm text-muted-foreground">Arayüz teması</p>
+                    <p className="font-medium">{t('profile.theme')}</p>
+                    <p className="text-sm text-muted-foreground">{t('profile.interface_theme')}</p>
                   </div>
                   <Select defaultValue="system">
                     <SelectTrigger className="w-32">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="light">Açık</SelectItem>
-                      <SelectItem value="dark">Koyu</SelectItem>
-                      <SelectItem value="system">Sistem</SelectItem>
+                      <SelectItem value="light">{t('profile.light')}</SelectItem>
+                      <SelectItem value="dark">{t('profile.dark')}</SelectItem>
+                      <SelectItem value="system">{t('profile.system')}</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -763,14 +764,14 @@ const Profile = () => {
 
             <Card>
               <CardHeader>
-                <CardTitle className="text-red-600">Tehlikeli Alan</CardTitle>
+                <CardTitle className="text-red-600">{t('profile.danger_zone')}</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <Button variant="outline" className="w-full">
-                  Hesabı Geçici Dondur
+                  {t('profile.suspend_account')}
                 </Button>
                 <Button variant="destructive" className="w-full">
-                  Hesabı Kalıcı Kapat
+                  {t('profile.close_account_permanently')}
                 </Button>
               </CardContent>
             </Card>

@@ -14,6 +14,7 @@ import {
   History,
   Clock
 } from 'lucide-react';
+import { useI18n } from '@/hooks/useI18n';
 
 interface BetSelection {
   matchId: string;
@@ -59,6 +60,7 @@ const BettingSlip: React.FC<BettingSlipProps> = ({
   potentialWin,
   isMobile = false
 }) => {
+  const { t } = useI18n();
   const [isExpanded, setIsExpanded] = useState(false);
 
   const quickStakeAmounts = [10, 25, 50, 100, 250, 500];
@@ -75,7 +77,7 @@ const BettingSlip: React.FC<BettingSlipProps> = ({
             <div className="flex items-center gap-2">
               <Receipt className="w-5 h-5 text-primary" />
               <span className="font-semibold">
-                {activeTab === 'betslip' ? 'Kupon' : 'Bahislerim'}
+                {activeTab === 'betslip' ? t('betting.slip', 'Bet Slip') : t('betting.myBets', 'My Bets')}
               </span>
               <Badge variant="secondary">
                 {activeTab === 'betslip' ? betSlip.length : confirmedBets.length}
@@ -239,7 +241,7 @@ const BettingSlip: React.FC<BettingSlipProps> = ({
       <CardHeader className="pb-3">
         <CardTitle className="flex items-center gap-2">
           <Receipt className="w-5 h-5 text-primary" />
-          Bahis Kuponu
+{t('betting.slip', 'Bet Slip')}
         </CardTitle>
       </CardHeader>
       
@@ -248,7 +250,7 @@ const BettingSlip: React.FC<BettingSlipProps> = ({
           <TabsList className="grid w-full grid-cols-2 mx-auto my-4 mb-0 max-w-md">
             <TabsTrigger value="betslip" className="flex items-center gap-2">
               <Receipt className="w-4 h-4" />
-              Kupon
+              {t('betting.slip', 'Bet Slip')}
               {betSlip.length > 0 && (
                 <Badge variant="secondary" className="ml-1">
                   {betSlip.length}
@@ -257,7 +259,7 @@ const BettingSlip: React.FC<BettingSlipProps> = ({
             </TabsTrigger>
             <TabsTrigger value="mybets" className="flex items-center gap-2">
               <History className="w-4 h-4" />
-              Bahislerim
+              {t('betting.myBets', 'My Bets')}
               {confirmedBets.length > 0 && (
                 <Badge variant="secondary" className="ml-1">
                   {confirmedBets.length}
@@ -271,7 +273,7 @@ const BettingSlip: React.FC<BettingSlipProps> = ({
             {betSlip.length === 0 ? (
               <div className="text-center py-8 text-muted-foreground">
                 <Calculator className="w-8 h-8 mx-auto mb-2 opacity-50" />
-                <p className="text-sm">Bahis yapmak için oranlara tıklayın</p>
+                <p className="text-sm">{t('betting.clickOddsToBet', 'Click on odds to place bets')}</p>
               </div>
             ) : (
               <>
@@ -387,8 +389,8 @@ const BettingSlip: React.FC<BettingSlipProps> = ({
             {confirmedBets.length === 0 ? (
               <div className="text-center py-8 text-muted-foreground">
                 <History className="w-8 h-8 mx-auto mb-2 opacity-50" />
-                <p className="text-sm">Henüz onaylanmış bahsiniz bulunmuyor</p>
-                <p className="text-xs mt-1">Bahis yapmak için "Kupon" sekmesini kullanın</p>
+                <p className="text-sm">{t('betting.noConfirmedBets', 'No confirmed bets yet')}</p>
+                <p className="text-xs mt-1">{t('betting.useBetSlipTab', 'Use the "Bet Slip" tab to place bets')}</p>
               </div>
             ) : (
               <div className="space-y-3 max-h-96 overflow-y-auto">
@@ -396,7 +398,7 @@ const BettingSlip: React.FC<BettingSlipProps> = ({
                   <div key={bet.id} className="p-4 bg-muted rounded-lg">
                     <div className="flex justify-between items-start mb-3">
                       <div>
-                        <p className="font-medium text-sm">Bahis #{bet.id.slice(-4)}</p>
+                        <p className="font-medium text-sm">{t('betting.betNumber', 'Bet')} #{bet.id.slice(-4)}</p>
                         <div className="flex items-center gap-1 text-xs text-muted-foreground">
                           <Clock className="w-3 h-3" />
                           {bet.date}
@@ -404,8 +406,8 @@ const BettingSlip: React.FC<BettingSlipProps> = ({
                       </div>
                       <Badge 
                         variant={
-                          bet.status === 'Kazandı' ? 'default' : 
-                          bet.status === 'Kaybetti' ? 'destructive' : 
+                          bet.status === t('betting.won', 'Won') ? 'default' : 
+                          bet.status === t('betting.lost', 'Lost') ? 'destructive' : 
                           'secondary'
                         }
                         className="text-xs"

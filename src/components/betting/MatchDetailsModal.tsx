@@ -18,6 +18,7 @@ import {
   Activity,
   Zap
 } from 'lucide-react';
+import { useI18n } from '@/hooks/useI18n';
 
 interface LiveMatch {
   id: string;
@@ -59,6 +60,7 @@ const MatchDetailsModal: React.FC<MatchDetailsModalProps> = ({
   isOpen,
   onClose
 }) => {
+  const { t } = useI18n();
   if (!match) return null;
 
   const getSportIcon = (sportType: string) => {
@@ -78,39 +80,39 @@ const MatchDetailsModal: React.FC<MatchDetailsModalProps> = ({
   // Group odds by market type with expanded betting markets
   const expandedOdds: LiveOdds[] = [
     // Match Result (1X2)
-    { id: '1', market_type: '1X2', market_name: 'Maç Sonucu', selection: '1', selection_name: match.home_team, odds_value: 2.45, is_active: true },
-    { id: '2', market_type: '1X2', market_name: 'Maç Sonucu', selection: 'X', selection_name: 'Beraberlik', odds_value: 3.20, is_active: true },
-    { id: '3', market_type: '1X2', market_name: 'Maç Sonucu', selection: '2', selection_name: match.away_team, odds_value: 2.85, is_active: true },
+    { id: '1', market_type: '1X2', market_name: t('betting.markets.matchResult', 'Match Result'), selection: '1', selection_name: match.home_team, odds_value: 2.45, is_active: true },
+    { id: '2', market_type: '1X2', market_name: t('betting.markets.matchResult', 'Match Result'), selection: 'X', selection_name: t('sports.draw', 'Draw'), odds_value: 3.20, is_active: true },
+    { id: '3', market_type: '1X2', market_name: t('betting.markets.matchResult', 'Match Result'), selection: '2', selection_name: match.away_team, odds_value: 2.85, is_active: true },
     
     // Double Chance
-    { id: '4', market_type: 'DC', market_name: 'Çifte Şans', selection: '1X', selection_name: `${match.home_team} veya Beraberlik`, odds_value: 1.32, is_active: true },
-    { id: '5', market_type: 'DC', market_name: 'Çifte Şans', selection: '12', selection_name: `${match.home_team} veya ${match.away_team}`, odds_value: 1.24, is_active: true },
-    { id: '6', market_type: 'DC', market_name: 'Çifte Şans', selection: 'X2', selection_name: `Beraberlik veya ${match.away_team}`, odds_value: 1.58, is_active: true },
+    { id: '4', market_type: 'DC', market_name: t('betting.markets.doubleChance', 'Double Chance'), selection: '1X', selection_name: `${match.home_team} ${t('common.or', 'or')} ${t('sports.draw', 'Draw')}`, odds_value: 1.32, is_active: true },
+    { id: '5', market_type: 'DC', market_name: t('betting.markets.doubleChance', 'Double Chance'), selection: '12', selection_name: `${match.home_team} ${t('common.or', 'or')} ${match.away_team}`, odds_value: 1.24, is_active: true },
+    { id: '6', market_type: 'DC', market_name: t('betting.markets.doubleChance', 'Double Chance'), selection: 'X2', selection_name: `${t('sports.draw', 'Draw')} ${t('common.or', 'or')} ${match.away_team}`, odds_value: 1.58, is_active: true },
     
     // Over/Under 2.5 Goals
-    { id: '7', market_type: 'O/U', market_name: 'Toplam Gol 2.5', selection: 'Over', selection_name: 'Üst 2.5', odds_value: 1.85, is_active: true },
-    { id: '8', market_type: 'O/U', market_name: 'Toplam Gol 2.5', selection: 'Under', selection_name: 'Alt 2.5', odds_value: 1.95, is_active: true },
+    { id: '7', market_type: 'O/U', market_name: t('betting.markets.totalGoals2_5', 'Total Goals 2.5'), selection: 'Over', selection_name: t('betting.selections.over2_5', 'Over 2.5'), odds_value: 1.85, is_active: true },
+    { id: '8', market_type: 'O/U', market_name: t('betting.markets.totalGoals2_5', 'Total Goals 2.5'), selection: 'Under', selection_name: t('betting.selections.under2_5', 'Under 2.5'), odds_value: 1.95, is_active: true },
     
     // Over/Under 1.5 Goals
-    { id: '9', market_type: 'O/U1.5', market_name: 'Toplam Gol 1.5', selection: 'Over', selection_name: 'Üst 1.5', odds_value: 1.25, is_active: true },
-    { id: '10', market_type: 'O/U1.5', market_name: 'Toplam Gol 1.5', selection: 'Under', selection_name: 'Alt 1.5', odds_value: 3.75, is_active: true },
+    { id: '9', market_type: 'O/U1.5', market_name: t('betting.markets.totalGoals1_5', 'Total Goals 1.5'), selection: 'Over', selection_name: t('betting.selections.over1_5', 'Over 1.5'), odds_value: 1.25, is_active: true },
+    { id: '10', market_type: 'O/U1.5', market_name: t('betting.markets.totalGoals1_5', 'Total Goals 1.5'), selection: 'Under', selection_name: t('betting.selections.under1_5', 'Under 1.5'), odds_value: 3.75, is_active: true },
     
     // Over/Under 3.5 Goals
-    { id: '11', market_type: 'O/U3.5', market_name: 'Toplam Gol 3.5', selection: 'Over', selection_name: 'Üst 3.5', odds_value: 3.45, is_active: true },
-    { id: '12', market_type: 'O/U3.5', market_name: 'Toplam Gol 3.5', selection: 'Under', selection_name: 'Alt 3.5', odds_value: 1.28, is_active: true },
+    { id: '11', market_type: 'O/U3.5', market_name: t('betting.markets.totalGoals3_5', 'Total Goals 3.5'), selection: 'Over', selection_name: t('betting.selections.over3_5', 'Over 3.5'), odds_value: 3.45, is_active: true },
+    { id: '12', market_type: 'O/U3.5', market_name: t('betting.markets.totalGoals3_5', 'Total Goals 3.5'), selection: 'Under', selection_name: t('betting.selections.under3_5', 'Under 3.5'), odds_value: 1.28, is_active: true },
     
     // Both Teams to Score
-    { id: '13', market_type: 'BTTS', market_name: 'Karşılıklı Gol', selection: 'Yes', selection_name: 'Evet', odds_value: 1.65, is_active: true },
-    { id: '14', market_type: 'BTTS', market_name: 'Karşılıklı Gol', selection: 'No', selection_name: 'Hayır', odds_value: 2.15, is_active: true },
+    { id: '13', market_type: 'BTTS', market_name: t('betting.markets.bothTeamsToScore', 'Both Teams to Score'), selection: 'Yes', selection_name: t('common.yes', 'Yes'), odds_value: 1.65, is_active: true },
+    { id: '14', market_type: 'BTTS', market_name: t('betting.markets.bothTeamsToScore', 'Both Teams to Score'), selection: 'No', selection_name: t('common.no', 'No'), odds_value: 2.15, is_active: true },
     
     // First Half Result
-    { id: '15', market_type: '1H', market_name: 'İlk Yarı Sonucu', selection: '1', selection_name: match.home_team, odds_value: 2.80, is_active: true },
-    { id: '16', market_type: '1H', market_name: 'İlk Yarı Sonucu', selection: 'X', selection_name: 'Beraberlik', odds_value: 2.25, is_active: true },
-    { id: '17', market_type: '1H', market_name: 'İlk Yarı Sonucu', selection: '2', selection_name: match.away_team, odds_value: 3.15, is_active: true },
+    { id: '15', market_type: '1H', market_name: t('betting.markets.firstHalfResult', 'First Half Result'), selection: '1', selection_name: match.home_team, odds_value: 2.80, is_active: true },
+    { id: '16', market_type: '1H', market_name: t('betting.markets.firstHalfResult', 'First Half Result'), selection: 'X', selection_name: t('sports.draw', 'Draw'), odds_value: 2.25, is_active: true },
+    { id: '17', market_type: '1H', market_name: t('betting.markets.firstHalfResult', 'First Half Result'), selection: '2', selection_name: match.away_team, odds_value: 3.15, is_active: true },
     
     // Handicap Asian -1
-    { id: '18', market_type: 'AH', market_name: 'Asya Handikap (-1)', selection: '1', selection_name: `${match.home_team} (-1)`, odds_value: 3.85, is_active: true },
-    { id: '19', market_type: 'AH', market_name: 'Asya Handikap (-1)', selection: '2', selection_name: `${match.away_team} (+1)`, odds_value: 1.25, is_active: true },
+    { id: '18', market_type: 'AH', market_name: t('betting.markets.asianHandicapMinus1', 'Asian Handicap (-1)'), selection: '1', selection_name: `${match.home_team} (-1)`, odds_value: 3.85, is_active: true },
+    { id: '19', market_type: 'AH', market_name: t('betting.markets.asianHandicapMinus1', 'Asian Handicap (-1)'), selection: '2', selection_name: `${match.away_team} (+1)`, odds_value: 1.25, is_active: true },
     
     // Correct Score
     { id: '20', market_type: 'CS', market_name: 'Doğru Skor', selection: '1-0', selection_name: '1-0', odds_value: 8.50, is_active: true },
@@ -130,23 +132,23 @@ const MatchDetailsModal: React.FC<MatchDetailsModalProps> = ({
     { id: '32', market_type: 'HT/FT', market_name: 'İlk Yarı / Maç Sonucu', selection: '2/2', selection_name: `${match.away_team}/${match.away_team}`, odds_value: 4.15, is_active: true },
     
     // Team Total Goals
-    { id: '33', market_type: 'TTG', market_name: `${match.home_team} Toplam Gol`, selection: 'Over1.5', selection_name: 'Üst 1.5', odds_value: 2.65, is_active: true },
-    { id: '34', market_type: 'TTG', market_name: `${match.home_team} Toplam Gol`, selection: 'Under1.5', selection_name: 'Alt 1.5', odds_value: 1.45, is_active: true },
-    { id: '35', market_type: 'TTG2', market_name: `${match.away_team} Toplam Gol`, selection: 'Over1.5', selection_name: 'Üst 1.5', odds_value: 3.15, is_active: true },
-    { id: '36', market_type: 'TTG2', market_name: `${match.away_team} Toplam Gol`, selection: 'Under1.5', selection_name: 'Alt 1.5', odds_value: 1.32, is_active: true },
+    { id: '33', market_type: 'TTG', market_name: `${match.home_team} ${t('betting.markets.totalGoals', 'Total Goals')}`, selection: 'Over1.5', selection_name: t('betting.selections.over1_5', 'Over 1.5'), odds_value: 2.65, is_active: true },
+    { id: '34', market_type: 'TTG', market_name: `${match.home_team} ${t('betting.markets.totalGoals', 'Total Goals')}`, selection: 'Under1.5', selection_name: t('betting.selections.under1_5', 'Under 1.5'), odds_value: 1.45, is_active: true },
+    { id: '35', market_type: 'TTG2', market_name: `${match.away_team} ${t('betting.markets.totalGoals', 'Total Goals')}`, selection: 'Over1.5', selection_name: t('betting.selections.over1_5', 'Over 1.5'), odds_value: 3.15, is_active: true },
+    { id: '36', market_type: 'TTG2', market_name: `${match.away_team} ${t('betting.markets.totalGoals', 'Total Goals')}`, selection: 'Under1.5', selection_name: t('betting.selections.under1_5', 'Under 1.5'), odds_value: 1.32, is_active: true },
     
     // Cards
-    { id: '37', market_type: 'Cards', market_name: 'Toplam Kart 3.5', selection: 'Over', selection_name: 'Üst 3.5', odds_value: 1.75, is_active: true },
-    { id: '38', market_type: 'Cards', market_name: 'Toplam Kart 3.5', selection: 'Under', selection_name: 'Alt 3.5', odds_value: 2.05, is_active: true },
+    { id: '37', market_type: 'Cards', market_name: t('betting.markets.totalCards3_5', 'Total Cards 3.5'), selection: 'Over', selection_name: t('betting.selections.over3_5', 'Over 3.5'), odds_value: 1.75, is_active: true },
+    { id: '38', market_type: 'Cards', market_name: t('betting.markets.totalCards3_5', 'Total Cards 3.5'), selection: 'Under', selection_name: t('betting.selections.under3_5', 'Under 3.5'), odds_value: 2.05, is_active: true },
     
     // Corners
-    { id: '39', market_type: 'Corners', market_name: 'Toplam Korner 9.5', selection: 'Over', selection_name: 'Üst 9.5', odds_value: 1.85, is_active: true },
-    { id: '40', market_type: 'Corners', market_name: 'Toplam Korner 9.5', selection: 'Under', selection_name: 'Alt 9.5', odds_value: 1.95, is_active: true },
+    { id: '39', market_type: 'Corners', market_name: t('betting.markets.totalCorners9_5', 'Total Corners 9.5'), selection: 'Over', selection_name: t('betting.selections.over9_5', 'Over 9.5'), odds_value: 1.85, is_active: true },
+    { id: '40', market_type: 'Corners', market_name: t('betting.markets.totalCorners9_5', 'Total Corners 9.5'), selection: 'Under', selection_name: t('betting.selections.under9_5', 'Under 9.5'), odds_value: 1.95, is_active: true },
     
     // Next Goal
-    { id: '41', market_type: 'NextGoal', market_name: 'Sonraki Gol', selection: '1', selection_name: match.home_team, odds_value: 1.95, is_active: true },
-    { id: '42', market_type: 'NextGoal', market_name: 'Sonraki Gol', selection: '2', selection_name: match.away_team, odds_value: 2.45, is_active: true },
-    { id: '43', market_type: 'NextGoal', market_name: 'Sonraki Gol', selection: 'None', selection_name: 'Gol Olmaz', odds_value: 4.25, is_active: true },
+    { id: '41', market_type: 'NextGoal', market_name: t('betting.markets.nextGoal', 'Next Goal'), selection: '1', selection_name: match.home_team, odds_value: 1.95, is_active: true },
+    { id: '42', market_type: 'NextGoal', market_name: t('betting.markets.nextGoal', 'Next Goal'), selection: '2', selection_name: match.away_team, odds_value: 2.45, is_active: true },
+    { id: '43', market_type: 'NextGoal', market_name: t('betting.markets.nextGoal', 'Next Goal'), selection: 'None', selection_name: t('betting.selections.noGoal', 'No Goal'), odds_value: 4.25, is_active: true },
   ];
 
   const allOdds = [...match.odds, ...expandedOdds];
@@ -173,7 +175,7 @@ const MatchDetailsModal: React.FC<MatchDetailsModalProps> = ({
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Maç Detayları</DialogTitle>
+          <DialogTitle>{t('matchDetails.title', 'Match Details')}</DialogTitle>
         </DialogHeader>
 
         <div className="space-y-6">
@@ -190,7 +192,7 @@ const MatchDetailsModal: React.FC<MatchDetailsModalProps> = ({
                 </div>
                 <div className="flex items-center gap-2 text-muted-foreground">
                   <Users className="w-4 h-4" />
-                  <span>{match.viewers_count?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') || '0'} izleyici</span>
+                  <span>{match.viewers_count?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') || '0'} {t('liveBetting.viewers', 'viewers')}</span>
                 </div>
               </div>
 
@@ -226,15 +228,15 @@ const MatchDetailsModal: React.FC<MatchDetailsModalProps> = ({
             <TabsList className="grid w-full grid-cols-3">
               <TabsTrigger value="odds">
                 <TrendingUp className="w-4 h-4 mr-2" />
-                Oranlar
+{t('matchDetails.odds', 'Odds')}
               </TabsTrigger>
               <TabsTrigger value="stats">
                 <BarChart3 className="w-4 h-4 mr-2" />
-                İstatistikler
+{t('matchDetails.statistics', 'Statistics')}
               </TabsTrigger>
               <TabsTrigger value="live">
                 <Activity className="w-4 h-4 mr-2" />
-                Canlı Takip
+{t('matchDetails.liveTracking', 'Live Tracking')}
               </TabsTrigger>
             </TabsList>
 
@@ -267,13 +269,13 @@ const MatchDetailsModal: React.FC<MatchDetailsModalProps> = ({
             <TabsContent value="stats" className="space-y-4">
               <Card>
                 <CardHeader>
-                  <CardTitle>Maç İstatistikleri</CardTitle>
+                  <CardTitle>{t('matchDetails.matchStatistics', 'Match Statistics')}</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   {/* Possession */}
                   <div>
                     <div className="flex justify-between items-center mb-2">
-                      <span className="text-sm font-medium">Top Kontrolü</span>
+                      <span className="text-sm font-medium">{t('matchDetails.ballPossession', 'Ball Possession')}</span>
                       <span className="text-sm text-muted-foreground">
                         {mockStats.possession.home}% - {mockStats.possession.away}%
                       </span>
@@ -290,27 +292,27 @@ const MatchDetailsModal: React.FC<MatchDetailsModalProps> = ({
                   <div className="grid grid-cols-2 gap-4">
                     <div className="text-center p-3 bg-muted rounded-lg">
                       <div className="text-2xl font-bold">{mockStats.shots.home}</div>
-                      <div className="text-sm text-muted-foreground">Şut</div>
+                      <div className="text-sm text-muted-foreground">{t('matchDetails.shots', 'Shots')}</div>
                     </div>
                     <div className="text-center p-3 bg-muted rounded-lg">
                       <div className="text-2xl font-bold">{mockStats.shots.away}</div>
-                      <div className="text-sm text-muted-foreground">Şut</div>
+                      <div className="text-sm text-muted-foreground">{t('matchDetails.shots', 'Shots')}</div>
                     </div>
                     <div className="text-center p-3 bg-muted rounded-lg">
                       <div className="text-2xl font-bold">{mockStats.shotsOnTarget.home}</div>
-                      <div className="text-sm text-muted-foreground">İsabetli Şut</div>
+                      <div className="text-sm text-muted-foreground">{t('matchDetails.shotsOnTarget', 'Shots on Target')}</div>
                     </div>
                     <div className="text-center p-3 bg-muted rounded-lg">
                       <div className="text-2xl font-bold">{mockStats.shotsOnTarget.away}</div>
-                      <div className="text-sm text-muted-foreground">İsabetli Şut</div>
+                      <div className="text-sm text-muted-foreground">{t('matchDetails.shotsOnTarget', 'Shots on Target')}</div>
                     </div>
                     <div className="text-center p-3 bg-muted rounded-lg">
                       <div className="text-2xl font-bold">{mockStats.corners.home}</div>
-                      <div className="text-sm text-muted-foreground">Korner</div>
+                      <div className="text-sm text-muted-foreground">{t('matchDetails.corners', 'Corners')}</div>
                     </div>
                     <div className="text-center p-3 bg-muted rounded-lg">
                       <div className="text-2xl font-bold">{mockStats.corners.away}</div>
-                      <div className="text-sm text-muted-foreground">Korner</div>
+                      <div className="text-sm text-muted-foreground">{t('matchDetails.corners', 'Corners')}</div>
                     </div>
                   </div>
                 </CardContent>

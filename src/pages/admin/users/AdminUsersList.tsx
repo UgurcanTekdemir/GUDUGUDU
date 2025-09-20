@@ -9,6 +9,7 @@ import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { useI18n } from '@/hooks/useI18n';
 
 interface AdminUser {
   id: string;
@@ -19,6 +20,7 @@ interface AdminUser {
 }
 
 export default function AdminUsersList() {
+  const { t } = useI18n();
   const [users, setUsers] = useState<AdminUser[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(false);
@@ -130,7 +132,7 @@ export default function AdminUsersList() {
             <div className="flex-1 relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
               <Input
-                placeholder="Search by email..."
+                placeholder={t('admin.users.searchPlaceholder', 'Search by email...')}
                 className="pl-10"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
@@ -138,7 +140,7 @@ export default function AdminUsersList() {
               />
             </div>
             <Button onClick={loadUsers} disabled={loading}>
-              {loading ? 'Searching...' : 'Search'}
+              {loading ? t('admin.users.searching', 'Searching...') : t('admin.users.search', 'Search')}
             </Button>
           </div>
         </CardContent>
@@ -195,7 +197,7 @@ export default function AdminUsersList() {
                     <TableCell>
                       {user.last_login_at 
                         ? new Date(user.last_login_at).toLocaleString()
-                        : 'Never'
+                        : t('admin.users.never', 'Never')
                       }
                     </TableCell>
                     <TableCell className="text-right">

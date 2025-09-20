@@ -137,7 +137,7 @@ export const Bonuses: React.FC = () => {
                       }}
                       disabled={!bonusCode.trim() || claimBonus.isPending}
                     >
-                      {claimBonus.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Talep Et'}
+                      {claimBonus.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : t('casino.claim', 'Claim')}
                     </Button>
                   </div>
                 </div>

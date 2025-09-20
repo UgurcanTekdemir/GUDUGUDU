@@ -5,6 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { ExternalGameFrame } from './ExternalGameFrame';
 import { Play, Star, Zap } from 'lucide-react';
+import { useI18n } from '@/hooks/useI18n';
 
 interface DemoGame {
   id: string;
@@ -141,6 +142,7 @@ export const DemoGameProvider: React.FC<DemoGameProviderProps> = ({
   showFeatured = false,
   limit
 }) => {
+  const { t } = useI18n();
   const [selectedGame, setSelectedGame] = useState<DemoGame | null>(null);
   const [gameDialogOpen, setGameDialogOpen] = useState(false);
 
@@ -200,7 +202,7 @@ export const DemoGameProvider: React.FC<DemoGameProviderProps> = ({
                     className="bg-orange-600 hover:bg-orange-700 text-white"
                   >
                     <Play className="w-4 h-4 mr-2" />
-                    Demo Oyna
+                    {t('casino.demoPlay', 'Demo Play')}
                   </Button>
                 </div>
                 
@@ -240,7 +242,7 @@ export const DemoGameProvider: React.FC<DemoGameProviderProps> = ({
                 className="w-full bg-orange-600 hover:bg-orange-700 text-white"
               >
                 <Play className="w-4 h-4 mr-2" />
-                Demo Oyna
+                {t('casino.demoPlay', 'Demo Play')}
               </Button>
             </CardContent>
           </Card>

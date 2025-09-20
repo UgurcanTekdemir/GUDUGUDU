@@ -5,6 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { Play, Users, Star, Crown } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/sections/Footer';
+import { useI18n } from '@/hooks/useI18n';
 
 interface LiveTable {
   id: string;
@@ -20,13 +21,14 @@ interface LiveTable {
 }
 
 const LiveCasino = () => {
+  const { t } = useI18n();
   const [selectedGame, setSelectedGame] = useState<string>('all');
 
   const gameCategories = [
-    { id: 'all', name: 'Hepsi', icon: '🎮' },
-    { id: 'roulette', name: 'Rulet', icon: '🎯' },
-    { id: 'blackjack', name: 'Blackjack', icon: '🃏' },
-    { id: 'baccarat', name: 'Baccarat', icon: '💎' },
+    { id: 'all', name: t('casino.all', 'All'), icon: '🎮' },
+    { id: 'roulette', name: t('casino.roulette', 'Roulette'), icon: '🎯' },
+    { id: 'blackjack', name: t('casino.blackjack', 'Blackjack'), icon: '🃏' },
+    { id: 'baccarat', name: t('casino.baccarat', 'Baccarat'), icon: '💎' },
   ];
 
   const liveTables: LiveTable[] = [
@@ -82,23 +84,23 @@ const LiveCasino = () => {
         <div className="relative z-10 h-full flex items-center justify-center text-center text-white px-4">
           <div>
             <h1 className="text-4xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-yellow-400 to-orange-500 bg-clip-text text-transparent">
-              CANLI CASİNO
+              {t('casino.liveCasino', 'Live Casino')}
             </h1>
             <p className="text-xl md:text-2xl mb-6 text-white/90">
-              Gerçek krupiyerlerle canlı casino deneyimi
+              {t('casino.realDealersLiveExperience', 'Live casino experience with real dealers')}
             </p>
             <div className="flex justify-center items-center gap-6 mb-6">
               <div className="flex items-center gap-2">
                 <Users className="w-5 h-5" />
-                <span>{liveTables.reduce((sum, table) => sum + table.viewers, 0).toLocaleString()} aktif oyuncu</span>
+                <span>{liveTables.reduce((sum, table) => sum + table.viewers, 0).toLocaleString()} {t('casino.activePlayers', 'active players')}</span>
               </div>
               <div className="flex items-center gap-2">
                 <Play className="w-5 h-5" />
-                <span>{liveTables.length} masa</span>
+                <span>{liveTables.length} {t('casino.tables', 'tables')}</span>
               </div>
             </div>
             <Button size="lg" className="bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-black font-bold">
-              Şimdi Oyna
+              {t('casino.playNow', 'Play Now')}
             </Button>
           </div>
         </div>
@@ -137,7 +139,7 @@ const LiveCasino = () => {
                 
                 <div className="absolute top-3 left-3">
                   <Badge className="bg-red-500 text-white animate-pulse">
-                    🔴 CANLI
+                    🔴 {t('casino.live', 'LIVE')}
                   </Badge>
                 </div>
                 
@@ -145,7 +147,7 @@ const LiveCasino = () => {
                   <div className="absolute top-3 right-3">
                     <Badge className="bg-gradient-to-r from-yellow-500 to-orange-500 text-black font-bold">
                       <Crown className="w-3 h-3 mr-1" />
-                      VIP
+                      {t('casino.vip', 'VIP')}
                     </Badge>
                   </div>
                 )}
@@ -160,20 +162,20 @@ const LiveCasino = () => {
                 <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                   <Button size="lg" className="bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600">
                     <Play className="w-5 h-5 mr-2" />
-                    Masaya Katıl
+                    {t('casino.joinTable', 'Join Table')}
                   </Button>
                 </div>
               </div>
               
               <CardContent className="p-4">
                 <h3 className="text-white font-semibold text-center">{table.name}</h3>
-                <p className="text-gray-400 text-sm text-center">Krupiye: {table.dealer}</p>
+                <p className="text-gray-400 text-sm text-center">{t('casino.dealer', 'Dealer')}: {table.dealer}</p>
                 <div className="flex justify-between items-center text-sm text-gray-400 mb-3">
-                  <span>Min: ₺{table.minBet}</span>
-                  <span>Max: ₺{table.maxBet.toLocaleString()}</span>
+                  <span>{t('casino.min', 'Min')}: ₺{table.minBet}</span>
+                  <span>{t('casino.max', 'Max')}: ₺{table.maxBet.toLocaleString()}</span>
                 </div>
                 <Button className="w-full bg-gradient-to-r from-primary to-accent hover:opacity-90">
-                  Oyna
+                  {t('casino.play', 'Play')}
                 </Button>
               </CardContent>
             </Card>

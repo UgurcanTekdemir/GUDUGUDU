@@ -10,6 +10,7 @@ import { useCasinoGames } from '@/hooks/useCasinoGames';
 import { useGameFavorites } from '@/hooks/useGameFavorites';
 import { Play, Star, TrendingUp, Sparkles, Heart } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useI18n } from '@/hooks/useI18n';
 
 interface FilterOptions {
   category: string;
@@ -23,6 +24,7 @@ interface FilterOptions {
 }
 
 const Casino = () => {
+  const { t } = useI18n();
   const navigate = useNavigate();
   
   const {
@@ -107,23 +109,23 @@ const Casino = () => {
             <div className="absolute inset-0 bg-gradient-to-r from-black/30 to-transparent" />
             <div className="relative z-10">
               <h1 className="text-4xl md:text-6xl font-gaming font-bold mb-4">
-                🎰 Casino
+                🎰 {t('pages.casino.title', 'Casino')}
               </h1>
               <p className="text-xl md:text-2xl mb-6 text-white/90">
-                En iyi slot oyunları ve casino deneyimi
+{t('pages.casino.subtitle', 'Best slot games and casino experience')}
               </p>
               <div className="flex items-center gap-4 flex-wrap">
                 <Badge className="bg-yellow-500 text-black">
                   <Star className="w-3 h-3 mr-1" />
-                  {featuredGames.length} Öne Çıkan Oyun
+{t('casino.featuredGames', 'Featured Games')}
                 </Badge>
                 <Badge className="bg-green-500">
                   <Sparkles className="w-3 h-3 mr-1" />
-                  {newGames.length} Yeni Oyun
+{t('casino.newGames', 'New Games')}
                 </Badge>
                 <Badge className="bg-blue-500">
                   <TrendingUp className="w-3 h-3 mr-1" />
-                  {popularGames.length} Popüler Oyun
+{t('casino.popularGames', 'Popular Games')}
                 </Badge>
               </div>
             </div>
@@ -136,14 +138,14 @@ const Casino = () => {
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <h2 className="text-2xl font-bold text-white mb-2">🎮 Demo Oyunlar</h2>
-                  <p className="text-gray-300">NetEnt, EGT ve Pragmatic Play oyunlarını ücretsiz deneyin</p>
+                  <h2 className="text-2xl font-bold text-white mb-2">🎮 {t('casino.demoGames', 'Demo Games')}</h2>
+                  <p className="text-gray-300">{t('casino.tryPopularCasinoGames', 'Try the most popular casino games for free')}</p>
                 </div>
                 <Button 
                   onClick={() => navigate('/demo-games')}
                   className="bg-orange-600 hover:bg-orange-700 text-white"
                 >
-                  Tüm Demo Oyunlar
+                  {t('casino.all', 'All')} {t('casino.demoGames', 'Demo Games')}
                 </Button>
               </div>
             </CardContent>
@@ -159,8 +161,8 @@ const Casino = () => {
             >
               <CardContent className="p-6 text-center">
                 <Star className="w-8 h-8 mx-auto mb-2 text-yellow-500 group-hover:scale-110 transition-transform" />
-                <h3 className="font-semibold text-white">Öne Çıkan</h3>
-                <p className="text-sm text-gray-400">{featuredGames.length} oyun</p>
+                <h3 className="font-semibold text-white">{t('casino.featured', 'Featured')}</h3>
+                <p className="text-sm text-gray-400">{featuredGames.length} {t('casino.games', 'games')}</p>
               </CardContent>
             </Card>
 
@@ -170,8 +172,8 @@ const Casino = () => {
             >
               <CardContent className="p-6 text-center">
                 <TrendingUp className="w-8 h-8 mx-auto mb-2 text-blue-500 group-hover:scale-110 transition-transform" />
-                <h3 className="font-semibold text-white">Popüler</h3>
-                <p className="text-sm text-gray-400">{popularGames.length} oyun</p>
+                <h3 className="font-semibold text-white">{t('casino.popular', 'Popular')}</h3>
+                <p className="text-sm text-gray-400">{popularGames.length} {t('casino.games', 'games')}</p>
               </CardContent>
             </Card>
 
@@ -181,8 +183,8 @@ const Casino = () => {
             >
               <CardContent className="p-6 text-center">
                 <Sparkles className="w-8 h-8 mx-auto mb-2 text-green-500 group-hover:scale-110 transition-transform" />
-                <h3 className="font-semibold text-white">Yeni Oyunlar</h3>
-                <p className="text-sm text-gray-400">{newGames.length} oyun</p>
+                <h3 className="font-semibold text-white">{t('casino.newGames', 'New Games')}</h3>
+                <p className="text-sm text-gray-400">{newGames.length} {t('casino.games', 'games')}</p>
               </CardContent>
             </Card>
 
@@ -192,8 +194,8 @@ const Casino = () => {
             >
               <CardContent className="p-6 text-center">
                 <Heart className="w-8 h-8 mx-auto mb-2 text-red-500 group-hover:scale-110 transition-transform" />
-                <h3 className="font-semibold text-white">Favorilerim</h3>
-                <p className="text-sm text-gray-400">{favorites.length} oyun</p>
+                <h3 className="font-semibold text-white">{t('casino.myFavorites', 'My Favorites')}</h3>
+                <p className="text-sm text-gray-400">{favorites.length} {t('casino.games', 'games')}</p>
               </CardContent>
             </Card>
           </div>
@@ -229,7 +231,7 @@ const Casino = () => {
             
             {getActiveFiltersCount() > 0 && (
               <Button variant="outline" onClick={clearFilters}>
-                Filtreleri Temizle ({getActiveFiltersCount()})
+{t('casino.clearFilters', 'Clear Filters')} ({getActiveFiltersCount()})
               </Button>
             )}
           </div>
@@ -239,7 +241,7 @@ const Casino = () => {
               id: game.id,
               name: game.name,
               slug: game.slug,
-              provider: game.provider || 'Unknown',
+              provider: game.provider || t('casino.unknownProvider', 'Unknown'),
               category: game.category || 'slot',
               thumbnail_url: game.thumbnail_url,
               rtp_percentage: game.rtp_percentage,
@@ -264,15 +266,15 @@ const Casino = () => {
         {!loading && filteredGames.length === 0 && (
           <div className="text-center py-12">
             <Play className="mx-auto h-16 w-16 text-gray-600 mb-4" />
-            <h3 className="text-xl font-semibold mb-2 text-white">Oyun bulunamadı</h3>
+            <h3 className="text-xl font-semibold mb-2 text-white">{t('casino.noGamesFound', 'No games found')}</h3>
             <p className="text-gray-400 mb-4">
               {searchTerm 
-                ? `"${searchTerm}" aramanız için sonuç bulunamadı.`
-                : 'Seçtiğiniz filtrelere uygun oyun bulunmuyor.'
+                ? t('casino.noSearchResults', 'No results found for your search.')
+                : t('casino.noGamesFound', 'No games found matching your filters.')
               }
             </p>
             <Button onClick={clearFilters} variant="outline">
-              Filtreleri Temizle
+{t('casino.clearFilters', 'Clear Filters')}
             </Button>
           </div>
         )}
@@ -283,28 +285,28 @@ const Casino = () => {
             <Card className="bg-gray-900 border-gray-700">
               <CardContent className="p-6 text-center">
                 <div className="text-2xl font-bold text-white mb-2">{games.length}</div>
-                <div className="text-sm text-gray-400">Toplam Oyun</div>
+                <div className="text-sm text-gray-400">{t('casino.totalGames', 'Total Games')}</div>
               </CardContent>
             </Card>
             
             <Card className="bg-gray-900 border-gray-700">
               <CardContent className="p-6 text-center">
                 <div className="text-2xl font-bold text-white mb-2">{providers.length}</div>
-                <div className="text-sm text-gray-400">Oyun Sağlayıcısı</div>
+                <div className="text-sm text-gray-400">{t('casino.gameProviders', 'Game Providers')}</div>
               </CardContent>
             </Card>
             
             <Card className="bg-gray-900 border-gray-700">
               <CardContent className="p-6 text-center">
                 <div className="text-2xl font-bold text-white mb-2">{featuredGames.length}</div>
-                <div className="text-sm text-gray-400">Öne Çıkan Oyun</div>
+                <div className="text-sm text-gray-400">{t('casino.featuredGamesCount', 'Featured Games')}</div>
               </CardContent>
             </Card>
             
             <Card className="bg-gray-900 border-gray-700">
               <CardContent className="p-6 text-center">
                 <div className="text-2xl font-bold text-white mb-2">{favorites.length}</div>
-                <div className="text-sm text-gray-400">Favori Oyunlarım</div>
+                <div className="text-sm text-gray-400">{t('casino.favoriteGames', 'Favorite Games')}</div>
               </CardContent>
             </Card>
           </section>

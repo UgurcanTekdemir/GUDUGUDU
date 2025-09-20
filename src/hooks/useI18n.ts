@@ -1,155 +1,86 @@
-import { useState, useEffect, useCallback } from 'react';
-import { supabase } from '@/integrations/supabase/client';
+import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import trTranslations from '@/locales/tr.json';
+import enTranslations from '@/locales/en.json';
 
-interface Translation {
-  key: string;
-  value: string;
-  namespace: string;
-}
+type Language = 'tr' | 'en';
+type Translations = typeof trTranslations;
 
-type SupportedLanguage = 'tr' | 'en';
+const translations: Record<Language, Translations> = {
+  tr: trTranslations,
+  en: enTranslations,
+};
 
-export const useI18n = () => {
-  const [currentLanguage, setCurrentLanguage] = useState<SupportedLanguage>('tr');
-  const [translations, setTranslations] = useState<Record<string, string>>({});
-  const [loading, setLoading] = useState(false);
+type I18nContextValue = {
+  currentLanguage: Language;
+  t: (key: string, fallback?: string) => string;
+  changeLanguage: (language: Language) => void;
+  availableLanguages: Language[];
+};
 
-  // Load translations for current language
-  const loadTranslations = useCallback(async (language: SupportedLanguage) => {
-    try {
-      setLoading(true);
-      
-      // Load from JSON files for homepage
-      const translations = await import(`../locales/${language}.json`);
-      const flatTranslations: Record<string, string> = {};
-      
-      // Flatten nested object
-      const flattenObject = (obj: any, prefix = ''): void => {
-        for (const key in obj) {
-          if (obj.hasOwnProperty(key)) {
-            const newKey = prefix ? `${prefix}.${key}` : key;
-            if (typeof obj[key] === 'object' && obj[key] !== null) {
-              flattenObject(obj[key], newKey);
-            } else {
-              flatTranslations[newKey] = obj[key];
-            }
-          }
-        }
-      };
-      
-      flattenObject(translations.default || translations);
-      setTranslations(flatTranslations);
-    } catch (error) {
-      console.error('Error loading JSON translations:', error);
-      // Set empty translations to avoid errors
-      setTranslations({});
-    } finally {
-      setLoading(false);
+const I18nContext = createContext<I18nContextValue | undefined>(undefined);
+
+// Helper: get nested object values by dot path
+const getNestedValue = (obj: any, path: string): string | null => {
+  return path.split('.').reduce((current, key) => {
+    return current && current[key] !== undefined ? current[key] : null;
+  }, obj);
+};
+
+export const I18nProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [currentLanguage, setCurrentLanguage] = useState<Language>('tr');
+
+  // Initialize from localStorage or browser language once
+  useEffect(() => {
+    const savedLanguage = (localStorage.getItem('language') as Language) || null;
+    if (savedLanguage && translations[savedLanguage]) {
+      setCurrentLanguage(savedLanguage);
+      return;
+    }
+
+    const browserLang = (navigator.language || navigator.languages?.[0] || 'tr').slice(0, 2) as Language;
+    if (translations[browserLang]) {
+      setCurrentLanguage(browserLang);
     }
   }, []);
 
-  // Get translation by key
-  const t = useCallback((key: string, fallback?: string): string => {
-    return translations[key] || fallback || key;
-  }, [translations]);
-
-  // Change language
-  const changeLanguage = useCallback(async (language: SupportedLanguage) => {
-    setCurrentLanguage(language);
-    localStorage.setItem('language', language);
-    await loadTranslations(language);
-  }, [loadTranslations]);
-
-  // Format currency based on language
-  const formatCurrency = useCallback((amount: number): string => {
-    const currency = currentLanguage === 'tr' ? 'TRY' : 'USD';
-    const locale = currentLanguage === 'tr' ? 'tr-TR' : 'en-US';
-    
-    return new Intl.NumberFormat(locale, {
-      style: 'currency',
-      currency: currency,
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2
-    }).format(amount);
-  }, [currentLanguage]);
-
-  // Format number based on language
-  const formatNumber = useCallback((value: number): string => {
-    const locale = currentLanguage === 'tr' ? 'tr-TR' : 'en-US';
-    return new Intl.NumberFormat(locale).format(value);
-  }, [currentLanguage]);
-
-  // Format date based on language
-  const formatDate = useCallback((date: Date | string): string => {
-    const dateObj = typeof date === 'string' ? new Date(date) : date;
-    const locale = currentLanguage === 'tr' ? 'tr-TR' : 'en-US';
-    
-    return new Intl.DateTimeFormat(locale, {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    }).format(dateObj);
-  }, [currentLanguage]);
-
-  // Initialize language from localStorage, auto-detection, or browser
+  // Persist selection
   useEffect(() => {
-    const savedLanguage = localStorage.getItem('language') as SupportedLanguage;
-    
-    if (savedLanguage && (savedLanguage === 'tr' || savedLanguage === 'en')) {
-      // Use saved preference
-      setCurrentLanguage(savedLanguage);
-      loadTranslations(savedLanguage);
-    } else {
-      // Auto-detect language
-      const browserLanguages = navigator.languages || [navigator.language];
-      let detectedLanguage: SupportedLanguage = 'en'; // default
-      
-      // Check browser languages in order of preference
-      for (const lang of browserLanguages) {
-        const normalizedLang = lang.toLowerCase();
-        if (normalizedLang.startsWith('tr') || normalizedLang.includes('tr')) {
-          detectedLanguage = 'tr';
-          break;
-        }
-        if (normalizedLang.startsWith('en') || normalizedLang.includes('en')) {
-          detectedLanguage = 'en';
-          break;
-        }
-      }
-      
-      // Additional detection based on timezone for Turkish users
-      try {
-        const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-        if (timezone.includes('Istanbul') || timezone.includes('Ankara')) {
-          detectedLanguage = 'tr';
-        }
-      } catch (error) {
-        console.warn('Timezone detection failed:', error);
-      }
-      
-      setCurrentLanguage(detectedLanguage);
-      loadTranslations(detectedLanguage);
-      
-      // Save auto-detected language
-      localStorage.setItem('language', detectedLanguage);
-      localStorage.setItem('auto-detected-language', JSON.stringify({
-        language: detectedLanguage,
-        detectedAt: new Date().toISOString(),
-        browserLanguages: browserLanguages,
-        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
-      }));
-    }
-  }, [loadTranslations]);
+    localStorage.setItem('language', currentLanguage);
+  }, [currentLanguage]);
 
-  return {
+  const t = useCallback((key: string, fallback?: string): string => {
+    const current = getNestedValue(translations[currentLanguage], key);
+    if (current) return current;
+
+    // Fallback to English for missing Turkish keys
+    if (currentLanguage === 'tr') {
+      const en = getNestedValue(translations.en, key);
+      if (en) return en;
+    }
+
+    return fallback || key;
+  }, [currentLanguage]);
+
+  const changeLanguage = useCallback((language: Language) => {
+    if (language === currentLanguage) return;
+    if (!translations[language]) return;
+    setCurrentLanguage(language);
+  }, [currentLanguage]);
+
+  const value: I18nContextValue = useMemo(() => ({
     currentLanguage,
-    translations,
-    loading,
     t,
     changeLanguage,
-    formatCurrency,
-    formatNumber,
-    formatDate,
-    loadTranslations
-  };
+    availableLanguages: Object.keys(translations) as Language[],
+  }), [currentLanguage, t, changeLanguage]);
+
+  return React.createElement(I18nContext.Provider, { value }, children);
+};
+
+export const useI18n = (): I18nContextValue => {
+  const ctx = useContext(I18nContext);
+  if (!ctx) {
+    throw new Error('useI18n must be used within an I18nProvider');
+  }
+  return ctx;
 };

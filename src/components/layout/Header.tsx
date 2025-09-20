@@ -167,13 +167,13 @@ const Header = () => {
             setIsLoginModalOpen(true);
             setIsMenuOpen(false);
           }} className="flex-1 text-black bg-white border-white hover:bg-gray-100">
-                  {t('login_button')}
+                  {t('header.login-button')}
                 </Button>
                 <Button onClick={() => {
             setIsRegistrationModalOpen(true);
             setIsMenuOpen(false);
           }} className="flex-1 bg-green-500 hover:bg-green-600 text-white">
-                  {t('register_button')}
+                  {t('header.register-button')}
                 </Button>
               </div>}
           </div>

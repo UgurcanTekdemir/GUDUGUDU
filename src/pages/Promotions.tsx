@@ -13,6 +13,7 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/sections/Footer';
 import gudubetBonusImage from '@/assets/gudubet-bonus.png';
 import vipBonusImage from '@/assets/vip-bonus-new.png';
+import { useI18n } from '@/hooks/useI18n';
 import { 
   Gift, 
   Calendar, 
@@ -60,6 +61,7 @@ interface UserPromotion {
 }
 
 const Promotions = () => {
+  const { t } = useI18n();
   const [promotions, setPromotions] = useState<Promotion[]>([]);
   const [userPromotions, setUserPromotions] = useState<UserPromotion[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
@@ -72,15 +74,15 @@ const Promotions = () => {
   const { data: bonusRequests } = useMyBonusRequests();
 
   const categories = [
-    { id: 'all', name: 'Tümü', icon: Zap },
-    { id: 'welcome', name: 'Hoş Geldin', icon: Star },
-    { id: 'deposit', name: 'Yatırım', icon: TrendingUp },
-    { id: 'freebet', name: 'Freebet', icon: Zap },
-    { id: 'cashback', name: 'Cashback', icon: Percent },
-    { id: 'first_deposit', name: 'İlk Yatırım', icon: Star },
-    { id: 'reload', name: 'Yeniden Yükle', icon: TrendingUp },
-    { id: 'special', name: 'Özel Gün', icon: Trophy },
-    { id: 'vip', name: 'VIP', icon: Crown },
+    { id: 'all', name: t('casino.all', 'All'), icon: Zap },
+    { id: 'welcome', name: t('casino.welcome', 'Welcome'), icon: Star },
+    { id: 'deposit', name: t('casino.deposit', 'Deposit'), icon: TrendingUp },
+    { id: 'freebet', name: t('casino.freebet', 'Freebet'), icon: Zap },
+    { id: 'cashback', name: t('casino.cashback', 'Cashback'), icon: Percent },
+    { id: 'first_deposit', name: t('casino.firstDeposit', 'First Deposit'), icon: Star },
+    { id: 'reload', name: t('casino.reload', 'Reload'), icon: TrendingUp },
+    { id: 'special', name: t('casino.special', 'Special Day'), icon: Trophy },
+    { id: 'vip', name: t('casino.vip', 'VIP'), icon: Crown },
   ];
 
   // Countdown Timer Component
@@ -118,7 +120,7 @@ const Promotions = () => {
       return (
         <div className="flex items-center text-red-500 text-sm">
           <Timer className="w-4 h-4 mr-1" />
-          <span>Süresi Doldu</span>
+          <span>{t('casino.expired', 'Expired')}</span>
         </div>
       );
     }
@@ -129,17 +131,17 @@ const Promotions = () => {
         <div className="flex space-x-1">
           {timeLeft.days > 0 && (
             <span className="bg-orange-500/20 text-orange-500 px-1 rounded text-xs font-mono">
-              {timeLeft.days}g
+              {timeLeft.days}{t('casino.daysShort', 'd')}
             </span>
           )}
           <span className="bg-orange-500/20 text-orange-500 px-1 rounded text-xs font-mono">
-            {timeLeft.hours.toString().padStart(2, '0')}s
+            {timeLeft.hours.toString().padStart(2, '0')}{t('casino.hoursShort', 'h')}
           </span>
           <span className="bg-orange-500/20 text-orange-500 px-1 rounded text-xs font-mono">
-            {timeLeft.minutes.toString().padStart(2, '0')}d
+            {timeLeft.minutes.toString().padStart(2, '0')}{t('casino.minutesShort', 'm')}
           </span>
           <span className="bg-orange-500/20 text-orange-500 px-1 rounded text-xs font-mono">
-            {timeLeft.seconds.toString().padStart(2, '0')}sn
+            {timeLeft.seconds.toString().padStart(2, '0')}{t('casino.secondsShort', 's')}
           </span>
         </div>
       </div>
@@ -192,7 +194,7 @@ const Promotions = () => {
           max_bonus: bonus.max_cap,
           wagering_requirement: bonus.rollover_multiplier,
           promo_code: bonus.code,
-          terms_conditions: `Çevrim şartı: ${bonus.rollover_multiplier}x. Min. yatırım: ₺${bonus.min_deposit}. ${bonus.max_cap ? `Max bonus: ₺${bonus.max_cap}` : ''}`,
+          terms_conditions: `${t('casino.wageringRequirement', 'Wagering requirement')}: ${bonus.rollover_multiplier}x. ${t('casino.minDeposit', 'Min. deposit')}: ₺${bonus.min_deposit}. ${bonus.max_cap ? `${t('casino.maxBonus', 'Max bonus')}: ₺${bonus.max_cap}` : ''}`,
           start_date: bonus.valid_from || bonus.created_at,
           end_date: bonus.valid_to || new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(), // 30 days default
           max_participants: null,
@@ -207,8 +209,8 @@ const Promotions = () => {
     } catch (error) {
       console.error('Error fetching promotions:', error);
       toast({
-        title: "Hata",
-        description: "Promosyonlar yüklenirken bir hata oluştu.",
+        title: t('casino.error', 'Error'),
+        description: t('casino.errorLoadingPromotions', 'An error occurred while loading promotions.'),
         variant: "destructive"
       });
     } finally {
@@ -260,8 +262,8 @@ const Promotions = () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) {
         toast({
-          title: "Giriş Gerekli",
-          description: "Promosyona katılmak için giriş yapmalısınız.",
+          title: t('casino.loginRequired', 'Login Required'),
+          description: t('casino.loginRequiredToJoin', 'You must login to join the promotion.'),
           variant: "destructive"
         });
         return;
@@ -280,8 +282,8 @@ const Promotions = () => {
         });
         
         toast({
-          title: "Talep Gönderildi!",
-          description: `${promotion.title} bonus talebi gönderildi. Onay bekleniyor.`,
+          title: t('casino.requestSent', 'Request Sent!'),
+          description: `${promotion.title} ${t('casino.bonusRequestSent', 'bonus request sent. Waiting for approval.')}`,
         });
       } else {
         console.log('⚠️ Using legacy promotion system');
@@ -298,8 +300,8 @@ const Promotions = () => {
         if (error) throw error;
 
         toast({
-          title: "Başarılı!",
-          description: `${promotion.title} promosyonuna başarıyla katıldınız!`,
+          title: t('casino.success', 'Success!'),
+          description: `${promotion.title} ${t('casino.successfullyJoinedPromotion', 'promotion successfully joined!')}`,
         });
 
         // Refresh user promotions
@@ -308,8 +310,8 @@ const Promotions = () => {
     } catch (error) {
       console.error('Error joining promotion:', error);
       toast({
-        title: "Hata",
-        description: "Promosyona katılırken bir hata oluştu.",
+        title: t('casino.error', 'Error'),
+        description: t('casino.errorJoiningPromotion', 'An error occurred while joining the promotion.'),
         variant: "destructive"
       });
     }
@@ -332,23 +334,22 @@ const Promotions = () => {
           <div className="container mx-auto px-6 py-12">
             <div className="flex items-center justify-between">
               <div className="max-w-2xl">
-                <h1 className="text-4xl font-bold mb-4">Promosyonlar & Bonuslar</h1>
+                <h1 className="text-4xl font-bold mb-4">{t('casino.promotionsAndBonuses', 'Promotions & Bonuses')}</h1>
                 <p className="text-lg text-muted-foreground mb-6">
-                  Size özel hazırlanmış muhteşem bonus ve promosyonlarla kazancınızı artırın! 
-                  Hoş geldin bonuslarından özel gün kampanyalarına kadar birçok fırsatı kaçırmayın.
+                  {t('casino.promotionsDescription', 'Increase your winnings with amazing bonuses and promotions prepared especially for you! Don\'t miss many opportunities from welcome bonuses to special day campaigns.')}
                 </p>
                 <div className="flex items-center space-x-6 text-sm text-muted-foreground">
                   <div className="flex items-center">
                     <Gift className="w-4 h-4 mr-2" />
-                    <span>{promotions.length} Aktif Promosyon</span>
+                    <span>{promotions.length} {t('casino.activePromotions', 'Active Promotions')}</span>
                   </div>
                   <div className="flex items-center">
                     <Clock className="w-4 h-4 mr-2" />
-                    <span>Günlük Güncelleme</span>
+                    <span>{t('casino.dailyUpdate', 'Daily Update')}</span>
                   </div>
                   <div className="flex items-center">
                     <Star className="w-4 h-4 mr-2" />
-                    <span>VIP Bonuslar</span>
+                    <span>{t('casino.vipBonuses', 'VIP Bonuses')}</span>
                   </div>
                 </div>
               </div>
@@ -394,13 +395,13 @@ const Promotions = () => {
                     <Crown className="w-8 h-8 text-amber-500" />
                   </div>
                   <div>
-                    <h3 className="text-xl font-bold text-amber-500">VIP Promosyonları</h3>
-                    <p className="text-sm text-muted-foreground">Özel üyelerimiz için hazırlanmış elit fırsatlar</p>
+                    <h3 className="text-xl font-bold text-amber-500">{t('casino.vipPromotions', 'VIP Promotions')}</h3>
+                    <p className="text-sm text-muted-foreground">{t('casino.eliteMembers', 'Elite Members')}</p>
                   </div>
                 </div>
                 <Badge className="bg-amber-500/20 text-amber-500 border-amber-500/30">
                   <Crown className="w-3 h-3 mr-1" />
-                  Elit Üye
+                  {t('casino.eliteMember', 'Elite Member')}
                 </Badge>
               </div>
             </div>
@@ -412,7 +413,7 @@ const Promotions = () => {
           {loading ? (
             <div className="text-center py-12">
               <div className="animate-spin w-8 h-8 border-4 border-primary border-t-transparent rounded-full mx-auto mb-4"></div>
-              <p className="text-muted-foreground">Promosyonlar yükleniyor...</p>
+              <p className="text-muted-foreground">{t('casino.promotionsLoading', 'Loading promotions...')}</p>
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
@@ -431,7 +432,7 @@ const Promotions = () => {
                         {isUrgent && (
                           <Badge className="bg-red-500/20 text-red-500 border-red-500/30">
                             <Flame className="w-3 h-3 mr-1" />
-                            Sınırlı
+                            {t('casino.limited', 'Limited')}
                           </Badge>
                         )}
                         {promotion.category === 'vip' && (
@@ -479,7 +480,7 @@ const Promotions = () => {
                             {hasPromoCode && (
                               <Badge className="bg-blue-500/20 text-blue-500 border-blue-500/30">
                                 <Copy className="w-3 h-3 mr-1" />
-                                Kod
+                                {t('casino.code', 'Code')}
                               </Badge>
                             )}
                           </div>
@@ -489,7 +490,7 @@ const Promotions = () => {
                             <div className="text-2xl font-bold text-primary">
                               %{promotion.bonus_percentage}
                             </div>
-                            <div className="text-xs text-muted-foreground">Bonus</div>
+                            <div className="text-xs text-muted-foreground">{t('casino.bonus', 'Bonus')}</div>
                           </div>
                         )}
                       </div>
@@ -509,7 +510,7 @@ const Promotions = () => {
                       {promotion.max_participants && (
                         <div className="mb-4">
                           <div className="flex justify-between text-xs mb-1">
-                            <span className="text-muted-foreground">Katılım</span>
+                            <span className="text-muted-foreground">{t('casino.participation', 'Participation')}</span>
                             <span className="font-medium">
                               {promotion.current_participants}/{promotion.max_participants}
                             </span>
@@ -521,18 +522,18 @@ const Promotions = () => {
                       <div className="space-y-2 mb-4 flex-1">
                         {promotion.min_deposit && (
                           <div className="flex justify-between text-xs">
-                            <span className="text-muted-foreground">Min. Yatırım:</span>
+                            <span className="text-muted-foreground">{t('casino.minDeposit', 'Min. Deposit')}:</span>
                             <span className="font-medium">₺{promotion.min_deposit}</span>
                           </div>
                         )}
                         {promotion.max_bonus && (
                           <div className="flex justify-between text-xs">
-                            <span className="text-muted-foreground">Max. Bonus:</span>
+                            <span className="text-muted-foreground">{t('casino.maxBonus', 'Max. Bonus')}:</span>
                             <span className="font-medium">₺{promotion.max_bonus}</span>
                           </div>
                         )}
                         <div className="flex justify-between text-xs">
-                          <span className="text-muted-foreground">Çevrim:</span>
+                          <span className="text-muted-foreground">{t('casino.wagering', 'Wagering')}:</span>
                           <span className="font-medium">{promotion.wagering_requirement}x</span>
                         </div>
                       </div>
@@ -553,7 +554,7 @@ const Promotions = () => {
                                  setIsDialogOpen(true);
                                }}
                              >
-                               Detay
+                               {t('casino.details', 'Details')}
                              </Button>
                            </DialogTrigger>
                          </Dialog>
@@ -565,7 +566,7 @@ const Promotions = () => {
                           >
                             <div className="flex items-center">
                               <Gift className="w-4 h-4 mr-1" />
-                              Katıl
+                              {t('casino.join', 'Join')}
                             </div>
                          </Button>
                       </div>
@@ -581,8 +582,8 @@ const Promotions = () => {
               <Gift className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
               <p className="text-muted-foreground">
                 {selectedCategory === 'all' 
-                  ? 'Şu anda aktif promosyon bulunmuyor.' 
-                  : `${categories.find(c => c.id === selectedCategory)?.name} kategorisinde promosyon bulunmuyor.`
+                  ? t('casino.noActivePromotions', 'No active promotions at the moment.') 
+                  : `${categories.find(c => c.id === selectedCategory)?.name} ${t('casino.noPromotionsInCategory', 'No promotions found in this category.')}`
                 }
               </p>
             </div>
@@ -641,7 +642,7 @@ const Promotions = () => {
                             %{selectedPromotion.bonus_percentage}
                           </div>
                           <div className="text-lg text-muted-foreground font-medium">
-                            Bonus
+                            {t('casino.bonus', 'Bonus')}
                           </div>
                         </div>
                       )}
@@ -654,7 +655,7 @@ const Promotions = () => {
                         {selectedPromotion.promo_code && (
                           <Badge className="bg-blue-500/20 text-blue-500 border-blue-500/30">
                             <Copy className="w-3 h-3 mr-1" />
-                            Kod Var
+                            {t('casino.code', 'Code')} {t('casino.available', 'Available')}
                           </Badge>
                         )}
                       </div>
@@ -681,18 +682,18 @@ const Promotions = () => {
                       {selectedPromotion.min_deposit && (
                         <div className="flex items-center gap-1 text-muted-foreground">
                           <TrendingUp className="w-4 h-4" />
-                          <span>Min. ₺{selectedPromotion.min_deposit}</span>
+                          <span>{t('casino.minDeposit', 'Min.')} ₺{selectedPromotion.min_deposit}</span>
                         </div>
                       )}
                       {selectedPromotion.max_bonus && (
                         <div className="flex items-center gap-1 text-muted-foreground">
                           <Gift className="w-4 h-4" />
-                          <span>Max. ₺{selectedPromotion.max_bonus}</span>
+                          <span>{t('casino.maxBonus', 'Max.')} ₺{selectedPromotion.max_bonus}</span>
                         </div>
                       )}
                       <div className="flex items-center gap-1 text-muted-foreground">
                         <Clock className="w-4 h-4" />
-                        <span>{selectedPromotion.wagering_requirement}x çevrim</span>
+                        <span>{selectedPromotion.wagering_requirement}x {t('casino.wagering', 'wagering')}</span>
                       </div>
                     </div>
                   </div>
@@ -703,7 +704,7 @@ const Promotions = () => {
                     <div>
                       <h4 className="font-semibold mb-3 text-lg flex items-center gap-2">
                         <Star className="w-5 h-5 text-yellow-500" />
-                        Promosyon Detayları
+                        {t('casino.promotionDetails', 'Promotion Details')}
                       </h4>
                       <p className="text-muted-foreground leading-relaxed">
                         {selectedPromotion.detailed_description || selectedPromotion.description}
@@ -715,7 +716,7 @@ const Promotions = () => {
                       <div>
                         <h4 className="font-semibold mb-3 text-lg flex items-center gap-2">
                           <Copy className="w-5 h-5 text-blue-500" />
-                          Promosyon Kodu
+                          {t('casino.promotionCode', 'Promotion Code')}
                         </h4>
                         <div className="bg-gradient-to-r from-primary/10 to-primary/5 border border-primary/20 rounded-lg p-4">
                           <div className="flex items-center justify-between">
@@ -728,17 +729,17 @@ const Promotions = () => {
                               onClick={() => {
                                 navigator.clipboard.writeText(selectedPromotion.promo_code || '');
                                 toast({
-                                  title: "Kopyalandı!",
-                                  description: "Promosyon kodu panoya kopyalandı.",
+                                  title: t('casino.copied', 'Copied!'),
+                                  description: t('casino.promotionCodeCopied', 'Promotion code copied to clipboard.'),
                                 });
                               }}
                             >
                               <Copy className="w-4 h-4 mr-1" />
-                              Kopyala
+                              {t('casino.copy', 'Copy')}
                             </Button>
                           </div>
                           <p className="text-sm text-muted-foreground mt-2">
-                            Bu kodu yatırım yaparken kullanın
+                            {t('casino.useThisCodeWhenDepositing', 'Use this code when making a deposit')}
                           </p>
                         </div>
                       </div>
@@ -748,7 +749,7 @@ const Promotions = () => {
                     <div>
                       <h4 className="font-semibold mb-3 text-lg flex items-center gap-2">
                         <Timer className="w-5 h-5 text-orange-500" />
-                        Süre
+                        {t('casino.time', 'Time')}
                       </h4>
                       <div className="bg-muted/50 rounded-lg p-4">
                         <CountdownTimer endDate={selectedPromotion.end_date} />
@@ -759,7 +760,7 @@ const Promotions = () => {
                     <div>
                       <h4 className="font-semibold mb-3 text-lg flex items-center gap-2">
                         <Users className="w-5 h-5 text-purple-500" />
-                        Şartlar & Koşullar
+                        {t('casino.termsAndConditions', 'Terms & Conditions')}
                       </h4>
                       <div className="bg-muted/30 border rounded-lg p-4">
                         <p className="text-sm text-muted-foreground leading-relaxed">
@@ -777,7 +778,7 @@ const Promotions = () => {
                         className="flex-1"
                         onClick={() => setIsDialogOpen(false)}
                       >
-                        Kapat
+                        {t('casino.close', 'Close')}
                       </Button>
                       <Button 
                         className="flex-1 bg-primary hover:bg-primary/90"
@@ -788,7 +789,7 @@ const Promotions = () => {
                       >
                         <div className="flex items-center gap-2">
                           <Gift className="w-4 h-4" />
-                          Promosyona Katıl
+                          {t('casino.joinPromotion', 'Join Promotion')}
                         </div>
                       </Button>
                     </div>

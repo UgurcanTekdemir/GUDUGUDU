@@ -244,9 +244,9 @@ export const LoginModal = ({ isOpen, onClose, onLoginSuccess }: LoginModalProps)
         if (error.message.includes('Invalid login credentials')) {
           errorMessage = t('auth.email_invalid');
         } else if (error.message.includes('Email not confirmed')) {
-          errorMessage = 'E-posta adresinizi doğrulamanız gerekiyor';
+          errorMessage = t('auth.email_not_confirmed');
         } else if (error.message.includes('Too many requests')) {
-          errorMessage = 'Çok fazla deneme. Lütfen daha sonra tekrar deneyin';
+          errorMessage = t('auth.too_many_attempts');
         }
 
         toast({
@@ -287,8 +287,8 @@ export const LoginModal = ({ isOpen, onClose, onLoginSuccess }: LoginModalProps)
             // Show VPN/Proxy warning if detected
             if (fraudAnalysis.analysis_summary?.vpn_proxy_detected) {
               toast({
-                title: "🛡️ Güvenlik Uyarısı",
-                description: "Hesabınız VPN veya Proxy kullanımı nedeniyle güvenlik incelemesine alınmıştır.",
+                title: t('auth.security_warning'),
+                description: t('auth.vpn_proxy_warning'),
                 variant: "destructive",
                 duration: 8000
               });
@@ -297,8 +297,8 @@ export const LoginModal = ({ isOpen, onClose, onLoginSuccess }: LoginModalProps)
             // Show velocity warning if detected
             if (fraudAnalysis.analysis_summary?.velocity_violation) {
               toast({
-                title: "⚠️ Hız Limiti Uyarısı",
-                description: "Çok hızlı giriş denemesi tespit edildi. Lütfen dikkatli olun.",
+                title: t('auth.velocity_warning'),
+                description: t('auth.velocity_warning_description'),
                 variant: "destructive",
                 duration: 6000
               });
@@ -307,8 +307,8 @@ export const LoginModal = ({ isOpen, onClose, onLoginSuccess }: LoginModalProps)
             // Show device warning if detected
             if (fraudAnalysis.analysis_summary?.device_suspicious) {
               toast({
-                title: "🔍 Cihaz Uyarısı", 
-                description: "Yeni cihaz veya şüpheli cihaz aktivitesi tespit edildi.",
+                title: t('auth.device_warning'), 
+                description: t('auth.device_warning_description'),
                 variant: "destructive",
                 duration: 6000
               });
@@ -348,7 +348,7 @@ export const LoginModal = ({ isOpen, onClose, onLoginSuccess }: LoginModalProps)
       console.error('Login error:', error);
       toast({
         title: t('auth.login_failed'),
-        description: "Bir hata oluştu. Lütfen tekrar deneyin.",
+        description: t('auth.error_occurred'),
         variant: "destructive"
       });
       refreshCaptcha();
@@ -444,7 +444,7 @@ export const LoginModal = ({ isOpen, onClose, onLoginSuccess }: LoginModalProps)
                   {/* Login'de sadece bilgilendirici şekilde gösterelim */}
                   {formData.password.length >= 8 && !passwordStrength.isSecure && (
                     <div className="text-xs text-orange-600 dark:text-orange-400 mt-1">
-                      💡 Şifrenizi güvenliğiniz için daha güçlü bir şifre ile değiştirmeyi düşünün
+                      💡 {t('auth.password_security_tip')}
                     </div>
                   )}
                 </div>
@@ -499,7 +499,7 @@ export const LoginModal = ({ isOpen, onClose, onLoginSuccess }: LoginModalProps)
                     <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
                   </svg>
                 )}
-                Google ile Giriş Yap
+                {t('auth.google_login')}
               </Button>
 
               <div className="relative">
@@ -508,7 +508,7 @@ export const LoginModal = ({ isOpen, onClose, onLoginSuccess }: LoginModalProps)
                 </div>
                 <div className="relative flex justify-center text-xs uppercase">
                   <span className="bg-background px-2 text-muted-foreground">
-                    veya
+                    {t('auth.or')}
                   </span>
                 </div>
               </div>

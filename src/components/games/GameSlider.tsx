@@ -6,6 +6,7 @@ import { ChevronLeft, ChevronRight, Play, Eye } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import { addSmartCacheBuster, getPlaceholderImage } from '@/utils/imageUtils';
+import { useI18n } from '@/hooks/useI18n';
 
 interface Game {
   id: string;
@@ -47,6 +48,7 @@ export const GameSlider: React.FC<GameSliderProps> = ({
   autoPlay = false,
   autoPlayInterval = 5000
 }) => {
+  const { t } = useI18n();
   const navigate = useNavigate();
   const [currentIndex, setCurrentIndex] = React.useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = React.useState(autoPlay);
@@ -220,7 +222,7 @@ export const GameSlider: React.FC<GameSliderProps> = ({
                           className="bg-orange-600 hover:bg-orange-700 text-white px-6 py-3 text-sm font-semibold shadow-lg hover:shadow-orange-500/25 transition-all duration-200"
                         >
                           <Play className="w-4 h-4 mr-2" />
-                          Oyna
+                          {t('casino.play', 'Play')}
                         </Button>
                         
                         {showDemoButton && (
@@ -230,7 +232,7 @@ export const GameSlider: React.FC<GameSliderProps> = ({
                             className="bg-transparent border-white/30 text-white hover:bg-white/10 px-6 py-3 text-sm font-semibold backdrop-blur-sm"
                           >
                             <Eye className="w-4 h-4 mr-2" />
-                            Demo
+                            {t('casino.demo', 'Demo')}
                           </Button>
                         )}
                       </div>

@@ -19,6 +19,7 @@ import Footer from '@/components/sections/Footer';
 import LiveMatchCard from '@/components/betting/LiveMatchCard';
 import BettingSlip from '@/components/betting/BettingSlip';
 import MatchDetailsModal from '@/components/betting/MatchDetailsModal';
+import { useI18n } from '@/hooks/useI18n';
 
 interface LiveMatch {
   id: string;
@@ -67,6 +68,7 @@ interface ConfirmedBet {
 }
 
 const LiveBetting = () => {
+  const { t } = useI18n();
   const [liveMatches, setLiveMatches] = useState<LiveMatch[]>([]);
   const [selectedSport, setSelectedSport] = useState<string>('hepsi');
   const [betSlip, setBetSlip] = useState<BetSelection[]>([]);
@@ -79,11 +81,11 @@ const LiveBetting = () => {
   const { toast } = useToast();
 
   const sportFilters = [
-    { id: 'hepsi', name: 'Hepsi', icon: '🎯' },
-    { id: 'futbol', name: 'Futbol', icon: '⚽' },
-    { id: 'basketbol', name: 'Basketbol', icon: '🏀' },
-    { id: 'tenis', name: 'Tenis', icon: '🎾' },
-    { id: 'e-spor', name: 'E-Spor', icon: '🎮' },
+    { id: 'hepsi', name: t('sports.all', 'All'), icon: '🎯' },
+    { id: 'futbol', name: t('sports.football', 'Football'), icon: '⚽' },
+    { id: 'basketbol', name: t('sports.basketball', 'Basketball'), icon: '🏀' },
+    { id: 'tenis', name: t('sports.tennis', 'Tennis'), icon: '🎾' },
+    { id: 'e-spor', name: t('sports.esports', 'E-Sports'), icon: '🎮' },
   ];
 
    useEffect(() => {
@@ -122,7 +124,7 @@ const LiveBetting = () => {
                  market_type: '1X2',
                  market_name: 'Match Winner',
                  selection: 'X',
-                 selection_name: 'Draw',
+                 selection_name: t('sports.draw', 'Draw'),
                  odds_value: 3.2,
                  is_active: true
                },
@@ -185,8 +187,8 @@ const LiveBetting = () => {
   const confirmBet = () => {
     if (!stakeAmount || parseFloat(stakeAmount) <= 0) {
       toast({
-        title: "Hata",
-        description: "Lütfen geçerli bir bahis miktarı girin.",
+        title: t('errors.error', 'Error'),
+        description: t('sports.validStakeAmount', 'Please enter a valid stake amount.'),
         variant: "destructive"
       });
       return;
@@ -194,8 +196,8 @@ const LiveBetting = () => {
 
     if (betSlip.length === 0) {
       toast({
-        title: "Hata", 
-        description: "Lütfen en az bir bahis seçin.",
+        title: t('errors.error', 'Error'), 
+        description: t('sports.selectAtLeastOne', 'Please select at least one bet.'),
         variant: "destructive"
       });
       return;
@@ -208,7 +210,7 @@ const LiveBetting = () => {
       totalOdds: totalOdds,
       potentialWin: potentialWin,
       date: new Date().toLocaleString('tr-TR'),
-      status: 'Beklemede'
+      status: t('sports.pending', 'Pending')
     };
 
     setConfirmedBets(prev => [...prev, confirmedBet]);
@@ -233,18 +235,18 @@ const LiveBetting = () => {
           <div className="container mx-auto px-4 py-6">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <h1 className="text-3xl font-bold">Canlı Bahisler</h1>
+                <h1 className="text-3xl font-bold">{t('pages.liveBetting.title', 'Live Betting')}</h1>
                  <Badge className="bg-red-500 text-white">
-                   🔴 CANLI
+                   🔴 {t('liveBetting.live', 'LIVE')}
                  </Badge>
                 <Badge variant="secondary">
                   <Trophy className="w-3 h-3 mr-1" />
-                  {liveMatches.length} Maç
+                  {liveMatches.length} {t('sports.matches', 'Matches')}
                 </Badge>
               </div>
               <div className="flex items-center gap-2 text-sm text-muted-foreground">
                 <Users className="w-4 h-4" />
-                <span>{filteredMatches.reduce((sum, match) => sum + (match.viewers_count || 0), 0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')} izleyici</span>
+                <span>{filteredMatches.reduce((sum, match) => sum + (match.viewers_count || 0), 0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')} {t('liveBetting.viewers', 'viewers')}</span>
               </div>
             </div>
           </div>
@@ -298,8 +300,8 @@ const LiveBetting = () => {
             <div className="text-center py-12">
               <p className="text-muted-foreground">
                 {selectedSport === 'hepsi' 
-                  ? 'Şu anda canlı maç bulunmuyor.' 
-                  : `${sportFilters.find(s => s.id === selectedSport)?.name} kategorisinde canlı maç bulunmuyor.`
+                  ? t('liveBetting.noLiveMatches', 'No live matches currently available.') 
+                  : `${sportFilters.find(s => s.id === selectedSport)?.name} ${t('liveBetting.noLiveMatchesInCategory', 'No live matches in this category.')}`
                 }
               </p>
             </div>

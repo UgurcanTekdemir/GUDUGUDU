@@ -6,6 +6,7 @@ import { Play, Eye } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import { addSmartCacheBuster, getPlaceholderImage } from '@/utils/imageUtils';
+import { useI18n } from '@/hooks/useI18n';
 
 interface Game {
   id: string;
@@ -39,6 +40,7 @@ export const GameCard: React.FC<GameCardProps> = ({
   onFavoriteToggle,
   showDemoButton = true
 }) => {
+  const { t } = useI18n();
   const navigate = useNavigate();
   const [loadingGame, setLoadingGame] = useState<string | null>(null);
 
@@ -120,7 +122,7 @@ export const GameCard: React.FC<GameCardProps> = ({
               ) : (
                 <Play className="w-4 h-4 mr-2" />
               )}
-              Oyna
+              {t('casino.play', 'Play')}
             </Button>
             
             {showDemoButton && (
@@ -133,7 +135,7 @@ export const GameCard: React.FC<GameCardProps> = ({
                 className="bg-transparent border-white/30 text-white hover:bg-white/10 px-6 py-3 text-sm font-semibold backdrop-blur-sm"
               >
                 <Eye className="w-4 h-4 mr-2" />
-                Demo
+                {t('casino.demo', 'Demo')}
               </Button>
             )}
           </div>

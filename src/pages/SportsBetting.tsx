@@ -21,6 +21,7 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/sections/Footer';
 import BettingSlip from '@/components/betting/BettingSlip';
 import MatchDetailsModal from '@/components/betting/MatchDetailsModal';
+import { useI18n } from '@/hooks/useI18n';
 
 interface Match {
   id: string;
@@ -71,6 +72,7 @@ interface ConfirmedBet {
 }
 
 const SportsBetting = () => {
+  const { t } = useI18n();
   const [matches, setMatches] = useState<Match[]>([]);
   const [selectedSport, setSelectedSport] = useState<string>('hepsi');
   const [betSlip, setBetSlip] = useState<BetSelection[]>([]);
@@ -83,11 +85,11 @@ const SportsBetting = () => {
   const { toast } = useToast();
 
   const sportFilters = [
-    { id: 'hepsi', name: 'Hepsi', icon: '🎯' },
-    { id: 'futbol', name: 'Futbol', icon: '⚽' },
-    { id: 'basketbol', name: 'Basketbol', icon: '🏀' },
-    { id: 'tenis', name: 'Tenis', icon: '🎾' },
-    { id: 'e-spor', name: 'E-Spor', icon: '🎮' },
+    { id: 'hepsi', name: t('sports.all', 'All'), icon: '🎯' },
+    { id: 'futbol', name: t('sports.football', 'Football'), icon: '⚽' },
+    { id: 'basketbol', name: t('sports.basketball', 'Basketball'), icon: '🏀' },
+    { id: 'tenis', name: t('sports.tennis', 'Tennis'), icon: '🎾' },
+    { id: 'e-spor', name: t('sports.esports', 'E-Sports'), icon: '🎮' },
   ];
 
   useEffect(() => {
@@ -140,7 +142,7 @@ const SportsBetting = () => {
             market_name: odd.market_name,
             selection: odd.selection,
             selection_name: odd.selection === '1' ? match.home_team : 
-                           odd.selection === 'X' ? 'Beraberlik' : 
+                           odd.selection === 'X' ? t('sports.draw', 'Draw') : 
                            odd.selection === '2' ? match.away_team : odd.selection,
             odds_value: odd.odds_value,
             is_active: odd.is_active
@@ -183,7 +185,7 @@ const SportsBetting = () => {
                 market_type: '1X2',
                 market_name: 'Maç Sonucu',
                 selection: 'X',
-                selection_name: 'Beraberlik',
+                selection_name: t('sports.draw', 'Draw'),
                 odds_value: 3.2,
                 is_active: true
               },
@@ -245,8 +247,8 @@ const SportsBetting = () => {
   const confirmBet = async () => {
     if (!stakeAmount || parseFloat(stakeAmount) <= 0) {
       toast({
-        title: "Hata",
-        description: "Lütfen geçerli bir bahis miktarı girin.",
+        title: t('errors.error', 'Error'),
+        description: t('sports.validStakeAmount', 'Please enter a valid stake amount.'),
         variant: "destructive"
       });
       return;
@@ -254,8 +256,8 @@ const SportsBetting = () => {
 
     if (betSlip.length === 0) {
       toast({
-        title: "Hata", 
-        description: "Lütfen en az bir bahis seçin.",
+        title: t('errors.error', 'Error'), 
+        description: t('sports.selectAtLeastOne', 'Please select at least one bet.'),
         variant: "destructive"
       });
       return;
@@ -266,8 +268,8 @@ const SportsBetting = () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) {
         toast({
-          title: "Hata",
-          description: "Bahis yapmak için giriş yapmanız gerekir.",
+          title: t('errors.error', 'Error'),
+          description: t('sports.loginRequired', 'You need to login to place bets.'),
           variant: "destructive"
         });
         return;
@@ -314,7 +316,7 @@ const SportsBetting = () => {
         totalOdds: totalOdds,
         potentialWin: potentialWin,
         date: new Date().toLocaleString('tr-TR'),
-        status: 'Beklemede'
+        status: t('sports.pending', 'Pending')
       };
 
       setConfirmedBets(prev => [...prev, confirmedBet]);
@@ -330,8 +332,8 @@ const SportsBetting = () => {
     } catch (error) {
       console.error('Error creating bet:', error);
       toast({
-        title: "Hata",
-        description: "Bahis oluşturulurken bir hata oluştu.",
+        title: t('errors.error', 'Error'),
+        description: t('sports.betCreationError', 'An error occurred while creating the bet.'),
         variant: "destructive"
       });
     }
@@ -347,15 +349,15 @@ const SportsBetting = () => {
           <div className="container mx-auto px-4 py-6">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <h1 className="text-3xl font-bold">Spor Bahisleri</h1>
+                <h1 className="text-3xl font-bold">{t('pages.sportsBetting.title', 'Sports Betting')}</h1>
                 <Badge variant="secondary">
                   <Trophy className="w-3 h-3 mr-1" />
-                  {matches.length} Maç
+                  {matches.length} {t('sports.matches', 'Matches')}
                 </Badge>
               </div>
               <div className="flex items-center gap-2 text-sm text-muted-foreground">
                 <Calendar className="w-4 h-4" />
-                <span>Bugün {filteredMatches.length} maç</span>
+                <span>{t('sports.today', 'Today')} {filteredMatches.length} {t('sports.matches', 'matches')}</span>
               </div>
             </div>
           </div>
@@ -459,7 +461,7 @@ const SportsBetting = () => {
                             <Button
                               variant="outline"
                               size="sm"
-                              onClick={() => addToBetSlip(match, 'Beraberlik', match.draw_odds)}
+                              onClick={() => addToBetSlip(match, t('sports.draw', 'Draw'), match.draw_odds)}
                               className="min-w-16"
                             >
                               <div className="text-center">
@@ -504,8 +506,8 @@ const SportsBetting = () => {
                 <div className="text-center py-12">
                   <p className="text-muted-foreground">
                     {selectedSport === 'hepsi' 
-                      ? 'Henüz maç bulunmuyor.' 
-                      : `${sportFilters.find(s => s.id === selectedSport)?.name} kategorisinde maç bulunmuyor.`
+                      ? t('sports.noMatchesYet', 'No matches yet.') 
+                      : `${sportFilters.find(s => s.id === selectedSport)?.name} ${t('sports.noMatchesInCategory', 'No matches in this category.')}`
                     }
                   </p>
                 </div>

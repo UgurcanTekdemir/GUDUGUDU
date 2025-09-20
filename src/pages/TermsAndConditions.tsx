@@ -4,8 +4,11 @@ import Footer from '@/components/sections/Footer';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Shield, AlertCircle, Scale, Users, Calendar, Globe } from 'lucide-react';
+import { useI18n } from '@/hooks/useI18n';
 
 const TermsAndConditions = () => {
+  const { t } = useI18n();
+
   return (
     <div className="min-h-screen bg-black text-white">
       <Header />
@@ -16,16 +19,15 @@ const TermsAndConditions = () => {
           <div className="flex justify-center items-center mb-4">
             <Scale className="w-12 h-12 text-orange-500 mr-4" />
             <h1 className="text-4xl md:text-5xl font-bold">
-              <span className="text-white">Kurallar ve</span>
-              <span className="text-orange-500"> Şartlar</span>
+              <span className="text-white">{t('pages.terms.title', 'Terms & Conditions')}</span>
             </h1>
           </div>
           <p className="text-xl text-gray-300 max-w-2xl mx-auto">
-            GuduBet platformunu kullanırken uymanız gereken kurallar ve şartlar
+            {t('pages.terms.subtitle', 'Rules and conditions you must follow when using the GuduBet platform')}
           </p>
           <div className="flex justify-center items-center mt-4 text-sm text-gray-400">
             <Calendar className="w-4 h-4 mr-2" />
-            Son güncelleme: 7 Eylül 2025
+            {t('common.lastUpdated', 'Last updated')}: 7 Eylül 2025
           </div>
         </div>
 

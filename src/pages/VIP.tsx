@@ -5,8 +5,10 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/sections/Footer";
+import { useI18n } from "@/hooks/useI18n";
 
 const VIP = () => {
+  const { t } = useI18n();
   const tiers = [
     {
       name: 'BRONZE',
@@ -53,13 +55,13 @@ const VIP = () => {
   const benefits = [
     {
       icon: Gift,
-      title: "Çevrimsiz Yatırım Bonusu",
-      description: "VIP seviyenize göre yatırımlarınızda alabileceğiniz bonus miktarıdır. Bu bonustan yararlanabilmek için bonuslar sayfasından ilgili bonusu seçmeniz gerekmektedir. Sonrasında bonus otomatik olarak hesabınıza eklenecektir."
+      title: t('vip.wageringFreeDepositBonus', 'Wagering-Free Deposit Bonus'),
+      description: t('vip.wageringFreeDepositBonusDescription', 'This is the bonus amount you can receive on your deposits according to your VIP level. To benefit from this bonus, you need to select the relevant bonus from the bonuses page. Afterwards, the bonus will be automatically added to your account.')
     },
     {
       icon: TrendingUp,
-      title: "Seviye Atlama Puanı",
-      description: "Bir sonraki seviyeye ulaşmanız için gerekten puandır. 1 puan = 1 euro."
+      title: t('vip.levelUpPoints', 'Level Up Points'),
+      description: t('vip.levelUpPointsDescription', 'These are the points required to reach the next level. 1 point = 1 euro.')
     }
   ];
 
@@ -75,25 +77,20 @@ const VIP = () => {
               <div className="flex items-center justify-center mb-10 py-8 px-6">
                 <Crown className="w-16 h-16 text-yellow-500 mr-4" />
                 <h1 className="text-4xl font-bold bg-gradient-to-r from-yellow-500 to-orange-500 bg-clip-text text-transparent">
-                  GuduBet VIP Programı
+                  {t('vip.programTitle', 'GuduBet VIP Program')}
                 </h1>
               </div>
               
               <p className="text-xl text-muted-foreground mb-4">
-                GuduBet VIP Programı ile oynadıkça seviyenizi arttırabilirsiniz.
+                {t('vip.programDescription', 'With the GuduBet VIP Program, you can increase your level as you play.')}
               </p>
               <p className="text-lg text-muted-foreground mb-8">
-                Her seviyeye göre farklı bonus ve ayrıcalıklara sahip olabilirsiniz. 
-                Katılmak tamamen ücretsizdir.
+                {t('vip.programBenefits', 'You can have different bonuses and privileges according to each level. Joining is completely free.')}
               </p>
               
               <div className="bg-muted/30 border border-muted rounded-lg p-6 max-w-4xl mx-auto">
                 <p className="text-muted-foreground">
-                  GuduBet'e üye olur olmaz otomatik olarak <span className="text-orange-400 font-semibold">BRONZE</span> seviyesinin avantajlarından faydalanabilirsiniz. 
-                  Bir sonraki seviyeye geçmek için 10.000 Puan toplamanız yeterlidir. 1 Puan = 1 Euro olup toplamda yaklaşık 350.000 
-                  TL'lik oyun çevirmeniz halinde <span className="text-gray-400 font-semibold">SILVER</span> seviyesine yükselebilirsiniz. 
-                  Silver seviyedeki kullanıcılar için 2 Euro oyun çevrimi 1 puan kazandıracaktır. Gold, Platinum, ve Diamond 
-                  seviyedeki kullanıcılar için 3 Euro oyun çevrimi 1 puan kazandıracaktır.
+                  {t('vip.programDetails', 'As soon as you become a member of GuduBet, you can automatically benefit from the advantages of the <span className="text-orange-400 font-semibold">BRONZE</span> level. To move to the next level, you need to collect 10,000 Points. 1 Point = 1 Euro, and if you play approximately 350,000 TL worth of games in total, you can rise to the <span className="text-gray-400 font-semibold">SILVER</span> level. For Silver level users, 2 Euro game turnover will earn 1 point. For Gold, Platinum, and Diamond level users, 3 Euro game turnover will earn 1 point.')}
                 </p>
               </div>
             </div>
@@ -101,7 +98,7 @@ const VIP = () => {
             {/* Benefits Section */}
             <div className="mb-16">
               <h2 className="text-3xl font-bold text-center mb-12 text-foreground">
-                GuduBet VIP Programı bonus ve ayrıcalıkları aşağıda belirtilmiştir:
+                {t('vip.benefitsTitle', 'GuduBet VIP Program bonuses and privileges are specified below:')}
               </h2>
               
               <div className="grid md:grid-cols-2 gap-8 mb-12">
@@ -131,7 +128,7 @@ const VIP = () => {
                 <CardHeader>
                   <CardTitle className="text-2xl flex items-center">
                     <Gift className="w-8 h-8 mr-3 text-yellow-500" />
-                    Çevrimsiz Yatırım Bonusu
+                    {t('vip.wageringFreeDepositBonus', 'Wagering-Free Deposit Bonus')}
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
@@ -154,7 +151,7 @@ const VIP = () => {
                 <CardHeader>
                   <CardTitle className="text-2xl flex items-center">
                     <TrendingUp className="w-8 h-8 mr-3 text-yellow-500" />
-                    Seviye Atlama Puanı
+                    {t('vip.levelUpPoints', 'Level Up Points')}
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
@@ -180,24 +177,24 @@ const VIP = () => {
               <Card className="bg-gradient-to-br from-yellow-500/10 to-orange-500/10 border border-yellow-500/20">
                 <CardContent className="p-6 text-center">
                   <Crown className="w-12 h-12 text-yellow-500 mx-auto mb-4" />
-                  <h3 className="text-xl font-bold mb-2">Özel Ayrıcalıklar</h3>
-                  <p className="text-muted-foreground">VIP seviyenize özel bonus ve promosyonlardan yararlanın</p>
+                  <h3 className="text-xl font-bold mb-2">{t('vip.specialPrivileges', 'Special Privileges')}</h3>
+                  <p className="text-muted-foreground">{t('vip.specialPrivilegesDescription', 'Benefit from bonuses and promotions special to your VIP level')}</p>
                 </CardContent>
               </Card>
               
               <Card className="bg-gradient-to-br from-blue-500/10 to-purple-500/10 border border-blue-500/20">
                 <CardContent className="p-6 text-center">
                   <Users className="w-12 h-12 text-blue-500 mx-auto mb-4" />
-                  <h3 className="text-xl font-bold mb-2">Kişisel Destek</h3>
-                  <p className="text-muted-foreground">Yüksek seviye üyelerimize özel destek hizmeti</p>
+                  <h3 className="text-xl font-bold mb-2">{t('vip.personalSupport', 'Personal Support')}</h3>
+                  <p className="text-muted-foreground">{t('vip.personalSupportDescription', 'Special support service for our high-level members')}</p>
                 </CardContent>
               </Card>
               
               <Card className="bg-gradient-to-br from-green-500/10 to-emerald-500/10 border border-green-500/20">
                 <CardContent className="p-6 text-center">
                   <Award className="w-12 h-12 text-green-500 mx-auto mb-4" />
-                  <h3 className="text-xl font-bold mb-2">Özel Etkinlikler</h3>
-                  <p className="text-muted-foreground">VIP üyelerimize özel turnuva ve etkinlikler</p>
+                  <h3 className="text-xl font-bold mb-2">{t('vip.specialEvents', 'Special Events')}</h3>
+                  <p className="text-muted-foreground">{t('vip.specialEventsDescription', 'Special tournaments and events for our VIP members')}</p>
                 </CardContent>
               </Card>
             </div>

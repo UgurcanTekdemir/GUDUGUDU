@@ -107,7 +107,7 @@ export const RegistrationModal = ({ isOpen, onClose }: RegistrationModalProps) =
 
     if (step === 2) {
       if (!formData.email.trim()) {
-        newErrors.email = "E-mail adresi zorunludur";
+        newErrors.email = t('auth.email_required');
       } else {
         // Çok sıkı email validation - sadece ASCII karakterler
         const email = formData.email.trim().toLowerCase();
@@ -115,12 +115,12 @@ export const RegistrationModal = ({ isOpen, onClose }: RegistrationModalProps) =
         // ASCII olmayan karakterleri kontrol et
         const hasNonASCII = /[^\x00-\x7F]/.test(email);
         if (hasNonASCII) {
-          newErrors.email = "E-mail adresinde Türkçe veya özel karakter kullanılamaz";
+          newErrors.email = t('auth.email_no_special_chars');
         } else {
           // Standard email regex
           const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
           if (!emailRegex.test(email)) {
-            newErrors.email = "Geçerli bir e-mail adresi formatı giriniz (örn: ornek@gmail.com)";
+            newErrors.email = t('auth.email_invalid_format');
           }
         }
       }
@@ -130,7 +130,7 @@ export const RegistrationModal = ({ isOpen, onClose }: RegistrationModalProps) =
       } else if (formData.password.length < 8) {
         newErrors.password = t('auth.password_min_length');
       } else if (!passwordStrength.isSecure) {
-        newErrors.password = 'Şifre yeterince güçlü değil. Lütfen daha güvenli bir şifre seçin.';
+        newErrors.password = t('auth.password_not_strong');
       }
       
       if (!formData.confirmPassword) {
@@ -173,7 +173,7 @@ export const RegistrationModal = ({ isOpen, onClose }: RegistrationModalProps) =
 
       if (error) {
         toast({
-          title: "Google Kaydı Başarısız",
+          title: t('auth.google_signup_failed'),
           description: error.message,
           variant: "destructive"
         });
@@ -181,8 +181,8 @@ export const RegistrationModal = ({ isOpen, onClose }: RegistrationModalProps) =
     } catch (error) {
       console.error('Google signup error:', error);
       toast({
-        title: "Google Kaydı Başarısız", 
-        description: "Bir hata oluştu. Lütfen tekrar deneyin.",
+        title: t('auth.google_signup_failed'), 
+        description: t('auth.error_occurred'),
         variant: "destructive"
       });
     } finally {
@@ -247,22 +247,22 @@ export const RegistrationModal = ({ isOpen, onClose }: RegistrationModalProps) =
 
       if (error) {
         console.error('❌ Registration Error:', error);
-        let errorMessage = "Kayıt işlemi başarısız oldu";
+        let errorMessage = t('auth.registration_failed');
         
         if (error.message.includes('User already registered')) {
-          errorMessage = 'Bu e-posta adresi ile zaten bir hesap mevcut';
+          errorMessage = t('auth.email_already_exists');
         } else if (error.message.includes('Password should be at least')) {
-          errorMessage = 'Şifre en az 8 karakter olmalıdır';
+          errorMessage = t('auth.password_min_length');
         } else if (error.message.includes('Invalid email') || error.message.includes('invalid format')) {
-          errorMessage = `E-mail adresi geçersiz format. Girilen email: "${formData.email}" - Temizlenmiş: "${cleanEmail}"`;
+          errorMessage = t('auth.email_invalid_format_detailed', `E-mail adresi geçersiz format. Girilen email: "${formData.email}" - Temizlenmiş: "${cleanEmail}"`);
         } else if (error.message.includes('Unable to validate email')) {
-          errorMessage = `E-mail adresi doğrulanamadı: "${formData.email}" - Hata: ${error.message}`;
+          errorMessage = t('auth.email_validation_failed', `E-mail adresi doğrulanamadı: "${formData.email}" - Hata: ${error.message}`);
         } else {
-          errorMessage = `Beklenmeyen hata: ${error.message}`;
+          errorMessage = t('auth.unexpected_error', `Beklenmeyen hata: ${error.message}`);
         }
 
         toast({
-          title: "Kayıt Başarısız",
+          title: t('auth.registration_failed'),
           description: errorMessage,
           variant: "destructive"
         });
@@ -270,8 +270,8 @@ export const RegistrationModal = ({ isOpen, onClose }: RegistrationModalProps) =
       }
 
       toast({
-        title: "Kayıt Başarılı!",
-        description: "Hesabınız başarıyla oluşturuldu. E-posta adresinizi kontrol ediniz.",
+        title: t('auth.registration_success'),
+        description: t('auth.registration_success_description'),
       });
       
       onClose();
@@ -281,8 +281,8 @@ export const RegistrationModal = ({ isOpen, onClose }: RegistrationModalProps) =
     } catch (error) {
       console.error('Registration error:', error);
       toast({
-        title: "Kayıt Başarısız",
-        description: "Bir hata oluştu. Lütfen tekrar deneyin.",
+        title: t('auth.registration_failed'),
+        description: t('auth.error_occurred'),
         variant: "destructive"
       });
     } finally {
@@ -301,10 +301,10 @@ export const RegistrationModal = ({ isOpen, onClose }: RegistrationModalProps) =
     <div className="space-y-4 md:space-y-6">
       <div className="text-center mb-4 md:mb-8">
         <h2 className="text-lg md:text-2xl font-gaming font-bold text-foreground mb-2">
-          Kişisel Bilgiler
+          {t('auth.personal_info')}
         </h2>
         <p className="text-sm md:text-base text-muted-foreground">
-          Hesabınızı oluşturmak için gerekli bilgileri giriniz
+          {t('auth.personal_info_description')}
         </p>
       </div>
 
@@ -326,7 +326,7 @@ export const RegistrationModal = ({ isOpen, onClose }: RegistrationModalProps) =
             <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
           </svg>
         )}
-        Google ile Kayıt Ol
+        {t('auth.google_signup')}
       </Button>
 
       <div className="relative">
@@ -335,14 +335,14 @@ export const RegistrationModal = ({ isOpen, onClose }: RegistrationModalProps) =
         </div>
         <div className="relative flex justify-center text-xs uppercase">
           <span className="bg-background px-2 text-muted-foreground">
-            veya manuel olarak
+            {t('auth.or_manually')}
           </span>
         </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
         <div className="space-y-2">
-          <Label htmlFor="firstName" className="text-sm">Ad</Label>
+          <Label htmlFor="firstName" className="text-sm">{t('auth.first_name')}</Label>
           <Input
             id="firstName"
             value={formData.firstName}
@@ -354,7 +354,7 @@ export const RegistrationModal = ({ isOpen, onClose }: RegistrationModalProps) =
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="lastName" className="text-sm">Soyad</Label>
+          <Label htmlFor="lastName" className="text-sm">{t('auth.last_name')}</Label>
           <Input
             id="lastName"
             value={formData.lastName}
@@ -367,7 +367,7 @@ export const RegistrationModal = ({ isOpen, onClose }: RegistrationModalProps) =
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="phone" className="text-sm">Telefon</Label>
+        <Label htmlFor="phone" className="text-sm">{t('auth.phone')}</Label>
         <Input
           id="phone"
           type="tel"
@@ -380,7 +380,7 @@ export const RegistrationModal = ({ isOpen, onClose }: RegistrationModalProps) =
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="birthDate" className="text-sm">Doğum Tarihi</Label>
+        <Label htmlFor="birthDate" className="text-sm">{t('auth.birth_date')}</Label>
         <Input
           id="birthDate"
           type="date"
@@ -398,16 +398,16 @@ export const RegistrationModal = ({ isOpen, onClose }: RegistrationModalProps) =
     <div className="space-y-6">
       <div className="text-center mb-8">
         <h2 className="text-2xl font-gaming font-bold text-foreground mb-2">
-          Hesap Bilgileri
+          {t('auth.account_info')}
         </h2>
         <p className="text-muted-foreground">
-          Giriş yapabilmeniz için e-mail ve şifre bilgilerinizi giriniz
+          {t('auth.account_info_description')}
         </p>
       </div>
 
       <div className="space-y-4">
         <div className="space-y-2">
-          <Label htmlFor="email">E-mail Adresi * <span className="text-xs text-muted-foreground">(Türkçe karakter kullanmayınız)</span></Label>
+          <Label htmlFor="email">{t('auth.email_address')} * <span className="text-xs text-muted-foreground">({t('auth.no_turkish_chars')})</span></Label>
           <Input
             id="email"
             type="email"
@@ -420,7 +420,7 @@ export const RegistrationModal = ({ isOpen, onClose }: RegistrationModalProps) =
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="password">Şifre *</Label>
+          <Label htmlFor="password">{t('auth.password')} *</Label>
           <div className="relative">
             <Input
               id="password"
@@ -446,7 +446,7 @@ export const RegistrationModal = ({ isOpen, onClose }: RegistrationModalProps) =
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="confirmPassword">Şifre Tekrarı *</Label>
+          <Label htmlFor="confirmPassword">{t('auth.confirm_password')} *</Label>
           <div className="relative">
             <Input
               id="confirmPassword"
@@ -468,13 +468,13 @@ export const RegistrationModal = ({ isOpen, onClose }: RegistrationModalProps) =
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="promoCode" className="text-base font-medium">Promosyon Kodu (Opsiyonel)</Label>
+          <Label htmlFor="promoCode" className="text-base font-medium">{t('auth.promo_code_optional')}</Label>
           <Input
             id="promoCode"
             value={formData.promoCode}
             onChange={(e) => updateFormData('promoCode', e.target.value)}
             className="h-12 text-lg px-4"
-            placeholder="Promosyon kodunuzu giriniz"
+            placeholder={t('auth.promo_code_placeholder')}
           />
         </div>
       </div>
@@ -485,34 +485,34 @@ export const RegistrationModal = ({ isOpen, onClose }: RegistrationModalProps) =
     <div className="space-y-6">
       <div className="text-center mb-8">
         <h2 className="text-2xl font-gaming font-bold text-foreground mb-2">
-          Adres Bilgileri
+          {t('auth.address_info')}
         </h2>
         <p className="text-muted-foreground">
-          İkamet adresinizi giriniz
+          {t('auth.address_info_description')}
         </p>
       </div>
 
       <div className="space-y-4">
         <div className="grid grid-cols-2 gap-4">
           <div className="space-y-2">
-            <Label htmlFor="country">Ülke *</Label>
+            <Label htmlFor="country">{t('auth.country')} *</Label>
             <Select value={formData.country} onValueChange={(value) => updateFormData('country', value)}>
               <SelectTrigger className={errors.country ? 'border-destructive' : ''}>
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="turkey">Türkiye</SelectItem>
-                <SelectItem value="usa">Amerika Birleşik Devletleri</SelectItem>
-                <SelectItem value="germany">Almanya</SelectItem>
-                <SelectItem value="france">Fransa</SelectItem>
-                <SelectItem value="uk">Birleşik Krallık</SelectItem>
+                <SelectItem value="turkey">{t('auth.country_turkey')}</SelectItem>
+                <SelectItem value="usa">{t('auth.country_usa')}</SelectItem>
+                <SelectItem value="germany">{t('auth.country_germany')}</SelectItem>
+                <SelectItem value="france">{t('auth.country_france')}</SelectItem>
+                <SelectItem value="uk">{t('auth.country_uk')}</SelectItem>
               </SelectContent>
             </Select>
             {errors.country && <p className="text-sm text-destructive">{errors.country}</p>}
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="city">Şehir *</Label>
+            <Label htmlFor="city">{t('auth.city')} *</Label>
             <Input
               id="city"
               value={formData.city}
@@ -525,7 +525,7 @@ export const RegistrationModal = ({ isOpen, onClose }: RegistrationModalProps) =
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="address">Adres *</Label>
+          <Label htmlFor="address">{t('auth.address')} *</Label>
           <Input
             id="address"
             value={formData.address}
@@ -537,7 +537,7 @@ export const RegistrationModal = ({ isOpen, onClose }: RegistrationModalProps) =
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="postalCode">Posta Kodu *</Label>
+          <Label htmlFor="postalCode">{t('auth.postal_code')} *</Label>
           <Input
             id="postalCode"
             value={formData.postalCode}
@@ -672,12 +672,12 @@ export const RegistrationModal = ({ isOpen, onClose }: RegistrationModalProps) =
                   {isLoading ? (
                     <>
                       <RefreshCw className="w-3 h-3 md:w-4 md:h-4 animate-spin" />
-                      Kaydediliyor...
+                      {t('auth.saving')}...
                     </>
                   ) : (
                     <>
                       <CheckCircle className="w-3 h-3 md:w-4 md:h-4" />
-                      Kayıt Ol
+                      {t('auth.register')}
                     </>
                   )}
                 </Button>

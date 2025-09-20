@@ -4,6 +4,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Search, Filter, X, Grid, List, Star, TrendingUp, Sparkles } from 'lucide-react';
+import { useI18n } from '@/hooks/useI18n';
 
 interface FilterOptions {
   category: string;
@@ -41,6 +42,7 @@ export const GameFilters: React.FC<GameFiltersProps> = ({
   activeFiltersCount,
   onClearFilters
 }) => {
+  const { t } = useI18n();
   const handleFilterChange = (key: keyof FilterOptions, value: any) => {
     onFiltersChange({
       ...filters,
@@ -62,7 +64,7 @@ export const GameFilters: React.FC<GameFiltersProps> = ({
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
           <Input
-            placeholder="Oyun ara..."
+            placeholder={t('casino.searchGames', 'Search games...')}
             value={searchTerm}
             onChange={(e) => onSearchChange(e.target.value)}
             className="pl-10"
@@ -145,10 +147,10 @@ export const GameFilters: React.FC<GameFiltersProps> = ({
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <Select value={filters.category} onValueChange={(value) => handleFilterChange('category', value)}>
           <SelectTrigger>
-            <SelectValue placeholder="Kategori" />
+            <SelectValue placeholder={t('casino.category', 'Category')} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">Tüm Kategoriler</SelectItem>
+            <SelectItem value="all">{t('casino.allCategories', 'All Categories')}</SelectItem>
             {categories.map((category) => (
               <SelectItem key={category} value={category}>
                 {category.charAt(0).toUpperCase() + category.slice(1)}
@@ -159,10 +161,10 @@ export const GameFilters: React.FC<GameFiltersProps> = ({
 
         <Select value={filters.provider} onValueChange={(value) => handleFilterChange('provider', value)}>
           <SelectTrigger>
-            <SelectValue placeholder="Sağlayıcı" />
+            <SelectValue placeholder={t('casino.provider', 'Provider')} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">Tüm Sağlayıcılar</SelectItem>
+            <SelectItem value="all">{t('casino.allProviders', 'All Providers')}</SelectItem>
             {providers.map((provider) => (
               <SelectItem key={provider} value={provider}>
                 {provider}
@@ -173,25 +175,25 @@ export const GameFilters: React.FC<GameFiltersProps> = ({
 
         <Select value={filters.volatility} onValueChange={(value) => handleFilterChange('volatility', value)}>
           <SelectTrigger>
-            <SelectValue placeholder="Volatilite" />
+            <SelectValue placeholder={t('casino.volatility', 'Volatility')} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">Tüm Volatiliteler</SelectItem>
-            <SelectItem value="low">Düşük</SelectItem>
-            <SelectItem value="medium">Orta</SelectItem>
-            <SelectItem value="high">Yüksek</SelectItem>
+            <SelectItem value="all">{t('casino.allVolatilities', 'All Volatilities')}</SelectItem>
+            <SelectItem value="low">{t('casino.lowVolatility', 'Low')}</SelectItem>
+            <SelectItem value="medium">{t('casino.mediumVolatility', 'Medium')}</SelectItem>
+            <SelectItem value="high">{t('casino.highVolatility', 'High')}</SelectItem>
           </SelectContent>
         </Select>
 
         <Select value={filters.sortBy} onValueChange={(value) => handleFilterChange('sortBy', value)}>
           <SelectTrigger>
-            <SelectValue placeholder="Sırala" />
+            <SelectValue placeholder={t('casino.sortBy', 'Sort by')} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="name">İsme göre</SelectItem>
-            <SelectItem value="popularity">Popülerlik</SelectItem>
+            <SelectItem value="name">{t('casino.sortByName', 'Name')}</SelectItem>
+            <SelectItem value="popularity">{t('casino.sortByPopularity', 'Popularity')}</SelectItem>
             <SelectItem value="rtp">RTP</SelectItem>
-            <SelectItem value="newest">En yeni</SelectItem>
+            <SelectItem value="newest">{t('casino.sortByNewest', 'Newest')}</SelectItem>
             <SelectItem value="jackpot">Jackpot</SelectItem>
           </SelectContent>
         </Select>
@@ -224,7 +226,7 @@ export const GameFilters: React.FC<GameFiltersProps> = ({
            
            {filters.volatility && filters.volatility !== 'all' && (
             <Badge variant="secondary" className="gap-1">
-              Volatilite: {filters.volatility === 'low' ? 'Düşük' : filters.volatility === 'medium' ? 'Orta' : 'Yüksek'}
+              {t('casino.volatility', 'Volatility')}: {filters.volatility === 'low' ? t('casino.lowVolatility', 'Low') : filters.volatility === 'medium' ? t('casino.mediumVolatility', 'Medium') : t('casino.highVolatility', 'High')}
                <X 
                  className="w-3 h-3 cursor-pointer hover:text-red-500" 
                  onClick={() => handleFilterChange('volatility', 'all')}

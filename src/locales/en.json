@@ -32,7 +32,20 @@
       "loss-bonus": "LOSS BONUS",
       "get-back": "Get back 20% of your losses!",
       "get": "GET"
-    }
+    },
+    "live_betting_casino": "Live Betting & Casino",
+    "ready_to_win": "Ready to Win",
+    "are_you_ready": "Are You Ready?",
+    "description": "Experience the ultimate betting and casino platform with live games, sports betting, and amazing bonuses.",
+    "start_now": "Start Now",
+    "play_demo": "Play Demo",
+    "active_users": "Active Users",
+    "daily_bets": "Daily Bets",
+    "win_rate": "Win Rate",
+    "featured_matches": "Featured Matches",
+    "current": "Current",
+    "live": "Live",
+    "see_all_matches": "See All Matches"
   },
   "banners": {
     "telegram": {
@@ -43,7 +56,12 @@
     "vip": {
       "program": "VIP PROGRAM"
     },
+    "live-casino": {
+      "title": "LIVE CASINO"
+    },
     "mobile": {
+      "title-1": "MOBILE",
+      "title-2": "APP",
       "coming-soon": "COMING SOON",
       "description": "Our mobile app<br />is coming soon!"
     }
@@ -110,29 +128,567 @@
     "live-casino": "Live Casino",
     "bonuses": "Bonuses"
   },
-  "banners": {
-    "telegram": {
-      "join-channel": "JOIN",
-      "channel": "CHANNEL",
-      "subscribers": "+200K SUBSCRIBERS"
-    },
-    "vip": {
-      "program": "VIP PROGRAM"
-    },
-    "live-casino": {
-      "title": "LIVE CASINO"
-    },
-    "mobile": {
-      "title-1": "MOBILE",
-      "title-2": "APP",
-      "coming-soon": "COMING SOON",
-      "description": "Our mobile app<br />is coming soon!"
-    }
-  },
   "gudubet_telegram": "Gudubet Telegram Channel",
   "address-bar": {
     "text": "Current Address: ",
     "current-address": "For our current address:",
     "use-link": "use the link"
+  },
+  "auth": {
+    "email_required": "Email is required",
+    "email_invalid": "Please enter a valid email",
+    "password_required": "Password is required",
+    "password_min_length": "Password must be at least 6 characters",
+    "captcha_required": "Captcha is required",
+    "captcha_wrong": "Captcha is incorrect",
+    "login_failed": "Login Failed",
+    "login_success": "Login Successful",
+    "admin_redirect": "Redirecting to admin panel...",
+    "welcome": "Welcome!",
+    "login_title": "Login to Your Account",
+    "login_description": "Enter your credentials to access your account",
+    "email_label": "Email Address",
+    "email_placeholder": "Enter your email",
+    "password_label": "Password",
+    "password_placeholder": "Enter your password",
+    "captcha_label": "Security Code",
+    "captcha_placeholder": "Enter security code",
+    "logging_in": "Logging in...",
+    "login_button": "Login",
+    "forgot_password": "Forgot Password?",
+    "name_required": "Name is required",
+    "surname_required": "Surname is required",
+    "phone_required": "Phone number is required",
+    "phone_invalid": "Please enter a valid phone number",
+    "birth_date_required": "Birth date is required"
+  },
+  "ageVerification": {
+    "title": "Age Verification Required",
+    "restriction": "This site is only for people 18 years and older",
+    "description": "This platform offers gambling and betting content. To continue, you must confirm that you are 18 years old or older.",
+    "legalWarning": "Legal Warning:",
+    "legalText": "According to the laws of the Republic of Turkey, gambling by persons under 18 is prohibited.",
+    "responsibleGambling": "Responsible Gambling",
+    "responsibleText": "Gambling addiction is a serious problem. To get help:",
+    "helpline": "Gamblers Anonymous: 0212 123 45 67",
+    "healthMinistry": "Ministry of Health ALO 184",
+    "supportCenters": "Gambling addiction support centers",
+    "confirmAdult": "I am 18 years old or older",
+    "confirmMinor": "I am under 18 years old",
+    "footer": "Access to this site means you accept that you are of legal age."
+  },
+  "kyc": {
+    "limits": {
+      "dailyExceeded": "Daily withdrawal limit exceeded",
+      "monthlyExceeded": "Monthly withdrawal limit exceeded",
+      "yearlyExceeded": "Yearly withdrawal limit exceeded",
+      "general": "Withdrawal limit exceeded"
+    },
+    "yearlyLimit": "Yearly Limit",
+    "remaining": "Remaining",
+    "startVerification": "Start KYC Verification",
+    "increaseLimits": "Increase Limits"
+  }
+  ,
+  "footer": {
+    "banner": {
+      "title": "Gudubet™ | Leading Casino and Betting Platform",
+      "subtitle": "Experience the best casino and betting with Gudubet! Start winning with 2000 TL welcome bonus."
+    },
+    "contact": {
+      "email": "EMAIL"
+    },
+    "legal": {
+      "title": "Legal & Rules",
+      "terms": "Terms & Conditions",
+      "privacy": "Privacy Policy",
+      "cookies": "Cookie Policy",
+      "partnership": "Partnership",
+      "responsibleGaming": "Responsible Gaming",
+      "ageWarning": "18+ Age Warning"
+    },
+    "about": {
+      "title": "About Us",
+      "contact": "Contact Us",
+      "helpCenter": "Gudubet Help Center",
+      "bettingRules": "Betting Rules"
+    }
+  },
+  "common": {
+    "lastUpdated": "Last updated",
+    "returnHome": "Return to Home"
+  },
+  "pages": {
+    "terms": {
+      "title": "Terms & Conditions",
+      "subtitle": "Rules and conditions you must follow when using the GuduBet platform"
+    },
+    "privacy": {
+      "title": "Privacy Policy",
+      "subtitle": "How we collect, use and protect your personal information"
+    },
+    "contact": {
+      "title": "Contact Us",
+      "subtitle": "Get in touch with our support team"
+    },
+    "help": {
+      "title": "Help Center",
+      "subtitle": "Find answers to your questions"
+    },
+    "responsible": {
+      "title": "Responsible Gaming",
+      "subtitle": "Play responsibly and get help when needed"
+    },
+    "partnership": {
+      "title": "Partnership",
+      "subtitle": "Become our business partner"
+    },
+    "cookies": {
+      "title": "Cookie Policy",
+      "subtitle": "How we use cookies on our website"
+    },
+    "bettingRules": {
+      "title": "Betting Rules",
+      "subtitle": "Rules and regulations for sports betting"
+    },
+    "liveSupport": {
+      "title": "Live Support",
+      "subtitle": "Get instant help from our support team"
+    },
+    "paymentMethods": {
+      "title": "Payment Methods",
+      "subtitle": "Available deposit and withdrawal options"
+    },
+    "depositWithdrawal": {
+      "title": "Deposit & Withdrawal",
+      "subtitle": "Manage your account balance"
+    },
+    "profile": {
+      "title": "Profile",
+      "subtitle": "Manage your account settings"
+    },
+    "vip": {
+      "title": "VIP Program",
+      "subtitle": "Exclusive benefits for VIP members"
+    },
+    "promotions": {
+      "title": "Promotions",
+      "subtitle": "Current bonuses and special offers"
+    },
+    "casino": {
+      "title": "Casino Games",
+      "subtitle": "Play the best casino games"
+    },
+    "liveCasino": {
+      "title": "Live Casino",
+      "subtitle": "Experience live casino games"
+    },
+    "sportsBetting": {
+      "title": "Sports Betting",
+      "subtitle": "Bet on your favorite sports"
+    },
+    "liveBetting": {
+      "title": "Live Betting",
+      "subtitle": "Bet on live sports events"
+    },
+    "demoGames": {
+      "title": "Demo Games",
+      "subtitle": "Try games for free"
+    },
+    "notFound": {
+      "title": "Page Not Found",
+      "subtitle": "The page you're looking for doesn't exist"
+    }
+  },
+  "user": {
+    "bonuses": {
+      "title": "My Bonuses",
+      "depositAmount": "Deposit Amount",
+      "bonusAmount": "Bonus Amount",
+      "lastDepositAmount": "Last Deposit Amount",
+      "requestBonus": "Request Bonus",
+      "pending": "Pending",
+      "approved": "Approved",
+      "rejected": "Rejected",
+      "processing": "Processing",
+      "completed": "Completed",
+      "paid": "Paid",
+      "failed": "Failed",
+      "waiting": "Waiting"
+    },
+    "withdrawal": {
+      "title": "Request Withdrawal",
+      "accountHolderName": "Account Holder Name",
+      "walletAddress": "Wallet Address",
+      "amount": "Amount",
+      "withdraw": "Withdraw",
+      "success": "Withdrawal request sent successfully",
+      "error": "Failed to send withdrawal request",
+      "invalidAmount": "Invalid amount",
+      "insufficientBalance": "Insufficient balance",
+      "paymentMethodError": "Check payment information",
+      "profileError": "Profile error",
+      "unknownError": "Unknown error occurred",
+      "checkErrorDetails": "Check the error message below for details"
+    },
+    "deposit": {
+      "title": "Request Deposit",
+      "accountHolderName": "Account holder name for the account you will deposit to",
+      "amount": "Amount",
+      "deposit": "Deposit",
+      "success": "Deposit request sent successfully",
+      "error": "Failed to create deposit request",
+      "fillAllFields": "Please fill all fields",
+      "validAmount": "Enter a valid amount",
+      "approved": "Approved"
+    }
+  },
+  "admin": {
+    "users": {
+      "title": "User Management",
+      "searchPlaceholder": "Search by email...",
+      "search": "Search",
+      "searching": "Searching...",
+      "never": "Never",
+      "success": "User profile updated successfully",
+      "error": "Error updating user",
+      "loadError": "Error loading users"
+    },
+    "devices": {
+      "title": "Device Management",
+      "unknown": "Unknown",
+      "loadError": "Failed to load devices",
+      "eventsError": "Failed to load events"
+    },
+    "bonuses": {
+      "deleteConfirm": "Are you sure you want to delete this bonus?",
+      "deleteSuccess": "Bonus deleted successfully",
+      "deleteError": "Error deleting bonus"
+    }
+  },
+  "errors": {
+    "userNotFound": "User not found",
+    "profileNotFound": "User profile not found",
+    "authRequired": "Authentication required",
+    "fillAllFields": "Please fill all fields",
+    "invalidAmount": "Enter a valid amount",
+    "unknownError": "Unknown error occurred"
+  },
+  "gameProviders": {
+    "evolution": "Evolution",
+    "pragmatic": "PRAGMATIC",
+    "pragmaticLive": "PRAGMATIC LIVE",
+    "imaginelive": "imaginelive",
+    "amidst": "AMIDST",
+    "wazdan": "WAZDAN",
+    "digitain": "DIGITAIN",
+    "hacksaw": "HACKSAW",
+    "nolimit": "NOLIMIT",
+    "redTiger": "RED TIGER",
+    "mod": "MOD",
+    "evoplay": "evoplay",
+    "habanero": "HABANERO",
+    "endorphina": "Endorphina",
+    "microgaming": "Microgaming",
+    "quickspin": "QUICKSPIN",
+    "swinominator": "Swinominator",
+    "ironDog": "IRON DOG STUDIO",
+    "boomingGames": "BOOMING GAMES",
+    "tomHorn": "tom horn",
+    "nomadic": "NOMATIC"
+  },
+  "paymentProviders": {
+    "payco": "PAYco",
+    "banka": "Banka",
+    "superPay": "SUPER PAY",
+    "pep": "PEP",
+    "papara": "papara",
+    "pay": "PAY",
+    "hey": "Hey",
+    "bitcoin": "bitcoin",
+    "litecoin": "Litecoin",
+    "ethereum": "ethereum",
+    "trx": "TRX",
+    "doge": "DOGE"
+  },
+  "sports": {
+    "all": "All",
+    "football": "Football",
+    "basketball": "Basketball",
+    "tennis": "Tennis",
+    "esports": "E-Sports",
+    "draw": "Draw",
+    "matches": "Matches",
+    "today": "Today",
+    "validStakeAmount": "Please enter a valid stake amount.",
+    "selectAtLeastOne": "Please select at least one bet.",
+    "loginRequired": "You need to login to place bets.",
+    "pending": "Pending",
+    "betCreationError": "An error occurred while creating the bet.",
+    "noMatchesYet": "No matches yet.",
+    "noMatchesInCategory": "No matches in this category."
+  },
+  "betting": {
+    "slip": "Bet Slip",
+    "myBets": "My Bets",
+    "clickOddsToBet": "Click on odds to place bets",
+    "noConfirmedBets": "No confirmed bets yet",
+    "useBetSlipTab": "Use the \"Bet Slip\" tab to place bets",
+    "betNumber": "Bet",
+    "won": "Won",
+    "lost": "Lost",
+    "markets": {
+      "matchResult": "Match Result",
+      "doubleChance": "Double Chance",
+      "totalGoals1_5": "Total Goals 1.5",
+      "totalGoals2_5": "Total Goals 2.5",
+      "totalGoals3_5": "Total Goals 3.5",
+      "totalGoals": "Total Goals",
+      "bothTeamsToScore": "Both Teams to Score",
+      "firstHalfResult": "First Half Result",
+      "asianHandicapMinus1": "Asian Handicap (-1)",
+      "totalCards3_5": "Total Cards 3.5",
+      "totalCorners9_5": "Total Corners 9.5",
+      "nextGoal": "Next Goal"
+    },
+    "selections": {
+      "over1_5": "Over 1.5",
+      "under1_5": "Under 1.5",
+      "over2_5": "Over 2.5",
+      "under2_5": "Under 2.5",
+      "over3_5": "Over 3.5",
+      "under3_5": "Under 3.5",
+      "over9_5": "Over 9.5",
+      "under9_5": "Under 9.5",
+      "noGoal": "No Goal"
+    }
+  },
+  "liveBetting": {
+    "live": "LIVE",
+    "viewers": "viewers",
+    "noLiveMatches": "No live matches currently available.",
+    "noLiveMatchesInCategory": "No live matches in this category."
+  },
+  "matchDetails": {
+    "title": "Match Details",
+    "odds": "Odds",
+    "statistics": "Statistics",
+    "liveTracking": "Live Tracking",
+    "matchStatistics": "Match Statistics",
+    "ballPossession": "Ball Possession",
+    "shots": "Shots",
+    "shotsOnTarget": "Shots on Target",
+    "corners": "Corners"
+  },
+  "casino": {
+    "unknownProvider": "Unknown",
+    "noGamesFound": "No games found",
+    "noSearchResults": "No results found for your search.",
+    "clearFilters": "Clear Filters",
+    "featuredGames": "Featured Games",
+    "newGames": "New Games",
+    "popularGames": "Popular Games",
+    "searchGames": "Search games...",
+    "category": "Category",
+    "allCategories": "All Categories",
+    "provider": "Provider",
+    "allProviders": "All Providers",
+    "volatility": "Volatility",
+    "allVolatilities": "All Volatilities",
+    "lowVolatility": "Low",
+    "mediumVolatility": "Medium",
+    "highVolatility": "High",
+    "sortBy": "Sort by",
+    "sortByName": "Name",
+    "sortByPopularity": "Popularity",
+    "totalGames": "Total Games",
+    "gameProviders": "Game Providers",
+    "featuredGamesCount": "Featured Games",
+    "favoriteGames": "Favorite Games",
+    "sortByNewest": "Newest",
+    "featured": "Featured",
+    "popular": "Popular",
+    "myFavorites": "My Favorites",
+    "games": "games",
+    "play": "Play",
+    "demo": "Demo",
+    "demoPlay": "Demo Play",
+    "demoGames": "Demo Games",
+    "freeCasinoGames": "Free Casino Games",
+    "tryPopularCasinoGames": "Try the most popular casino games for free",
+    "noRegistrationRequired": "No Registration Required",
+    "playInstantly": "Play Instantly",
+    "premiumProviders": "Premium Providers",
+    "demoGame": "Demo Game",
+    "featuredDemoGames": "Featured Demo Games",
+    "providerGames": "Provider Games",
+    "all": "All",
+    "aboutNetEnt": "About NetEnt",
+    "netEntDescription": "NetEnt is a world-renowned Swedish game provider known for high-quality slot games and innovative features.",
+    "aboutEGT": "About EGT",
+    "egtDescription": "Euro Games Technology is a Bulgaria-based company that develops classic and modern slot games.",
+    "aboutPragmaticPlay": "About Pragmatic Play",
+    "pragmaticPlayDescription": "Pragmatic Play is a leading game developer known for innovative and entertaining slot games. Offers high volatility and big wins.",
+    "aboutDemoGames": "About Demo Games",
+    "whyPlayDemo": "Why Play Demo?",
+    "demoBenefits": [
+      "Free and requires no registration",
+      "Learn game mechanics",
+      "Gain experience without risk",
+      "Discover bonus features"
+    ],
+    "demoVsReal": "Demo vs Real Difference",
+    "demoVsRealPoints": [
+      "Virtual money is used in demo mode",
+      "You cannot win or lose real money",
+      "All features are the same as real version",
+      "RTP rates do not change"
+    ],
+    "liveCasino": "Live Casino",
+    "realDealersLiveExperience": "Live casino experience with real dealers",
+    "activePlayers": "active players",
+    "tables": "tables",
+    "playNow": "Play Now",
+    "roulette": "Roulette",
+    "blackjack": "Blackjack",
+    "baccarat": "Baccarat",
+    "live": "LIVE",
+    "joinTable": "Join Table",
+    "dealer": "Dealer",
+    "min": "Min",
+    "max": "Max",
+    "promotionsAndBonuses": "Promotions & Bonuses",
+    "promotionsDescription": "Increase your winnings with amazing bonuses and promotions prepared especially for you! Don't miss many opportunities from welcome bonuses to special day campaigns.",
+    "activePromotions": "Active Promotions",
+    "dailyUpdate": "Daily Update",
+    "vipBonuses": "VIP Bonuses",
+    "welcome": "Welcome",
+    "deposit": "Deposit",
+    "freebet": "Freebet",
+    "cashback": "Cashback",
+    "firstDeposit": "First Deposit",
+    "reload": "Reload",
+    "special": "Special Day",
+    "vipPromotions": "VIP Promotions",
+    "eliteMembers": "Elite Members",
+    "eliteMember": "Elite Member",
+    "limited": "Limited",
+    "code": "Code",
+    "bonus": "Bonus",
+    "participation": "Participation",
+    "minDeposit": "Min. Deposit",
+    "maxBonus": "Max. Bonus",
+    "wagering": "Wagering",
+    "expired": "Expired",
+    "daysShort": "d",
+    "hoursShort": "h",
+    "minutesShort": "m",
+    "secondsShort": "s",
+    "wageringRequirement": "Wagering requirement",
+    "time": "Time",
+    "details": "Details",
+    "join": "Join",
+    "noActivePromotions": "No active promotions at the moment.",
+    "noPromotionsInCategory": "No promotions found in this category.",
+    "copied": "Copied!",
+    "promotionCodeCopied": "Promotion code copied to clipboard.",
+    "promotionsLoading": "Loading promotions...",
+    "error": "Error",
+    "errorLoadingPromotions": "An error occurred while loading promotions.",
+    "loginRequired": "Login Required",
+    "loginRequiredToJoin": "You must login to join the promotion.",
+    "requestSent": "Request Sent!",
+    "bonusRequestSent": "bonus request sent. Waiting for approval.",
+    "success": "Success!",
+    "successfullyJoinedPromotion": "promotion successfully joined!",
+    "errorJoiningPromotion": "An error occurred while joining the promotion.",
+    "bonuses": "Bonuses",
+    "bonusesDescription": "View bonus requests and discover bonuses you can claim",
+    "availableBonuses": "Available Bonuses",
+    "requests": "Requests",
+    "activeBonuses": "Active Bonuses",
+    "claimWithBonusCode": "Claim with Bonus Code",
+    "bonusCode": "Bonus Code",
+    "enterBonusCode": "Enter your bonus code...",
+    "claim": "Claim",
+    "invalidBonusCode": "Invalid bonus code",
+    "noAvailableBonuses": "No available bonuses at the moment",
+    "checkRegularlyForNewOffers": "Check regularly for new bonus offers",
+    "bonusRequests": "Bonus Requests",
+    "available": "Available",
+    "copy": "Copy",
+    "vip": {
+      "programTitle": "GuduBet VIP Program",
+      "programDescription": "With the GuduBet VIP Program, you can increase your level as you play.",
+      "programBenefits": "You can have different bonuses and privileges according to each level. Joining is completely free.",
+      "programDetails": "As soon as you become a member of GuduBet, you can automatically benefit from the advantages of the BRONZE level. To move to the next level, you need to collect 10,000 Points. 1 Point = 1 Euro, and if you play approximately 350,000 TL worth of games in total, you can rise to the SILVER level. For Silver level users, 2 Euro game turnover will earn 1 point. For Gold, Platinum, and Diamond level users, 3 Euro game turnover will earn 1 point.",
+      "benefitsTitle": "GuduBet VIP Program bonuses and privileges are specified below:",
+      "wageringFreeDepositBonus": "Wagering-Free Deposit Bonus",
+      "wageringFreeDepositBonusDescription": "This is the bonus amount you can receive on your deposits according to your VIP level. To benefit from this bonus, you need to select the relevant bonus from the bonuses page. Afterwards, the bonus will be automatically added to your account.",
+      "levelUpPoints": "Level Up Points",
+      "levelUpPointsDescription": "These are the points required to reach the next level. 1 point = 1 euro.",
+      "specialPrivileges": "Special Privileges",
+      "specialPrivilegesDescription": "Benefit from bonuses and promotions special to your VIP level",
+      "personalSupport": "Personal Support",
+      "personalSupportDescription": "Special support service for our high-level members",
+      "specialEvents": "Special Events",
+      "specialEventsDescription": "Special tournaments and events for our VIP members"
+    },
+    "auth": {
+      "personal_info": "Personal Information",
+      "personal_info_description": "Enter the required information to create your account",
+      "google_signup": "Sign up with Google",
+      "or_manually": "or manually",
+      "first_name": "First Name",
+      "last_name": "Last Name",
+      "phone": "Phone",
+      "birth_date": "Birth Date",
+      "account_info": "Account Information",
+      "account_info_description": "Enter your email and password information to log in",
+      "email_address": "Email Address",
+      "no_turkish_chars": "Do not use Turkish characters",
+      "password": "Password",
+      "confirm_password": "Confirm Password",
+      "promo_code_optional": "Promo Code (Optional)",
+      "promo_code_placeholder": "Enter your promo code",
+      "address_info": "Address Information",
+      "address_info_description": "Enter your residential address",
+      "country": "Country",
+      "country_turkey": "Turkey",
+      "country_usa": "United States",
+      "country_germany": "Germany",
+      "country_france": "France",
+      "country_uk": "United Kingdom",
+      "city": "City",
+      "address": "Address",
+      "postal_code": "Postal Code",
+      "saving": "Saving",
+      "register": "Register",
+      "email_required": "Email address is required",
+      "email_no_special_chars": "Turkish or special characters cannot be used in email address",
+      "email_invalid_format": "Enter a valid email address format (e.g.: example@gmail.com)",
+      "password_not_strong": "Password is not strong enough. Please choose a more secure password.",
+      "google_signup_failed": "Google Signup Failed",
+      "error_occurred": "An error occurred. Please try again.",
+      "registration_failed": "Registration Failed",
+      "email_already_exists": "An account already exists with this email address",
+      "password_min_length": "Password must be at least 8 characters",
+      "email_invalid_format_detailed": "Invalid email format. Entered email: \"{0}\" - Cleaned: \"{1}\"",
+      "email_validation_failed": "Email address could not be validated: \"{0}\" - Error: {1}",
+      "unexpected_error": "Unexpected error: {0}",
+      "registration_success": "Registration Successful!",
+      "registration_success_description": "Your account has been successfully created. Please check your email address.",
+      "email_not_confirmed": "You need to verify your email address",
+      "too_many_attempts": "Too many attempts. Please try again later",
+      "security_warning": "🛡️ Security Warning",
+      "vpn_proxy_warning": "Your account has been placed under security review due to VPN or Proxy usage.",
+      "velocity_warning": "⚠️ Velocity Limit Warning",
+      "velocity_warning_description": "Very fast login attempt detected. Please be careful.",
+      "device_warning": "🔍 Device Warning",
+      "device_warning_description": "New device or suspicious device activity detected.",
+      "google_login": "Sign in with Google",
+      "or": "or",
+      "password_security_tip": "Consider changing your password to a stronger one for your security"
+    }
   }
 }
