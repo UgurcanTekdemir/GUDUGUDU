@@ -579,6 +579,6 @@ const Index = () => {
         onVerify={handleAgeVerification} 
       />
 
-    </div>;
+    </div>
 };
 export default Index;
