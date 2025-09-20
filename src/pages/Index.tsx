@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel';
+import { Carousel, CarouselContent } from '@/components/ui/carousel';
+// import Autoplay from 'embla-carousel-autoplay';
 import { GameSlider } from '@/components/games/GameSlider';
 import { Badge } from '@/components/ui/badge';
 import { useNavigate } from 'react-router-dom';
@@ -20,10 +21,20 @@ const Index = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isRegistrationModalOpen, setIsRegistrationModalOpen] = useState(false);
   const [showAgeVerification, setShowAgeVerification] = useState(false);
+  const [currentSlide, setCurrentSlide] = useState(0);
   const navigate = useNavigate();
   const { t } = useI18n();
   const { games, loading } = useCasinoGames();
   const { images, getImageByName } = useSiteImages();
+
+  // Auto-slider timer
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % 8);
+    }, 4000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   // Get site images with fallbacks
   const getHeroImage = (imageName: string, fallback: string) => {
@@ -61,15 +72,14 @@ const Index = () => {
       {/* Main Content */}
       <div className="bg-black min-h-screen">
         {/* Hero Section - Animated Advertisement Slider */}
-        <div className="relative">
-          <Carousel className="h-80 md:h-96" opts={{
-          loop: true,
-          duration: 60
-        }}>
-            <CarouselContent className="h-full">
+        <div className="relative overflow-hidden">
+          <div 
+            className="flex transition-transform duration-500 ease-in-out"
+            style={{ transform: `translateX(-${currentSlide * 100}%)` }}
+          >
               {/* Slide 1 - Main Bonus Banner */}
-              <CarouselItem>
-                <div className="relative h-80 md:h-96 bg-gradient-to-br from-red-800 via-red-600 to-orange-500 overflow-hidden">
+              <div className="w-full flex-shrink-0 h-80 md:h-96">
+                <div className="relative h-full bg-gradient-to-br from-red-800 via-red-600 to-orange-500 overflow-hidden">
                   <div className="absolute inset-0 bg-gradient-to-r from-black/30 via-transparent to-black/30"></div>
                   
                   {/* Decorative Elements */}
@@ -93,10 +103,10 @@ const Index = () => {
                     />
                   </div>
                 </div>
-              </CarouselItem>
+              </div>
 
               {/* Slide 2 - VIP Program */}
-              <CarouselItem>
+              <div className="w-full flex-shrink-0 h-80 md:h-96">
                 <div className="relative h-80 md:h-96 bg-gradient-to-br from-purple-800 via-purple-600 to-pink-500 overflow-hidden">
                   <div className="absolute inset-0 bg-gradient-to-r from-black/30 via-transparent to-black/30"></div>
                   
@@ -134,10 +144,10 @@ const Index = () => {
                     </div>
                   </div>
                 </div>
-              </CarouselItem>
+              </div>
 
               {/* Slide 3 - Live Casino */}
-              <CarouselItem>
+              <div className="w-full flex-shrink-0 h-80 md:h-96">
                 <div className="relative h-80 md:h-96 bg-gradient-to-br from-green-800 via-green-600 to-emerald-500 overflow-hidden">
                   <div className="absolute inset-0 bg-gradient-to-r from-black/30 via-transparent to-black/30"></div>
                   
@@ -165,10 +175,10 @@ const Index = () => {
                     </div>
                   </div>
                 </div>
-              </CarouselItem>
+              </div>
 
               {/* Slide 4 - Sports Betting */}
-              <CarouselItem>
+              <div className="w-full flex-shrink-0 h-80 md:h-96">
                 <div className="relative h-80 md:h-96 bg-gradient-to-br from-blue-800 via-blue-600 to-cyan-500 overflow-hidden">
                   <div className="absolute inset-0 bg-gradient-to-r from-black/30 via-transparent to-black/30"></div>
                   
@@ -193,10 +203,10 @@ const Index = () => {
                     </div>
                   </div>
                 </div>
-              </CarouselItem>
+              </div>
 
               {/* Slide 5 - Jackpot */}
-              <CarouselItem>
+              <div className="w-full flex-shrink-0 h-80 md:h-96">
                 <div className="relative h-80 md:h-96 bg-gradient-to-br from-yellow-800 via-yellow-600 to-amber-500 overflow-hidden">
                   <div className="absolute inset-0 bg-gradient-to-r from-black/30 via-transparent to-black/30"></div>
                   
@@ -222,10 +232,10 @@ const Index = () => {
                     </div>
                   </div>
                 </div>
-              </CarouselItem>
+              </div>
 
               {/* Slide 6 - Mobile App */}
-              <CarouselItem>
+              <div className="w-full flex-shrink-0 h-80 md:h-96">
                 <div className="relative h-80 md:h-96 bg-gradient-to-br from-indigo-800 via-indigo-600 to-blue-500 overflow-hidden">
                   <div className="absolute inset-0 bg-gradient-to-r from-black/30 via-transparent to-black/30"></div>
                   
@@ -251,10 +261,10 @@ const Index = () => {
                     </div>
                   </div>
                 </div>
-              </CarouselItem>
+              </div>
 
               {/* Slide 7 - Weekly Tournament */}
-              <CarouselItem>
+              <div className="w-full flex-shrink-0 h-80 md:h-96">
                 <div className="relative h-80 md:h-96 bg-gradient-to-br from-rose-800 via-rose-600 to-pink-500 overflow-hidden">
                   <div className="absolute inset-0 bg-gradient-to-r from-black/30 via-transparent to-black/30"></div>
                   
@@ -280,10 +290,10 @@ const Index = () => {
                     </div>
                   </div>
                 </div>
-              </CarouselItem>
+              </div>
 
               {/* Slide 8 - Cashback Bonus */}
-              <CarouselItem>
+              <div className="w-full flex-shrink-0 h-80 md:h-96">
                 <div className="relative h-80 md:h-96 bg-gradient-to-br from-teal-800 via-teal-600 to-cyan-500 overflow-hidden">
                   <div className="absolute inset-0 bg-gradient-to-r from-black/30 via-transparent to-black/30"></div>
                   
@@ -309,16 +319,23 @@ const Index = () => {
                     </div>
                   </div>
                 </div>
-              </CarouselItem>
-            </CarouselContent>
+              </div>
             
             {/* Pagination Dots */}
             <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
-              {Array.from({
-              length: 8
-            }, (_, i) => <div key={i} className="w-3 h-3 rounded-full bg-white/50"></div>)}
+              {Array.from({ length: 8 }, (_, i) => (
+                <div 
+                  key={i} 
+                  className={`w-3 h-3 rounded-full transition-all duration-300 cursor-pointer ${
+                    currentSlide === i 
+                      ? 'bg-white scale-125' 
+                      : 'bg-white/50 hover:bg-white/75'
+                  }`}
+                  onClick={() => setCurrentSlide(i)}
+                />
+              ))}
             </div>
-          </Carousel>
+          </div>
         </div>
 
         {/* Promotional Banners Section */}
@@ -375,18 +392,34 @@ const Index = () => {
             </Card>
 
             {/* Mobile App */}
-            <Card className="bg-gradient-to-r from-orange-600 to-red-500 border-none text-white overflow-hidden">
+            <Card className="bg-gradient-to-r from-orange-600 to-red-500 border-none text-white overflow-hidden relative">
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
-                  <div className="text-6xl">📱</div>
+                  <div className="flex items-center gap-4">
+                    <div className="text-6xl animate-bounce">📱</div>
+                    <div>
+                      <h3 className="text-xl font-bold mb-2">MOBİL</h3>
+                      <h3 className="text-xl font-bold mb-2">UYGULAMA</h3>
+                    </div>
+                  </div>
                   <div className="text-right">
-                    <h3 className="text-xl font-bold mb-2">MOBİL</h3>
-                    <h3 className="text-xl font-bold mb-2">UYGULAMA</h3>
-                    <Button className="bg-white text-orange-600 font-bold hover:bg-gray-100 text-sm">
-                      İNDİR →
-                    </Button>
+                    <div className="bg-white/20 rounded-lg p-4 backdrop-blur-sm">
+                      <div className="flex items-center justify-center mb-2">
+                        <div className="w-3 h-3 bg-yellow-400 rounded-full animate-pulse mr-2"></div>
+                        <span className="text-yellow-300 font-bold text-sm">ÇOK YAKINDA</span>
+                      </div>
+                      <div className="text-xs text-white/80">
+                        Mobil uygulamamız<br />
+                        yakında geliyor!
+                      </div>
+                    </div>
                   </div>
                 </div>
+                
+                {/* Animated background elements */}
+                <div className="absolute top-2 right-2 w-8 h-8 bg-white/10 rounded-full animate-ping"></div>
+                <div className="absolute bottom-2 left-2 w-4 h-4 bg-yellow-400/30 rounded-full animate-pulse"></div>
+                <div className="absolute top-1/2 left-1/4 w-2 h-2 bg-white/20 rounded-full animate-bounce" style={{animationDelay: '0.5s'}}></div>
               </CardContent>
             </Card>
           </div>

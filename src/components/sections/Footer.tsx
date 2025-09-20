@@ -123,9 +123,6 @@ const Footer = () => {
                 </svg>
               </div>
               <img src="/gcb-seal.svg" alt="gcb" className="h-12" />
-              <div className="bg-red-600 rounded px-2 py-1 text-xs font-bold flex items-center gap-1">
-                🇹🇷 TR
-              </div>
             </div>
           </div>
         </div>
