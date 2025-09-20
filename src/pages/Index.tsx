@@ -23,9 +23,11 @@ const Index = () => {
   const [showAgeVerification, setShowAgeVerification] = useState(false);
   const [currentSlide, setCurrentSlide] = useState(0);
   const navigate = useNavigate();
-  const { t } = useI18n();
+  const { t, currentLanguage, changeLanguage } = useI18n();
   const { games, loading } = useCasinoGames();
   const { images, getImageByName } = useSiteImages();
+
+
 
   // Auto-slider timer
   useEffect(() => {
@@ -69,6 +71,7 @@ const Index = () => {
   return <div className="min-h-screen bg-black">
       <Header />
       
+      
       {/* Main Content */}
       <div className="bg-black min-h-screen">
         {/* Hero Section - Animated Advertisement Slider */}
@@ -91,7 +94,7 @@ const Index = () => {
                   <div className="relative z-10 h-full w-full cursor-pointer" onClick={() => setIsRegistrationModalOpen(true)}>
                     <img 
                       src={getHeroImage('welcome-bonus', '/lovable-uploads/ea4401d0-dccf-4923-b1f3-c6fe9f5412a8.png')} 
-                      alt="Gudubet Hoşgeldin Bonusu 500 TL" 
+                      alt={t('hero.welcome-bonus.alt')} 
                       className="w-full h-full object-cover"
                       style={{ 
                         imageRendering: 'crisp-edges',
@@ -122,7 +125,7 @@ const Index = () => {
                       </h1>
                       <div className="bg-black/80 rounded-lg px-6 py-3 inline-block mb-6">
                         <h2 className="text-xl md:text-2xl font-bold text-purple-300">
-                          ÖZEL AVANTAJLAR
+                          {t('hero.vip.special-advantages')}
                         </h2>
                       </div>
                       <div className="flex justify-center items-center space-x-4 mb-6">
@@ -136,7 +139,7 @@ const Index = () => {
                         </div>
                       </div>
                       <Button className="bg-purple-500 hover:bg-purple-600 text-white font-bold px-8 py-3 text-lg rounded-full hover:scale-105 transition-transform" onClick={() => navigate('/vip')}>
-                        VIP OL
+                        {t('hero.vip.become-vip')}
                       </Button>
                     </div>
                     <div className="flex-1 flex justify-center items-center">
@@ -163,11 +166,11 @@ const Index = () => {
                       </h1>
                       <div className="bg-black/80 rounded-lg px-6 py-3 inline-block mb-6">
                         <h2 className="text-xl md:text-2xl font-bold text-emerald-300">
-                          CASİNO DENEYİMİ
+                          {t('hero.live-casino.experience')}
                         </h2>
                       </div>
                       <Button className="bg-emerald-500 hover:bg-emerald-600 text-white font-bold px-8 py-3 text-lg rounded-full hover:scale-105 transition-transform" onClick={() => navigate('/live-casino')}>
-                        OYNA
+                        {t('hero.live-casino.play')}
                       </Button>
                     </div>
                     <div className="flex-1 flex justify-center items-center">
@@ -194,11 +197,11 @@ const Index = () => {
                       </h1>
                       <div className="bg-black/80 rounded-lg px-6 py-3 inline-block mb-6">
                         <h2 className="text-xl md:text-2xl font-bold text-cyan-300">
-                          BAHİS HEYECANI
+                          {t('hero.sports-betting.excitement')}
                         </h2>
                       </div>
                       <Button className="bg-cyan-500 hover:bg-cyan-600 text-white font-bold px-8 py-3 text-lg rounded-full hover:scale-105 transition-transform" onClick={() => navigate('/sports-betting')}>
-                        BAHİS YAP
+                        {t('hero.sports-betting.place-bet')}
                       </Button>
                     </div>
                   </div>
@@ -225,9 +228,9 @@ const Index = () => {
                           ₺5.847.293
                         </h2>
                       </div>
-                      <p className="text-white text-lg mb-6">Büyük ikramiye seni bekliyor!</p>
+                      <p className="text-white text-lg mb-6">{t('hero.jackpot.waiting')}</p>
                       <Button className="bg-yellow-500 hover:bg-yellow-600 text-black font-bold px-8 py-3 text-lg rounded-full hover:scale-105 transition-transform" onClick={() => navigate('/casino')}>
-                        ŞANSINI DENE
+                        {t('hero.jackpot.try-luck')}
                       </Button>
                     </div>
                   </div>
@@ -254,9 +257,9 @@ const Index = () => {
                           UYGULAMA
                         </h2>
                       </div>
-                      <p className="text-white text-lg mb-6">Her yerden bahis yap, kazan!</p>
+                      <p className="text-white text-lg mb-6">{t('hero.mobile-app.everywhere')}</p>
                       <Button className="bg-blue-500 hover:bg-blue-600 text-white font-bold px-8 py-3 text-lg rounded-full hover:scale-105 transition-transform">
-                        İNDİR
+                        {t('hero.mobile-app.download')}
                       </Button>
                     </div>
                   </div>
@@ -280,12 +283,12 @@ const Index = () => {
                       </h1>
                       <div className="bg-black/80 rounded-lg px-6 py-3 inline-block mb-4">
                         <h2 className="text-xl md:text-2xl font-bold text-pink-300">
-                          HAFTALIK YARIŞMA
+                          {t('hero.tournament.weekly-competition')}
                         </h2>
                       </div>
-                      <p className="text-white text-lg mb-6">₺100.000 ödül havuzu!</p>
+                      <p className="text-white text-lg mb-6">{t('hero.tournament.prize-pool')}</p>
                       <Button className="bg-pink-500 hover:bg-pink-600 text-white font-bold px-8 py-3 text-lg rounded-full hover:scale-105 transition-transform">
-                        KATIL
+                        {t('hero.tournament.join')}
                       </Button>
                     </div>
                   </div>
@@ -309,12 +312,12 @@ const Index = () => {
                       </h1>
                       <div className="bg-black/80 rounded-lg px-6 py-3 inline-block mb-4">
                         <h2 className="text-xl md:text-2xl font-bold text-teal-300">
-                          KAYIP BONUSU
+                          {t('hero.cashback.loss-bonus')}
                         </h2>
                       </div>
-                      <p className="text-white text-lg mb-6">Kaybettiğin paranın %20'si geri!</p>
+                      <p className="text-white text-lg mb-6">{t('hero.cashback.get-back')}</p>
                       <Button className="bg-teal-500 hover:bg-teal-600 text-white font-bold px-8 py-3 text-lg rounded-full hover:scale-105 transition-transform">
-                        AL
+                        {t('hero.cashback.get')}
                       </Button>
                     </div>
                   </div>
@@ -343,7 +346,7 @@ const Index = () => {
           {/* Address Bar */}
           <div className="bg-gradient-to-r from-yellow-600 to-orange-500 rounded-lg p-4 mb-6 text-center">
             <p className="text-black font-semibold">
-              Güncel adresimiz için: <span className="bg-yellow-300 px-2 py-1 rounded">t.ly/gudubetadres</span> linkini kullanınız
+              {t('address-bar.current-address')} <span className="bg-yellow-300 px-2 py-1 rounded">t.ly/gudubetadres</span> {t('address-bar.use-link')}
             </p>
           </div>
 
@@ -354,9 +357,9 @@ const Index = () => {
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h3 className="text-2xl font-bold mb-2">KANALA</h3>
-                    <h3 className="text-2xl font-bold mb-2">KATIL</h3>
-                    <p className="text-sm opacity-90">+200K ABONE</p>
+                    <h3 className="text-2xl font-bold mb-2">{t('banners.telegram.join-channel')}</h3>
+                    <h3 className="text-2xl font-bold mb-2">{t('banners.telegram.channel')}</h3>
+                    <p className="text-sm opacity-90">{t('banners.telegram.subscribers')}</p>
                     <p className="text-xs opacity-75 mt-2">{t('gudubet_telegram')}</p>
                   </div>
                   <Send className="w-16 h-16 opacity-80" />
@@ -384,8 +387,8 @@ const Index = () => {
                       <div className="text-sm font-bold">%25</div>
                     </div>
                   </div>
-                  <Button className="bg-white text-green-600 font-bold hover:bg-gray-100" onClick={() => navigate('/vip')}>
-                    VIP PROGRAMI →
+                  <Button className="bg-white text-green-600 font-bold hover:bg-gray-100 no-underline" onClick={() => navigate('/vip')}>
+                    {t('banners.vip.program')} →
                   </Button>
                 </div>
               </CardContent>
@@ -398,20 +401,17 @@ const Index = () => {
                   <div className="flex items-center gap-4">
                     <div className="text-6xl animate-bounce">📱</div>
                     <div>
-                      <h3 className="text-xl font-bold mb-2">MOBİL</h3>
-                      <h3 className="text-xl font-bold mb-2">UYGULAMA</h3>
+                      <h3 className="text-xl font-bold mb-2">{t('banners.mobile.title-1')}</h3>
+                      <h3 className="text-xl font-bold mb-2">{t('banners.mobile.title-2')}</h3>
                     </div>
                   </div>
                   <div className="text-right">
                     <div className="bg-white/20 rounded-lg p-4 backdrop-blur-sm">
                       <div className="flex items-center justify-center mb-2">
                         <div className="w-3 h-3 bg-yellow-400 rounded-full animate-pulse mr-2"></div>
-                        <span className="text-yellow-300 font-bold text-sm">ÇOK YAKINDA</span>
+                        <span className="text-yellow-300 font-bold text-sm">{t('banners.mobile.coming-soon')}</span>
                       </div>
-                      <div className="text-xs text-white/80">
-                        Mobil uygulamamız<br />
-                        yakında geliyor!
-                      </div>
+                      <div className="text-xs text-white/80" dangerouslySetInnerHTML={{ __html: t('banners.mobile.description') }} />
                     </div>
                   </div>
                 </div>
@@ -427,8 +427,8 @@ const Index = () => {
           {/* Featured Games Section */}
           <GameSlider
             games={getFeaturedRandomGames(8)}
-            title="Öne Çıkan Oyunlar"
-            subtitle="En popüler casino oyunlarını keşfedin"
+            title={t('sections.featured-games.title')}
+            subtitle={t('sections.featured-games.subtitle')}
             showDemoButton={true}
             autoPlay={true}
             autoPlayInterval={4000}
@@ -436,7 +436,7 @@ const Index = () => {
 
           {/* Winners Section */}
           <div className="mb-8">
-            <h2 className="text-yellow-400 text-xl font-bold mb-4">SON KAZANANLAR</h2>
+            <h2 className="text-yellow-400 text-xl font-bold mb-4">{t('sections.winners.title')}</h2>
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               {[{
               name: 'Y.S.',
@@ -479,14 +479,14 @@ const Index = () => {
           <div className="mb-12">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-yellow-400 text-2xl font-bold flex items-center">
-                🎰 CASINO OYUNLARI
+{t('sections.casino-games.title')}
               </h2>
               <Button 
                 variant="outline" 
                 className="border-yellow-400 text-yellow-400 hover:bg-yellow-400 hover:text-black"
                 onClick={() => navigate('/casino')}
               >
-                Tümünü Gör
+                {t('buttons.view-all')}
               </Button>
             </div>
             
@@ -503,7 +503,7 @@ const Index = () => {
                   ></div>
                   <div className="relative p-6 h-full flex flex-col justify-between">
                     <div className="text-center">
-                      <h3 className="text-white text-2xl font-bold mb-4">POPÜLER</h3>
+                      <h3 className="text-white text-2xl font-bold mb-4">{t('sidebar.popular.title')}</h3>
                       <div className="w-32 h-32 mx-auto mb-4 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center">
                         <div className="text-6xl">👑</div>
                       </div>
@@ -512,7 +512,7 @@ const Index = () => {
                       onClick={() => navigate('/casino?category=popular')}
                       className="bg-white text-black hover:bg-gray-100 font-bold w-full"
                     >
-                      HEPSİNİ GÖR
+                      {t('sidebar.popular.view-all')}
                     </Button>
                   </div>
                 </div>
@@ -556,7 +556,7 @@ const Index = () => {
                             className="bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 text-xs font-semibold shadow-lg hover:shadow-orange-500/25 transition-all duration-200"
                           >
                             <Play className="w-3 h-3 mr-1" />
-                            Oyna
+{t('buttons.play')}
                           </Button>
                           
                           <Button
@@ -565,7 +565,7 @@ const Index = () => {
                             className="bg-transparent border-white/30 text-white hover:bg-white/10 px-4 py-2 text-xs font-semibold backdrop-blur-sm"
                           >
                             <Eye className="w-3 h-3 mr-1" />
-                            Demo
+{t('buttons.demo')}
                           </Button>
                         </div>
                       </div>
@@ -612,7 +612,7 @@ const Index = () => {
                                 className="bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 text-xs font-semibold shadow-lg hover:shadow-orange-500/25 transition-all duration-200"
                               >
                                 <Play className="w-3 h-3 mr-1" />
-                                Oyna
+{t('buttons.play')}
                               </Button>
                               
                               <Button
@@ -621,7 +621,7 @@ const Index = () => {
                                 className="bg-transparent border-white/30 text-white hover:bg-white/10 px-4 py-2 text-xs font-semibold backdrop-blur-sm"
                               >
                                 <Eye className="w-3 h-3 mr-1" />
-                                Demo
+{t('buttons.demo')}
                               </Button>
                             </div>
                           </div>
@@ -638,14 +638,14 @@ const Index = () => {
           <div className="mb-12">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-yellow-400 text-2xl font-bold flex items-center">
-                🎲 CANLI CASINO
+                {t('sections.live-casino.title')}
               </h2>
               <Button 
                 variant="outline" 
-                className="border-yellow-400 text-yellow-400 hover:bg-yellow-400 hover:text-black"
+                className="border-yellow-400 text-yellow-400 hover:bg-yellow-400 hover:text-black no-underline"
                 onClick={() => navigate('/live-casino')}
               >
-                Tümünü Gör
+                {t('buttons.view-all')}
               </Button>
             </div>
             
@@ -662,7 +662,7 @@ const Index = () => {
                   ></div>
                   <div className="relative p-6 h-full flex flex-col justify-between">
                     <div className="text-center">
-                      <h3 className="text-white text-2xl font-bold mb-4">CANLI CASİNO</h3>
+                      <h3 className="text-white text-2xl font-bold mb-4">{t('banners.live-casino.title')}</h3>
                       <div className="w-32 h-32 mx-auto mb-4 bg-gradient-to-br from-green-400 to-blue-500 rounded-full flex items-center justify-center">
                         <div className="text-6xl">👩‍💼</div>
                       </div>
@@ -671,7 +671,7 @@ const Index = () => {
                       onClick={() => navigate('/live-casino')}
                       className="bg-white text-black hover:bg-gray-100 font-bold w-full"
                     >
-                      HEPSİNİ GÖR
+                      {t('sidebar.live-casino.view-all')}
                     </Button>
                   </div>
                 </div>
@@ -684,42 +684,42 @@ const Index = () => {
               {[
                 {
                   id: 'live-1',
-                  name: 'Lightning Rulet',
+                  name: t('games.live.lightning-roulette'),
                   provider: 'Evolution',
                   thumbnail: 'https://images.unsplash.com/photo-1596838132731-3301c3fd4317?w=400&h=300&fit=crop',
                   slug: 'lightning-rulet'
                 },
                 {
                   id: 'live-2',
-                  name: 'Özel Stüdyo',
+                  name: t('games.live.special-studio'),
                   provider: 'Evolution',
                   thumbnail: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=300&fit=crop',
                   slug: 'ozel-studio'
                 },
                 {
                   id: 'live-3',
-                  name: 'Blackjack Lobby',
+                  name: t('games.live.blackjack-lobby'),
                   provider: 'Evolution',
                   thumbnail: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=300&fit=crop',
                   slug: 'blackjack-lobby'
                 },
                 {
                   id: 'live-4',
-                  name: 'Crazy Time',
+                  name: t('games.live.crazy-time'),
                   provider: 'Evolution',
                   thumbnail: 'https://images.unsplash.com/photo-1596838132731-3301c3fd4317?w=400&h=300&fit=crop',
                   slug: 'crazy-time'
                 },
                 {
                   id: 'live-5',
-                  name: 'Dream Catcher',
+                  name: t('games.live.dream-catcher'),
                   provider: 'Evolution',
                   thumbnail: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=300&fit=crop',
                   slug: 'dream-catcher'
                 },
                 {
                   id: 'live-6',
-                  name: 'Monopoly Live',
+                  name: t('games.live.monopoly-live'),
                   provider: 'Evolution',
                   thumbnail: 'https://images.unsplash.com/photo-1596838132731-3301c3fd4317?w=400&h=300&fit=crop',
                   slug: 'monopoly-live'
@@ -769,42 +769,42 @@ const Index = () => {
                   {[
                     {
                       id: 'live-7',
-                      name: 'Speed Roulette',
+                      name: t('games.live.speed-roulette'),
                       provider: 'Evolution',
                       thumbnail: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=300&fit=crop',
                       slug: 'speed-roulette'
                     },
                     {
                       id: 'live-8',
-                      name: 'VIP Blackjack',
+                      name: t('games.live.vip-blackjack'),
                       provider: 'Evolution',
                       thumbnail: 'https://images.unsplash.com/photo-1596838132731-3301c3fd4317?w=400&h=300&fit=crop',
                       slug: 'vip-blackjack'
                     },
                     {
                       id: 'live-9',
-                      name: 'Immersive Roulette',
+                      name: t('games.live.immersive-roulette'),
                       provider: 'Evolution',
                       thumbnail: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=300&fit=crop',
                       slug: 'immersive-roulette'
                     },
                     {
                       id: 'live-10',
-                      name: 'Lightning Dice',
+                      name: t('games.live.lightning-dice'),
                       provider: 'Evolution',
                       thumbnail: 'https://images.unsplash.com/photo-1596838132731-3301c3fd4317?w=400&h=300&fit=crop',
                       slug: 'lightning-dice'
                     },
                     {
                       id: 'live-11',
-                      name: 'Gonzo\'s Treasure Hunt',
+                      name: t('games.live.gonzos-treasure-hunt'),
                       provider: 'Evolution',
                       thumbnail: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=300&fit=crop',
                       slug: 'gonzos-treasure-hunt'
                     },
                     {
                       id: 'live-12',
-                      name: 'Side Bet City',
+                      name: t('games.live.side-bet-city'),
                       provider: 'Evolution',
                       thumbnail: 'https://images.unsplash.com/photo-1596838132731-3301c3fd4317?w=400&h=300&fit=crop',
                       slug: 'side-bet-city'
@@ -839,7 +839,7 @@ const Index = () => {
                                 className="bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 text-xs font-semibold shadow-lg hover:shadow-orange-500/25 transition-all duration-200"
                               >
                                 <Play className="w-3 h-3 mr-1" />
-                                Canlı Oyna
+{t('buttons.live-play')}
                               </Button>
                             </div>
                           </div>

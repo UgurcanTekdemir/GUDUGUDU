@@ -15,29 +15,38 @@ export const useI18n = () => {
   const [loading, setLoading] = useState(false);
 
   // Load translations for current language
-  const loadTranslations = useCallback(async (language: SupportedLanguage = currentLanguage) => {
+  const loadTranslations = useCallback(async (language: SupportedLanguage) => {
     try {
       setLoading(true);
-      const { data, error } = await supabase
-        .from('translations')
-        .select('key, value, namespace')
-        .eq('language_code', language);
-
-      if (error) throw error;
-
-      const translationMap: Record<string, string> = {};
-      data?.forEach((t: Translation) => {
-        const fullKey = t.namespace === 'common' ? t.key : `${t.namespace}.${t.key}`;
-        translationMap[fullKey] = t.value;
-      });
-
-      setTranslations(translationMap);
+      
+      // Load from JSON files for homepage
+      const translations = await import(`../locales/${language}.json`);
+      const flatTranslations: Record<string, string> = {};
+      
+      // Flatten nested object
+      const flattenObject = (obj: any, prefix = ''): void => {
+        for (const key in obj) {
+          if (obj.hasOwnProperty(key)) {
+            const newKey = prefix ? `${prefix}.${key}` : key;
+            if (typeof obj[key] === 'object' && obj[key] !== null) {
+              flattenObject(obj[key], newKey);
+            } else {
+              flatTranslations[newKey] = obj[key];
+            }
+          }
+        }
+      };
+      
+      flattenObject(translations.default || translations);
+      setTranslations(flatTranslations);
     } catch (error) {
-      console.error('Error loading translations:', error);
+      console.error('Error loading JSON translations:', error);
+      // Set empty translations to avoid errors
+      setTranslations({});
     } finally {
       setLoading(false);
     }
-  }, [currentLanguage]);
+  }, []);
 
   // Get translation by key
   const t = useCallback((key: string, fallback?: string): string => {
@@ -49,7 +58,6 @@ export const useI18n = () => {
     setCurrentLanguage(language);
     localStorage.setItem('language', language);
     await loadTranslations(language);
-    // No page reload - let React handle the updates
   }, [loadTranslations]);
 
   // Format currency based on language

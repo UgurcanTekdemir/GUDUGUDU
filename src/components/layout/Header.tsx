@@ -23,7 +23,8 @@ const Header = () => {
   const location = useLocation();
   
   // I18n hook for translations
-  const { t } = useI18n();
+  const { t, currentLanguage } = useI18n();
+
   
   // Get user balance data
   const balanceData = useUserBalance(user);
@@ -33,25 +34,25 @@ const Header = () => {
   
   // Navigation items with translations
   const navItems = [{
-    name: t('sports'),
+    name: t('navigation.sports'),
     href: '/sports-betting'
   }, {
-    name: t('live_betting'),
+    name: t('navigation.live-betting'),
     href: '/live-betting'
   }, {
-    name: t('casino'),
+    name: t('navigation.casino'),
     href: '/casino'
   }, {
-    name: 'Demo Oyunlar',
+    name: t('navigation.demo-games'),
     href: '/demo-games'
   }, {
-    name: t('live_casino'),
+    name: t('navigation.live-casino'),
     href: '/live-casino'
   }, {
-    name: t('bonuses'),
+    name: t('navigation.bonuses'),
     href: '/promotions'
   }, {
-    name: t('vip_program'),
+    name: t('banners.vip.program'),
     href: '/vip'
   }];
   useEffect(() => {
@@ -100,7 +101,7 @@ const Header = () => {
 
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center space-x-8">
-            {navItems.map((item, index) => <Link key={index} to={item.href} className="text-white dark:text-white light:text-foreground hover:text-primary transition-colors duration-200 text-sm font-medium uppercase">
+            {navItems.map((item, index) => <Link key={index} to={item.href} className="text-white dark:text-white light:text-foreground hover:text-primary transition-colors duration-200 text-sm font-medium uppercase no-underline">
                 {item.name}
               </Link>)}
           </nav>
@@ -110,29 +111,29 @@ const Header = () => {
             <ThemeToggle />
             <LanguageSelector />
             {!user ? <>
-                <Button variant="outline" onClick={() => setIsLoginModalOpen(true)} className="text-xs px-4 h-8 uppercase font-medium border-white dark:border-white light:border-primary text-black dark:text-black light:text-primary bg-white dark:bg-white light:bg-background hover:bg-gray-100 dark:hover:bg-gray-100 light:hover:bg-muted">
-                  {t('login_button')}
+                <Button variant="outline" onClick={() => setIsLoginModalOpen(true)} className="text-xs px-4 h-8 uppercase font-medium border-white dark:border-white light:border-primary text-black dark:text-black light:text-primary bg-white dark:bg-white light:bg-background hover:bg-gray-100 dark:hover:bg-gray-100 light:hover:bg-muted no-underline">
+                  {t('header.login-button')}
                 </Button>
-                <Button onClick={() => setIsRegistrationModalOpen(true)} className="bg-success hover:bg-success/90 text-white text-xs px-4 h-8 uppercase font-medium">
-                  {t('register_button')}
+                <Button onClick={() => setIsRegistrationModalOpen(true)} className="bg-success hover:bg-success/90 text-white text-xs px-4 h-8 uppercase font-medium no-underline">
+                  {t('header.register-button')}
                 </Button>
               </> : <div className="flex items-center space-x-4">
                 <Link to="/deposit-withdrawal" className="flex items-center space-x-3 text-white dark:text-white light:text-foreground hover:text-primary transition-colors cursor-pointer">
                   <Wallet className="h-4 w-4" />
                   <div className="flex flex-col text-sm">
                     <span>
-                      Ana: ₺{balanceData.loading ? '...' : balanceData.balance.toLocaleString('tr-TR', { minimumFractionDigits: 2 })}
+                      {t('header.main-balance')}: ₺{balanceData.loading ? '...' : balanceData.balance.toLocaleString('tr-TR', { minimumFractionDigits: 2 })}
                     </span>
                     {balanceData.bonus_balance > 0 && (
                       <span className="text-green-400 text-xs">
-                        Bonus: ₺{balanceData.bonus_balance.toLocaleString('tr-TR', { minimumFractionDigits: 2 })}
+                        {t('header.bonus-balance')}: ₺{balanceData.bonus_balance.toLocaleString('tr-TR', { minimumFractionDigits: 2 })}
                       </span>
                     )}
                   </div>
                 </Link>
                 <Link to="/user/withdraw" className="flex items-center space-x-2 text-white dark:text-white light:text-foreground hover:text-primary transition-colors cursor-pointer">
                   <CreditCard className="h-4 w-4" />
-                  <span className="text-sm">Çekim</span>
+                  <span className="text-sm">{t('header.withdraw')}</span>
                 </Link>
                 <NotificationsDropdown 
                   notifications={notificationsData.notifications}
@@ -157,7 +158,7 @@ const Header = () => {
       {/* Mobile Menu */}
       {isMenuOpen && <div className="lg:hidden bg-gray-900 border-t border-gray-700">
           <div className="container mx-auto px-4 py-4 space-y-4">
-            {navItems.map((item, index) => <Link key={index} to={item.href} onClick={() => setIsMenuOpen(false)} className="block text-white hover:text-orange-400 transition-colors duration-200 py-2 uppercase font-medium">
+            {navItems.map((item, index) => <Link key={index} to={item.href} onClick={() => setIsMenuOpen(false)} className="block text-white hover:text-orange-400 transition-colors duration-200 py-2 uppercase font-medium no-underline">
                 {item.name}
               </Link>)}
             

@@ -1,0 +1,138 @@
+{
+  "hero": {
+    "welcome-bonus": {
+      "alt": "Gudubet Hoşgeldin Bonusu 500 TL"
+    },
+    "vip": {
+      "special-advantages": "ÖZEL AVANTAJLAR",
+      "become-vip": "VIP OL"
+    },
+    "live-casino": {
+      "experience": "CASİNO DENEYİMİ",
+      "play": "OYNA"
+    },
+    "sports-betting": {
+      "excitement": "BAHİS HEYECANI",
+      "place-bet": "BAHİS YAP"
+    },
+    "jackpot": {
+      "waiting": "Büyük ikramiye seni bekliyor!",
+      "try-luck": "ŞANSINI DENE"
+    },
+    "mobile-app": {
+      "everywhere": "Her yerden bahis yap, kazan!",
+      "download": "İNDİR"
+    },
+    "tournament": {
+      "weekly-competition": "HAFTALIK YARIŞMA",
+      "prize-pool": "₺100.000 ödül havuzu!",
+      "join": "KATIL"
+    },
+    "cashback": {
+      "loss-bonus": "KAYIP BONUSU",
+      "get-back": "Kaybettiğin paranın %20'si geri!",
+      "get": "AL"
+    }
+  },
+  "banners": {
+    "telegram": {
+      "join-channel": "KANALA",
+      "channel": "KATIL",
+      "subscribers": "+200K ABONE"
+    },
+    "vip": {
+      "program": "VIP PROGRAMI"
+    },
+    "mobile": {
+      "coming-soon": "ÇOK YAKINDA",
+      "description": "Mobil uygulamamız<br />yakında geliyor!"
+    }
+  },
+  "sections": {
+    "featured-games": {
+      "title": "Öne Çıkan Oyunlar",
+      "subtitle": "En popüler casino oyunlarını keşfedin"
+    },
+    "winners": {
+      "title": "SON KAZANANLAR"
+    },
+    "casino-games": {
+      "title": "🎰 CASINO OYUNLARI"
+    },
+    "live-casino": {
+      "title": "🎲 CANLI CASINO"
+    }
+  },
+  "sidebar": {
+    "popular": {
+      "title": "POPÜLER",
+      "view-all": "HEPSİNİ GÖR"
+    },
+    "live-casino": {
+      "title": "CANLI CASİNO",
+      "view-all": "HEPSİNİ GÖR"
+    }
+  },
+  "buttons": {
+    "view-all": "Tümünü Gör",
+    "play": "Oyna",
+    "demo": "Demo",
+    "live-play": "Canlı Oyna"
+  },
+  "games": {
+    "live": {
+      "lightning-roulette": "Lightning Rulet",
+      "special-studio": "Özel Stüdyo",
+      "blackjack-lobby": "Blackjack Lobby",
+      "crazy-time": "Crazy Time",
+      "dream-catcher": "Dream Catcher",
+      "monopoly-live": "Monopoly Live",
+      "speed-roulette": "Speed Roulette",
+      "vip-blackjack": "VIP Blackjack",
+      "immersive-roulette": "Immersive Roulette",
+      "lightning-dice": "Lightning Dice",
+      "gonzos-treasure-hunt": "Gonzo's Treasure Hunt",
+      "side-bet-city": "Side Bet City"
+    }
+  },
+  "header": {
+    "main-balance": "Ana",
+    "bonus-balance": "Bonus",
+    "withdraw": "Çekim",
+    "login-button": "Giriş Yap",
+    "register-button": "Üye Ol"
+  },
+  "navigation": {
+    "sports": "Spor",
+    "live-betting": "Canlı Bahis",
+    "casino": "Casino",
+    "demo-games": "Demo Oyunlar",
+    "live-casino": "Canlı Casino",
+    "bonuses": "Bonuslar"
+  },
+  "banners": {
+    "telegram": {
+      "join-channel": "KANALA",
+      "channel": "KATIL",
+      "subscribers": "+200K ABONE"
+    },
+    "vip": {
+      "program": "VIP PROGRAM"
+    },
+    "live-casino": {
+      "title": "CANLI CASINO"
+    },
+    "mobile": {
+      "title-1": "MOBİL",
+      "title-2": "UYGULAMA",
+      "coming-soon": "ÇOK YAKINDA",
+      "description": "Mobil uygulamamız<br />yakında geliyor!"
+    }
+  },
+  "gudubet_telegram": "Gudubet Telegram Kanalı",
+  "address-bar": {
+    "text": "Mevcut Adres: ",
+    "current-address": "Güncel adresimiz için:",
+    "use-link": "linkini kullanınız"
+  }
+}

@@ -1,0 +1,138 @@
+{
+  "hero": {
+    "welcome-bonus": {
+      "alt": "Gudubet Welcome Bonus 500 TL"
+    },
+    "vip": {
+      "special-advantages": "SPECIAL ADVANTAGES",
+      "become-vip": "BECOME VIP"
+    },
+    "live-casino": {
+      "experience": "CASINO EXPERIENCE",
+      "play": "PLAY"
+    },
+    "sports-betting": {
+      "excitement": "BETTING EXCITEMENT",
+      "place-bet": "PLACE BET"
+    },
+    "jackpot": {
+      "waiting": "Big jackpot is waiting for you!",
+      "try-luck": "TRY YOUR LUCK"
+    },
+    "mobile-app": {
+      "everywhere": "Bet from anywhere, win!",
+      "download": "DOWNLOAD"
+    },
+    "tournament": {
+      "weekly-competition": "WEEKLY COMPETITION",
+      "prize-pool": "₺100.000 prize pool!",
+      "join": "JOIN"
+    },
+    "cashback": {
+      "loss-bonus": "LOSS BONUS",
+      "get-back": "Get back 20% of your losses!",
+      "get": "GET"
+    }
+  },
+  "banners": {
+    "telegram": {
+      "join-channel": "JOIN",
+      "channel": "CHANNEL",
+      "subscribers": "+200K SUBSCRIBERS"
+    },
+    "vip": {
+      "program": "VIP PROGRAM"
+    },
+    "mobile": {
+      "coming-soon": "COMING SOON",
+      "description": "Our mobile app<br />is coming soon!"
+    }
+  },
+  "sections": {
+    "featured-games": {
+      "title": "Featured Games",
+      "subtitle": "Discover the most popular casino games"
+    },
+    "winners": {
+      "title": "LATEST WINNERS"
+    },
+    "casino-games": {
+      "title": "🎰 CASINO GAMES"
+    },
+    "live-casino": {
+      "title": "🎲 LIVE CASINO"
+    }
+  },
+  "sidebar": {
+    "popular": {
+      "title": "POPULAR",
+      "view-all": "VIEW ALL"
+    },
+    "live-casino": {
+      "title": "LIVE CASINO",
+      "view-all": "VIEW ALL"
+    }
+  },
+  "buttons": {
+    "view-all": "View All",
+    "play": "Play",
+    "demo": "Demo",
+    "live-play": "Live Play"
+  },
+  "games": {
+    "live": {
+      "lightning-roulette": "Lightning Roulette",
+      "special-studio": "Special Studio",
+      "blackjack-lobby": "Blackjack Lobby",
+      "crazy-time": "Crazy Time",
+      "dream-catcher": "Dream Catcher",
+      "monopoly-live": "Monopoly Live",
+      "speed-roulette": "Speed Roulette",
+      "vip-blackjack": "VIP Blackjack",
+      "immersive-roulette": "Immersive Roulette",
+      "lightning-dice": "Lightning Dice",
+      "gonzos-treasure-hunt": "Gonzo's Treasure Hunt",
+      "side-bet-city": "Side Bet City"
+    }
+  },
+  "header": {
+    "main-balance": "Main",
+    "bonus-balance": "Bonus",
+    "withdraw": "Withdraw",
+    "login-button": "Login",
+    "register-button": "Register"
+  },
+  "navigation": {
+    "sports": "Sports",
+    "live-betting": "Live Betting",
+    "casino": "Casino",
+    "demo-games": "Demo Games",
+    "live-casino": "Live Casino",
+    "bonuses": "Bonuses"
+  },
+  "banners": {
+    "telegram": {
+      "join-channel": "JOIN",
+      "channel": "CHANNEL",
+      "subscribers": "+200K SUBSCRIBERS"
+    },
+    "vip": {
+      "program": "VIP PROGRAM"
+    },
+    "live-casino": {
+      "title": "LIVE CASINO"
+    },
+    "mobile": {
+      "title-1": "MOBILE",
+      "title-2": "APP",
+      "coming-soon": "COMING SOON",
+      "description": "Our mobile app<br />is coming soon!"
+    }
+  },
+  "gudubet_telegram": "Gudubet Telegram Channel",
+  "address-bar": {
+    "text": "Current Address: ",
+    "current-address": "For our current address:",
+    "use-link": "use the link"
+  }
+}
