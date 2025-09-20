@@ -2,7 +2,7 @@ import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { ChevronLeft, ChevronRight, Play, Eye, Heart } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Play, Eye } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import { addSmartCacheBuster, getPlaceholderImage } from '@/utils/imageUtils';
@@ -119,16 +119,6 @@ export const GameSlider: React.FC<GameSliderProps> = ({
     }
   };
 
-  const handleFavoriteToggle = (gameId: string) => {
-    const isFavorite = favorites.includes(gameId);
-    onFavoriteToggle?.(gameId, !isFavorite);
-    
-    if (!isFavorite) {
-      toast.success('Oyun favorilere eklendi');
-    } else {
-      toast.success('Oyun favorilerden çıkarıldı');
-    }
-  };
 
 
   if (games.length === 0) {
@@ -211,8 +201,19 @@ export const GameSlider: React.FC<GameSliderProps> = ({
                       </div>
                     )}
 
-                    {/* Overlay with buttons */}
-                    <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center">
+                    {/* Overlay with buttons and game name */}
+                    <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-all duration-300 flex flex-col items-center justify-center">
+                      {/* Game Name */}
+                      <div className="text-center mb-6 px-4">
+                        <h3 className="text-white font-bold text-lg mb-1 line-clamp-2">
+                          {game.name}
+                        </h3>
+                        <p className="text-gray-300 text-sm">
+                          {game.provider}
+                        </p>
+                      </div>
+                      
+                      {/* Action Buttons */}
                       <div className="flex flex-col gap-3">
                         <Button
                           onClick={() => handlePlayGame(game, false)}
@@ -237,24 +238,6 @@ export const GameSlider: React.FC<GameSliderProps> = ({
 
                     {/* Badges removed for cleaner look */}
 
-                    {/* Favorite Button */}
-                    <Button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleFavoriteToggle(game.id);
-                      }}
-                      variant="ghost"
-                      size="sm"
-                      className={`absolute top-2 right-2 w-8 h-8 p-0 transition-all duration-200 ${
-                        favorites.includes(game.id)
-                          ? 'text-red-500 hover:text-red-600' 
-                          : 'text-white/70 hover:text-red-500'
-                      }`}
-                    >
-                      <Heart 
-                        className={`w-4 h-4 ${favorites.includes(game.id) ? 'fill-current' : ''}`} 
-                      />
-                    </Button>
 
                     {/* Provider Badge */}
                     <div className="absolute bottom-2 left-2">
