@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel';
 import { GameSlider } from '@/components/games/GameSlider';
+import { Badge } from '@/components/ui/badge';
 import { useNavigate } from 'react-router-dom';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/sections/Footer';
@@ -13,7 +14,7 @@ import { useI18n } from '@/hooks/useI18n';
 import { useCasinoGames } from '@/hooks/useCasinoGames';
 import { useSiteImages } from '@/hooks/useSiteImages';
 import { addSmartCacheBuster, getPlaceholderImage } from '@/utils/imageUtils';
-import { Send, Play, Star } from 'lucide-react';
+import { Send, Play, Star, Eye } from 'lucide-react';
 import treasureImage from '@/assets/treasure.png';
 const Index = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -33,11 +34,11 @@ const Index = () => {
     return fallback;
   };
 
-  // Get random 8 games for featured section
-  const getFeaturedRandomGames = () => {
+  // Get random games for featured section
+  const getFeaturedRandomGames = (count: number = 8) => {
     if (!games.length) return [];
     const shuffled = [...games].sort(() => Math.random() - 0.5);
-    return shuffled.slice(0, 8);
+    return shuffled.slice(0, count);
   };
 
   // Check age verification status on mount
@@ -392,7 +393,7 @@ const Index = () => {
 
           {/* Featured Games Section */}
           <GameSlider
-            games={getFeaturedRandomGames()}
+            games={getFeaturedRandomGames(8)}
             title="Öne Çıkan Oyunlar"
             subtitle="En popüler casino oyunlarını keşfedin"
             showDemoButton={true}
@@ -438,6 +439,383 @@ const Index = () => {
                     </div>
                   </CardContent>
                 </Card>)}
+            </div>
+          </div>
+
+          {/* Casino Games Section */}
+          <div className="mb-12">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-yellow-400 text-2xl font-bold flex items-center">
+                🎰 CASINO OYUNLARI
+              </h2>
+              <Button 
+                variant="outline" 
+                className="border-yellow-400 text-yellow-400 hover:bg-yellow-400 hover:text-black"
+                onClick={() => navigate('/casino')}
+              >
+                Tümünü Gör
+              </Button>
+            </div>
+            
+            {/* Casino Games Grid with Sidebar */}
+            <div className="relative">
+              {/* POPÜLER Sidebar - Desktop Only - Fixed to left edge */}
+              <div className="hidden lg:block absolute left-0 top-0 w-64 h-full z-10">
+                <div className="relative h-full bg-gradient-to-b from-gray-800 to-gray-900 rounded-lg overflow-hidden border border-gray-700 ml-4">
+                  <div 
+                    className="absolute inset-0 bg-cover bg-center opacity-20"
+                    style={{
+                      backgroundImage: `url('https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=600&fit=crop')`
+                    }}
+                  ></div>
+                  <div className="relative p-6 h-full flex flex-col justify-between">
+                    <div className="text-center">
+                      <h3 className="text-white text-2xl font-bold mb-4">POPÜLER</h3>
+                      <div className="w-32 h-32 mx-auto mb-4 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center">
+                        <div className="text-6xl">👑</div>
+                      </div>
+                    </div>
+                    <Button 
+                      onClick={() => navigate('/casino?category=popular')}
+                      className="bg-white text-black hover:bg-gray-100 font-bold w-full"
+                    >
+                      HEPSİNİ GÖR
+                    </Button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Games Grid with left margin for sidebar */}
+              <div className="lg:ml-72">
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-6">
+              {getFeaturedRandomGames(12).slice(0, 6).map((game) => (
+                <div key={game.id} className="group relative">
+                  <Card className="bg-gray-900 border-gray-700 overflow-hidden hover:border-orange-500/50 transition-all duration-300 cursor-pointer">
+                    <div className="relative aspect-[4/3] overflow-hidden">
+                      {game.thumbnail_url ? (
+                        <img 
+                          src={game.thumbnail_url} 
+                          alt={game.name}
+                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-800 to-gray-900">
+                          <div className="text-4xl opacity-50">🎰</div>
+                        </div>
+                      )}
+
+                      {/* Overlay with buttons and game name */}
+                      <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-all duration-300 flex flex-col items-center justify-center">
+                        {/* Game Name */}
+                        <div className="text-center mb-4 px-2">
+                          <h3 className="text-white font-bold text-sm mb-1 line-clamp-2">
+                            {game.name}
+                          </h3>
+                          <p className="text-gray-300 text-xs">
+                            {game.provider}
+                          </p>
+                        </div>
+                        
+                        {/* Action Buttons */}
+                        <div className="flex flex-col gap-2">
+                          <Button
+                            onClick={() => navigate(`/game/${game.slug}`)}
+                            className="bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 text-xs font-semibold shadow-lg hover:shadow-orange-500/25 transition-all duration-200"
+                          >
+                            <Play className="w-3 h-3 mr-1" />
+                            Oyna
+                          </Button>
+                          
+                          <Button
+                            onClick={() => navigate(`/demo-games?game=${game.slug}`)}
+                            variant="outline"
+                            className="bg-transparent border-white/30 text-white hover:bg-white/10 px-4 py-2 text-xs font-semibold backdrop-blur-sm"
+                          >
+                            <Eye className="w-3 h-3 mr-1" />
+                            Demo
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+                  </Card>
+                </div>
+              ))}
+            </div>
+
+                {/* Second row of casino games */}
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+                  {getFeaturedRandomGames(12).slice(6, 12).map((game) => (
+                    <div key={game.id} className="group relative">
+                      <Card className="bg-gray-900 border-gray-700 overflow-hidden hover:border-orange-500/50 transition-all duration-300 cursor-pointer">
+                        <div className="relative aspect-[4/3] overflow-hidden">
+                          {game.thumbnail_url ? (
+                            <img 
+                              src={game.thumbnail_url} 
+                              alt={game.name}
+                              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                            />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-800 to-gray-900">
+                              <div className="text-4xl opacity-50">🎰</div>
+                            </div>
+                          )}
+
+                          {/* Overlay with buttons and game name */}
+                          <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-all duration-300 flex flex-col items-center justify-center">
+                            {/* Game Name */}
+                            <div className="text-center mb-4 px-2">
+                              <h3 className="text-white font-bold text-sm mb-1 line-clamp-2">
+                                {game.name}
+                              </h3>
+                              <p className="text-gray-300 text-xs">
+                                {game.provider}
+                              </p>
+                            </div>
+                            
+                            {/* Action Buttons */}
+                            <div className="flex flex-col gap-2">
+                              <Button
+                                onClick={() => navigate(`/game/${game.slug}`)}
+                                className="bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 text-xs font-semibold shadow-lg hover:shadow-orange-500/25 transition-all duration-200"
+                              >
+                                <Play className="w-3 h-3 mr-1" />
+                                Oyna
+                              </Button>
+                              
+                              <Button
+                                onClick={() => navigate(`/demo-games?game=${game.slug}`)}
+                                variant="outline"
+                                className="bg-transparent border-white/30 text-white hover:bg-white/10 px-4 py-2 text-xs font-semibold backdrop-blur-sm"
+                              >
+                                <Eye className="w-3 h-3 mr-1" />
+                                Demo
+                              </Button>
+                            </div>
+                          </div>
+                        </div>
+                      </Card>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Live Casino Games Section */}
+          <div className="mb-12">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-yellow-400 text-2xl font-bold flex items-center">
+                🎲 CANLI CASINO
+              </h2>
+              <Button 
+                variant="outline" 
+                className="border-yellow-400 text-yellow-400 hover:bg-yellow-400 hover:text-black"
+                onClick={() => navigate('/live-casino')}
+              >
+                Tümünü Gör
+              </Button>
+            </div>
+            
+            {/* Live Casino Games Grid with Sidebar */}
+            <div className="relative">
+              {/* CANLI CASİNO Sidebar - Desktop Only - Fixed to left edge */}
+              <div className="hidden lg:block absolute left-0 top-0 w-64 h-full z-10">
+                <div className="relative h-full bg-gradient-to-b from-gray-800 to-gray-900 rounded-lg overflow-hidden border border-gray-700 ml-4">
+                  <div 
+                    className="absolute inset-0 bg-cover bg-center opacity-20"
+                    style={{
+                      backgroundImage: `url('https://images.unsplash.com/photo-1596838132731-3301c3fd4317?w=400&h=600&fit=crop')`
+                    }}
+                  ></div>
+                  <div className="relative p-6 h-full flex flex-col justify-between">
+                    <div className="text-center">
+                      <h3 className="text-white text-2xl font-bold mb-4">CANLI CASİNO</h3>
+                      <div className="w-32 h-32 mx-auto mb-4 bg-gradient-to-br from-green-400 to-blue-500 rounded-full flex items-center justify-center">
+                        <div className="text-6xl">👩‍💼</div>
+                      </div>
+                    </div>
+                    <Button 
+                      onClick={() => navigate('/live-casino')}
+                      className="bg-white text-black hover:bg-gray-100 font-bold w-full"
+                    >
+                      HEPSİNİ GÖR
+                    </Button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Games Grid with left margin for sidebar */}
+              <div className="lg:ml-72">
+                {/* First row of live casino games */}
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-6">
+              {[
+                {
+                  id: 'live-1',
+                  name: 'Lightning Rulet',
+                  provider: 'Evolution',
+                  thumbnail: 'https://images.unsplash.com/photo-1596838132731-3301c3fd4317?w=400&h=300&fit=crop',
+                  slug: 'lightning-rulet'
+                },
+                {
+                  id: 'live-2',
+                  name: 'Özel Stüdyo',
+                  provider: 'Evolution',
+                  thumbnail: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=300&fit=crop',
+                  slug: 'ozel-studio'
+                },
+                {
+                  id: 'live-3',
+                  name: 'Blackjack Lobby',
+                  provider: 'Evolution',
+                  thumbnail: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=300&fit=crop',
+                  slug: 'blackjack-lobby'
+                },
+                {
+                  id: 'live-4',
+                  name: 'Crazy Time',
+                  provider: 'Evolution',
+                  thumbnail: 'https://images.unsplash.com/photo-1596838132731-3301c3fd4317?w=400&h=300&fit=crop',
+                  slug: 'crazy-time'
+                },
+                {
+                  id: 'live-5',
+                  name: 'Dream Catcher',
+                  provider: 'Evolution',
+                  thumbnail: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=300&fit=crop',
+                  slug: 'dream-catcher'
+                },
+                {
+                  id: 'live-6',
+                  name: 'Monopoly Live',
+                  provider: 'Evolution',
+                  thumbnail: 'https://images.unsplash.com/photo-1596838132731-3301c3fd4317?w=400&h=300&fit=crop',
+                  slug: 'monopoly-live'
+                }
+              ].map((game) => (
+                <div key={game.id} className="group relative">
+                  <Card className="bg-gray-900 border-gray-700 overflow-hidden hover:border-orange-500/50 transition-all duration-300 cursor-pointer">
+                    <div className="relative aspect-[4/3] overflow-hidden">
+                      <img 
+                        src={game.thumbnail} 
+                        alt={game.name}
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                      />
+
+
+                      {/* Overlay with buttons and game name */}
+                      <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-all duration-300 flex flex-col items-center justify-center">
+                        {/* Game Name */}
+                        <div className="text-center mb-4 px-2">
+                          <h3 className="text-white font-bold text-sm mb-1 line-clamp-2">
+                            {game.name}
+                          </h3>
+                          <p className="text-gray-300 text-xs">
+                            {game.provider}
+                          </p>
+                        </div>
+                        
+                        {/* Action Buttons */}
+                        <div className="flex flex-col gap-2">
+                          <Button
+                            onClick={() => navigate(`/live-casino/${game.slug}`)}
+                            className="bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 text-xs font-semibold shadow-lg hover:shadow-orange-500/25 transition-all duration-200"
+                          >
+                            <Play className="w-3 h-3 mr-1" />
+                            Canlı Oyna
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+                  </Card>
+                </div>
+              ))}
+            </div>
+
+                {/* Second row of live casino games */}
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+                  {[
+                    {
+                      id: 'live-7',
+                      name: 'Speed Roulette',
+                      provider: 'Evolution',
+                      thumbnail: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=300&fit=crop',
+                      slug: 'speed-roulette'
+                    },
+                    {
+                      id: 'live-8',
+                      name: 'VIP Blackjack',
+                      provider: 'Evolution',
+                      thumbnail: 'https://images.unsplash.com/photo-1596838132731-3301c3fd4317?w=400&h=300&fit=crop',
+                      slug: 'vip-blackjack'
+                    },
+                    {
+                      id: 'live-9',
+                      name: 'Immersive Roulette',
+                      provider: 'Evolution',
+                      thumbnail: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=300&fit=crop',
+                      slug: 'immersive-roulette'
+                    },
+                    {
+                      id: 'live-10',
+                      name: 'Lightning Dice',
+                      provider: 'Evolution',
+                      thumbnail: 'https://images.unsplash.com/photo-1596838132731-3301c3fd4317?w=400&h=300&fit=crop',
+                      slug: 'lightning-dice'
+                    },
+                    {
+                      id: 'live-11',
+                      name: 'Gonzo\'s Treasure Hunt',
+                      provider: 'Evolution',
+                      thumbnail: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=300&fit=crop',
+                      slug: 'gonzos-treasure-hunt'
+                    },
+                    {
+                      id: 'live-12',
+                      name: 'Side Bet City',
+                      provider: 'Evolution',
+                      thumbnail: 'https://images.unsplash.com/photo-1596838132731-3301c3fd4317?w=400&h=300&fit=crop',
+                      slug: 'side-bet-city'
+                    }
+                  ].map((game) => (
+                    <div key={game.id} className="group relative">
+                      <Card className="bg-gray-900 border-gray-700 overflow-hidden hover:border-orange-500/50 transition-all duration-300 cursor-pointer">
+                        <div className="relative aspect-[4/3] overflow-hidden">
+                          <img 
+                            src={game.thumbnail} 
+                            alt={game.name}
+                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                          />
+
+
+                          {/* Overlay with buttons and game name */}
+                          <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-all duration-300 flex flex-col items-center justify-center">
+                            {/* Game Name */}
+                            <div className="text-center mb-4 px-2">
+                              <h3 className="text-white font-bold text-sm mb-1 line-clamp-2">
+                                {game.name}
+                              </h3>
+                              <p className="text-gray-300 text-xs">
+                                {game.provider}
+                              </p>
+                            </div>
+                            
+                            {/* Action Buttons */}
+                            <div className="flex flex-col gap-2">
+                              <Button
+                                onClick={() => navigate(`/live-casino/${game.slug}`)}
+                                className="bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 text-xs font-semibold shadow-lg hover:shadow-orange-500/25 transition-all duration-200"
+                              >
+                                <Play className="w-3 h-3 mr-1" />
+                                Canlı Oyna
+                              </Button>
+                            </div>
+                          </div>
+                        </div>
+                      </Card>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
         </div>
