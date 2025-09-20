@@ -617,11 +617,6 @@ const Footer = () => {
                 : '© GuduBet. All rights reserved.'
               }
             </div>
-            <div className="flex items-center gap-2">
-              <div className="bg-orange-500 rounded-full p-1">
-                <span className="text-black text-xs">♦️</span>
-              </div>
-            </div>
           </div>
         </div>
       </div>
