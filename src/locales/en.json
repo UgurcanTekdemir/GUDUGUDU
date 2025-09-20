@@ -187,7 +187,8 @@
     "yearlyLimit": "Yearly Limit",
     "remaining": "Remaining",
     "startVerification": "Start KYC Verification",
-    "increaseLimits": "Increase Limits"
+    "increaseLimits": "Increase Limits",
+    "documentNumberPlaceholder": "Enter document number"
   }
   ,
   "footer": {
@@ -229,7 +230,19 @@
     },
     "contact": {
       "title": "Contact Us",
-      "subtitle": "Get in touch with our support team"
+      "subtitle": "Get in touch with our support team",
+      "form": {
+        "firstName": "First Name",
+        "firstNamePlaceholder": "Your first name",
+        "lastName": "Last Name", 
+        "lastNamePlaceholder": "Your last name",
+        "email": "Email",
+        "emailPlaceholder": "your@email.com",
+        "subject": "Subject",
+        "subjectPlaceholder": "Subject of your message",
+        "message": "Message",
+        "messagePlaceholder": "Write your message here..."
+      }
     },
     "help": {
       "title": "Help Center",

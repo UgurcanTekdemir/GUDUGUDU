@@ -15,6 +15,8 @@ type I18nContextValue = {
   t: (key: string, fallback?: string) => string;
   changeLanguage: (language: Language) => void;
   availableLanguages: Language[];
+  formatNumber: (number: number) => string;
+  formatCurrency: (amount: number, currency?: string) => string;
 };
 
 const I18nContext = createContext<I18nContextValue | undefined>(undefined);
@@ -67,12 +69,25 @@ export const I18nProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setCurrentLanguage(language);
   }, [currentLanguage]);
 
+  const formatNumber = useCallback((number: number): string => {
+    return new Intl.NumberFormat(currentLanguage === 'tr' ? 'tr-TR' : 'en-US').format(number);
+  }, [currentLanguage]);
+
+  const formatCurrency = useCallback((amount: number, currency: string = 'TRY'): string => {
+    return new Intl.NumberFormat(currentLanguage === 'tr' ? 'tr-TR' : 'en-US', {
+      style: 'currency',
+      currency: currency,
+    }).format(amount);
+  }, [currentLanguage]);
+
   const value: I18nContextValue = useMemo(() => ({
     currentLanguage,
     t,
     changeLanguage,
     availableLanguages: Object.keys(translations) as Language[],
-  }), [currentLanguage, t, changeLanguage]);
+    formatNumber,
+    formatCurrency,
+  }), [currentLanguage, t, changeLanguage, formatNumber, formatCurrency]);
 
   return React.createElement(I18nContext.Provider, { value }, children);
 };
