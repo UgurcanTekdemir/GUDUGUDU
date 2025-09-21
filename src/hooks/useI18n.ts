@@ -22,8 +22,8 @@ type I18nContextValue = {
 const I18nContext = createContext<I18nContextValue | undefined>(undefined);
 
 // Helper: get nested object values by dot path
-const getNestedValue = (obj: any, path: string): string | null => {
-  return path.split('.').reduce((current, key) => {
+const getNestedValue = (obj: any, path: string): any => {
+  return path.split('.').reduce((current: any, key: string) => {
     return current && current[key] !== undefined ? current[key] : null;
   }, obj);
 };
@@ -52,15 +52,19 @@ export const I18nProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const t = useCallback((key: string, fallback?: string): string => {
     const current = getNestedValue(translations[currentLanguage], key);
-    if (current) return current;
-
-    // Fallback to English for missing Turkish keys
-    if (currentLanguage === 'tr') {
-      const en = getNestedValue(translations.en, key);
-      if (en) return en;
+    if (typeof current === 'string' || typeof current === 'number') {
+      return String(current);
     }
 
-    return fallback || key;
+    // Fallback to English for missing Turkish keys or when found value is non-string
+    if (currentLanguage === 'tr') {
+      const en = getNestedValue(translations.en, key);
+      if (typeof en === 'string' || typeof en === 'number') {
+        return String(en);
+      }
+    }
+
+    return fallback !== undefined ? fallback : key;
   }, [currentLanguage]);
 
   const changeLanguage = useCallback((language: Language) => {
