@@ -68,6 +68,10 @@ import AdminRiskQueue from "./pages/admin/AdminRiskQueue";
 import AdminReports from "./pages/admin/AdminReports";
 import AdminSiteImages from "./pages/admin/AdminSiteImages";
 import AdminChat from "./pages/admin/AdminChat";
+import AdminAuditTrail from "./pages/admin/AdminAuditTrail";
+import AdminAuditReports from "./pages/admin/AdminAuditReports";
+import AdminSecurityAudit from "./pages/admin/AdminSecurityAudit";
+import AdminDataRetention from "./pages/admin/AdminDataRetention";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -151,6 +155,10 @@ const App = () => {
             <Route path="reports" element={<AdminReports />} />
             <Route path="site-images" element={<AdminSiteImages />} />
             <Route path="chat" element={<AdminChat />} />
+            <Route path="audit-trail" element={<AdminAuditTrail />} />
+            <Route path="audit-reports" element={<AdminAuditReports />} />
+            <Route path="security-audit" element={<AdminSecurityAudit />} />
+            <Route path="data-retention" element={<AdminDataRetention />} />
           </Route>
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />

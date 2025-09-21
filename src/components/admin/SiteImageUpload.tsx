@@ -7,6 +7,7 @@ import { Upload, X, Image as ImageIcon, Loader2, Crop } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { ImageCropModal } from './ImageCropModal';
+import { resolveSiteImageUrl, getPlaceholderImageUrl } from '@/utils/resolveSiteImageUrl';
 
 interface SiteImageUploadProps {
   currentImageUrl?: string;
@@ -149,9 +150,14 @@ export const SiteImageUpload: React.FC<SiteImageUploadProps> = ({
           <CardContent className="p-4">
             <div className="relative">
               <img
-                src={currentImageUrl}
+                src={resolveSiteImageUrl(currentImageUrl)}
                 alt="Current image"
                 className="w-full h-40 object-cover rounded-lg"
+                onError={(e) => {
+                  const target = e.currentTarget as HTMLImageElement;
+                  target.onerror = null;
+                  target.src = getPlaceholderImageUrl();
+                }}
               />
               <Button
                 variant="destructive"

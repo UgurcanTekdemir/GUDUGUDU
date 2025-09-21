@@ -28,6 +28,7 @@ import {
 import { useSiteImages, SiteImage } from '@/hooks/useSiteImages';
 import { SiteImageUpload } from '@/components/admin/SiteImageUpload';
 import { toast } from 'sonner';
+import { resolveSiteImageUrl, getPlaceholderImageUrl } from '@/utils/resolveSiteImageUrl';
 
 const CATEGORIES = [
   { value: 'hero', label: 'Hero/Banner Resimleri', icon: Camera, color: 'bg-blue-500' },
@@ -305,9 +306,14 @@ const AdminSiteImages = () => {
                           {image.image_url && (
                             <div className="aspect-video bg-muted rounded-lg overflow-hidden">
                               <img
-                                src={image.image_url}
+                                src={resolveSiteImageUrl(image.image_url)}
                                 alt={image.alt_text || image.name}
                                 className="w-full h-full object-cover"
+                                onError={(e) => {
+                                  const target = e.currentTarget as HTMLImageElement;
+                                  target.onerror = null;
+                                  target.src = getPlaceholderImageUrl();
+                                }}
                               />
                             </div>
                           )}

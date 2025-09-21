@@ -10,11 +10,14 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/sections/Footer';
 import { RegistrationModal } from '@/components/auth/RegistrationModal';
 import { AgeVerificationModal } from '@/components/auth/AgeVerificationModal';
+import HomePageSEO from '@/components/seo/HomePageSEO';
+import { CasinoOrganizationSchema, FAQSchema } from '@/components/seo/StructuredData';
 
 import { useI18n } from '@/hooks/useI18n';
 import { useCasinoGames } from '@/hooks/useCasinoGames';
 import { useSiteImages } from '@/hooks/useSiteImages';
 import { addSmartCacheBuster, getPlaceholderImage } from '@/utils/imageUtils';
+import { generateCasinoFAQs } from '@/utils/seoUtils';
 import { Send, Play, Star, Eye } from 'lucide-react';
 import treasureImage from '@/assets/treasure.png';
 const Index = () => {
@@ -51,7 +54,12 @@ const Index = () => {
   const getFeaturedRandomGames = (count: number = 8) => {
     if (!games.length) return [];
     const shuffled = [...games].sort(() => Math.random() - 0.5);
-    return shuffled.slice(0, count);
+    return shuffled.slice(0, count).map(game => ({
+      ...game,
+      provider: game.provider || 'Unknown',
+      category: game.category || 'Unknown',
+      volatility: (game.volatility as 'low' | 'medium' | 'high') || 'medium'
+    }));
   };
 
   // Check age verification status on mount
@@ -68,7 +76,13 @@ const Index = () => {
       setShowAgeVerification(false);
     }
   };
-  return <div className="min-h-screen bg-black">
+  return (
+    <div className="min-h-screen bg-black">
+      {/* SEO Components */}
+      <HomePageSEO />
+      <CasinoOrganizationSchema />
+      <FAQSchema faqs={generateCasinoFAQs()} />
+      
       <Header />
       
       
@@ -867,5 +881,7 @@ const Index = () => {
       />
 
     </div>
+  );
 };
+
 export default Index;

@@ -25,7 +25,11 @@ import {
   Landmark,
   Star,
   Image,
-  MessageCircle
+  MessageCircle,
+  Activity,
+  ClipboardList,
+  Archive,
+  Lock
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
@@ -208,6 +212,30 @@ const AdminSidebar = ({ isCollapsed, onToggle }: AdminSidebarProps) => {
       icon: Settings,
       href: '/admin/management',
       active: location.pathname === '/admin/management'
+    },
+    {
+      title: 'Audit Trail',
+      icon: Activity,
+      href: '/admin/audit-trail',
+      active: location.pathname === '/admin/audit-trail'
+    },
+    {
+      title: 'Security Audit',
+      icon: Shield,
+      href: '/admin/security-audit',
+      active: location.pathname === '/admin/security-audit'
+    },
+    {
+      title: 'Audit Reports',
+      icon: ClipboardList,
+      href: '/admin/audit-reports',
+      active: location.pathname === '/admin/audit-reports'
+    },
+    {
+      title: 'Data Retention',
+      icon: Archive,
+      href: '/admin/data-retention',
+      active: location.pathname === '/admin/data-retention'
     }
   ];
 

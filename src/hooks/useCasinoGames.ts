@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import { resolveSiteImageUrl } from '@/utils/resolveSiteImageUrl';
 
 interface CasinoGame {
   id: string;
@@ -69,27 +70,41 @@ export const useCasinoGames = () => {
 
       if (gamesError) throw gamesError;
 
-      // Load site images for game thumbnails
+      // Load site images for game thumbnails. Support both 'games' and legacy 'game-images' categories
       const { data: siteImages, error: imagesError } = await supabase
         .from('site_images')
         .select('*')
-        .eq('category', 'game-images')
+        .in('category', ['games', 'game-images'])
         .eq('is_active', true);
 
       if (imagesError) {
         console.warn('Error loading site images:', imagesError);
       }
 
-      // Create a map of site images by name for quick lookup
-      const imageMap = new Map();
-      (siteImages || []).forEach(img => {
-        imageMap.set(img.name.toLowerCase(), img.image_url);
+      // Normalize helper: use slug-like key
+      const normalizeKey = (value: string | undefined | null) =>
+        (value || '')
+          .toString()
+          .trim()
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, '-')
+          .replace(/^-+|-+$/g, '');
+
+      // Create a map of site images by normalized name and also store original
+      const imageMap = new Map<string, string>();
+      (siteImages || []).forEach((img: any) => {
+        const byName = normalizeKey(img.name);
+        if (byName) {
+          imageMap.set(byName, img.image_url);
+        }
       });
 
       // Transform the data to match our interface
       const transformedGames: CasinoGame[] = (gamesData || []).map(game => {
-        // Try to find matching site image by game name
-        const matchingSiteImage = imageMap.get(game.name.toLowerCase());
+        // Try to find matching site image by slug or normalized game name
+        const keyBySlug = normalizeKey((game as any).slug);
+        const keyByName = normalizeKey(game.name);
+        const matchingSiteImage = imageMap.get(keyBySlug) || imageMap.get(keyByName);
         
         return {
           ...game,
@@ -102,8 +117,8 @@ export const useCasinoGames = () => {
           background_url: game.background_url || undefined,
           external_game_id: game.external_game_id || undefined,
           game_url: game.game_url || undefined,
-          // Use site image if available, otherwise use original thumbnail_url
-          thumbnail_url: matchingSiteImage || game.thumbnail_url || undefined,
+          // Use site image if available, otherwise use original thumbnail_url. Resolve legacy asset paths.
+          thumbnail_url: resolveSiteImageUrl(matchingSiteImage || game.thumbnail_url || undefined) || undefined,
           rtp_percentage: game.rtp_percentage || undefined,
           jackpot_amount: game.jackpot_amount || undefined
         };

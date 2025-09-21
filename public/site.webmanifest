@@ -1,0 +1,111 @@
+{
+  "name": "GuduBet - Online Casino Platformu",
+  "short_name": "GuduBet",
+  "description": "Türkiye'nin en güvenilir online casino ve bahis platformu",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#ff6b35",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "tr",
+  "dir": "ltr",
+  "categories": ["entertainment", "games", "casino"],
+  "icons": [
+    {
+      "src": "/favicon-16x16.png",
+      "sizes": "16x16",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon-32x32.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    },
+    {
+      "src": "/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshots/desktop-home.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "GuduBet Ana Sayfa"
+    },
+    {
+      "src": "/screenshots/mobile-home.png",
+      "sizes": "390x844",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "GuduBet Mobil Görünüm"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Casino Oyunları",
+      "short_name": "Casino",
+      "description": "Casino oyunlarını görüntüle",
+      "url": "/casino",
+      "icons": [
+        {
+          "src": "/icons/casino-96x96.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Canlı Casino",
+      "short_name": "Canlı",
+      "description": "Canlı casino oyunları",
+      "url": "/live-casino",
+      "icons": [
+        {
+          "src": "/icons/live-96x96.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Spor Bahisleri",
+      "short_name": "Spor",
+      "description": "Spor bahisleri",
+      "url": "/sports",
+      "icons": [
+        {
+          "src": "/icons/sports-96x96.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Bonuslar",
+      "short_name": "Bonus",
+      "description": "Mevcut bonuslar",
+      "url": "/bonus",
+      "icons": [
+        {
+          "src": "/icons/bonus-96x96.png",
+          "sizes": "96x96"
+        }
+      ]
+    }
+  ],
+  "related_applications": [],
+  "prefer_related_applications": false
+}

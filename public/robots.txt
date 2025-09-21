@@ -1,14 +1,55 @@
-User-agent: Googlebot
+User-agent: *
 Allow: /
+Disallow: /admin/
+Disallow: /api/
+Disallow: /_next/
+Disallow: /static/
+Disallow: /private/
+Disallow: /dashboard/
+Disallow: /profile/
+Disallow: /payment/
+Disallow: /withdrawal/
+Disallow: /bonus/
+Disallow: /transactions/
+
+# Sitemaps
+Sitemap: https://gudubet.com/sitemap.xml
+Sitemap: https://gudubet.com/sitemap-index.xml
+
+# Crawl-delay for different bots
+User-agent: Googlebot
+Crawl-delay: 1
 
 User-agent: Bingbot
+Crawl-delay: 1
+
+User-agent: Slurp
+Crawl-delay: 2
+
+User-agent: DuckDuckBot
+Crawl-delay: 1
+
+User-agent: Baiduspider
+Crawl-delay: 2
+
+User-agent: YandexBot
+Crawl-delay: 2
+
+User-agent: facebookexternalhit
 Allow: /
 
 User-agent: Twitterbot
 Allow: /
 
-User-agent: facebookexternalhit
+User-agent: LinkedInBot
 Allow: /
 
-User-agent: *
-Allow: /
+# Block problematic bots
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /
+
+User-agent: DotBot
+Disallow: /
