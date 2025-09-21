@@ -255,10 +255,12 @@ CREATE INDEX IF NOT EXISTS idx_seo_analytics_query ON public.seo_analytics(searc
 ALTER TABLE public.seo_analytics ENABLE ROW LEVEL SECURITY;
 
 -- Create RLS policy for SEO analytics
-CREATE POLICY "Admins can manage SEO analytics"
+CREATE POLICY "Authenticated users can manage SEO analytics"
 ON public.seo_analytics
 FOR ALL
-USING (EXISTS (SELECT 1 FROM public.admins WHERE id = auth.uid()));
+TO authenticated
+USING (true)
+WITH CHECK (true);
 
 -- Create function to update SEO analytics
 CREATE OR REPLACE FUNCTION update_seo_analytics(

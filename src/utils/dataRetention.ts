@@ -72,9 +72,9 @@ export const useDataRetention = () => {
 
   const loadStats = useCallback(async () => {
     try {
-      const { data, error: fetchError } = await supabase
-        .from('wallet_transactions')
-        .select('created_at');
+    const { data, error: fetchError } = await supabase
+      .from('audit_trail')
+      .select('occurred_at');
 
       if (fetchError) {
         throw fetchError;

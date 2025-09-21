@@ -73,16 +73,25 @@ const AuditTrailViewer: React.FC = () => {
     // For now, use existing tables to simulate audit trail
     // In production, you would use the actual audit_trail table
     let query = supabase
-      .from('wallet_transactions')
+      .from('audit_trail')
       .select('*', { count: 'exact' });
 
-    // Apply filters - using wallet_transactions fields
+    // Apply filters - using audit_trail fields
     if (filters.search) {
       query = query.ilike('description', `%${filters.search}%`);
     }
+    if (filters.category && filters.category !== 'all') {
+      query = query.eq('event_category', filters.category);
+    }
+    if (filters.severity && filters.severity !== 'all') {
+      query = query.eq('severity', filters.severity);
+    }
+    if (filters.actorType && filters.actorType !== 'all') {
+      query = query.eq('actor_type', filters.actorType);
+    }
 
     query = query
-      .order('created_at', { ascending: false })
+      .order('occurred_at', { ascending: false })
       .range(page * ITEMS_PER_PAGE, (page + 1) * ITEMS_PER_PAGE - 1);
 
     const { data, error, count } = await query;
@@ -91,31 +100,10 @@ const AuditTrailViewer: React.FC = () => {
       console.error('Error fetching audit logs:', error);
     } else {
       // Transform wallet_transactions to audit log format
-      const transformedLogs: AuditLog[] = (data || []).map((transaction: any) => ({
-        id: transaction.id,
-        event_id: transaction.id,
-        correlation_id: transaction.id,
-        actor_id: transaction.user_id,
-        actor_type: 'user',
-        actor_ip: '0.0.0.0',
-        actor_user_agent: 'Unknown',
-        event_category: 'financial',
-        event_type: transaction.type === 'deposit' ? 'deposit_initiated' : 'withdrawal_initiated',
-        event_name: `${transaction.type} transaction`,
-        description: `${transaction.type} of ${transaction.amount} ${transaction.currency}`,
-        entity_type: 'transaction',
-        entity_id: transaction.id,
-        old_value: null,
-        new_value: { amount: transaction.amount, currency: transaction.currency },
-        metadata: { status: transaction.status },
-        severity: transaction.status === 'pending' ? 'medium' : 'low',
-        status: transaction.status === 'completed' ? 'success' : 'pending',
-        is_sensitive: false,
-        occurred_at: transaction.created_at,
-        expires_at: null
-      }));
+      // Use data directly from audit_trail table
+      const auditLogs: AuditLog[] = data || [];
       
-      setLogs(transformedLogs);
+      setLogs(auditLogs);
       setTotalCount(count || 0);
     }
     setLoading(false);

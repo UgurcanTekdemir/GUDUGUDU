@@ -208,16 +208,12 @@ FOR UPDATE
 USING (true);
 
 -- RLS policies for audit config
-CREATE POLICY "Admins can manage audit config"
+CREATE POLICY "Authenticated users can manage audit config"
 ON public.audit_config
 FOR ALL
-USING (
-    EXISTS (
-        SELECT 1 FROM public.admins 
-        WHERE id = auth.uid() 
-        AND role_type IN ('super_admin', 'admin')
-    )
-);
+TO authenticated
+USING (true)
+WITH CHECK (true);
 
 -- RLS policies for audit alerts
 CREATE POLICY "Authenticated users can view audit alerts"
@@ -232,28 +228,19 @@ FOR ALL
 WITH CHECK (true);
 
 -- RLS policies for audit reports
-CREATE POLICY "Admins can manage audit reports"
+CREATE POLICY "Authenticated users can manage audit reports"
 ON public.audit_reports
 FOR ALL
-USING (
-    EXISTS (
-        SELECT 1 FROM public.admins 
-        WHERE id = auth.uid() 
-        AND role_type IN ('super_admin', 'admin', 'auditor')
-    )
-);
+TO authenticated
+USING (true)
+WITH CHECK (true);
 
 -- RLS policies for audit statistics
-CREATE POLICY "Admins can view audit statistics"
+CREATE POLICY "Authenticated users can view audit statistics"
 ON public.audit_statistics
 FOR SELECT
-USING (
-    EXISTS (
-        SELECT 1 FROM public.admins 
-        WHERE id = auth.uid() 
-        AND role_type IN ('super_admin', 'admin', 'auditor')
-    )
-);
+TO authenticated
+USING (true);
 
 CREATE POLICY "System can manage audit statistics"
 ON public.audit_statistics

@@ -37,37 +37,39 @@ export const useSecurityAudit = () => {
     try {
       // For now, use wallet_transactions to simulate security events
       const { data, error: fetchError } = await supabase
-        .from('wallet_transactions')
+        .from('audit_trail')
         .select(`
           id,
-          user_id,
-          type,
-          amount,
-          currency,
+          actor_id,
+          actor_type,
+          event_type,
+          event_name,
+          description,
+          severity,
           status,
-          created_at,
-          description
+          occurred_at,
+          metadata
         `)
-        .order('created_at', { ascending: false })
+        .order('occurred_at', { ascending: false })
         .limit(50);
 
       if (fetchError) {
         throw fetchError;
       }
 
-      // Transform data to SecurityEvent format
-      const events: SecurityEvent[] = (data || []).map(transaction => ({
-        id: transaction.id,
-        event_type: transaction.type === 'deposit' ? 'deposit_initiated' : 'withdrawal_initiated',
-        actor_id: transaction.user_id || 'unknown',
+      // Use data directly from audit_trail table
+      const events: SecurityEvent[] = (data || []).map(auditLog => ({
+        id: auditLog.id,
+        event_type: auditLog.event_type,
+        actor_id: auditLog.actor_id || 'unknown',
         actor_email: 'user@example.com',
         ip_address: '0.0.0.0',
-        description: `${transaction.type} of ${transaction.amount} ${transaction.currency}`,
-        severity: transaction.status === 'pending' ? 'medium' : 'low',
-        risk_score: calculateRiskScore(transaction),
-        status: transaction.status === 'completed' ? 'success' : 'pending',
-        occurred_at: transaction.created_at,
-        metadata: { amount: transaction.amount, currency: transaction.currency }
+        description: auditLog.description,
+        severity: auditLog.severity,
+        risk_score: calculateRiskScore(auditLog),
+        status: auditLog.status,
+        occurred_at: auditLog.occurred_at,
+        metadata: auditLog.metadata
       }));
 
       setSecurityEvents(events);
@@ -107,22 +109,30 @@ export const useSecurityAudit = () => {
     }
   }, []);
 
-  const calculateRiskScore = (transaction: any): number => {
+  const calculateRiskScore = (auditLog: any): number => {
     let score = 0;
     
-    // Base score by status
-    switch (transaction.status) {
-      case 'failed': score += 90; break;
-      case 'pending': score += 70; break;
-      case 'completed': score += 30; break;
+    // Severity-based scoring
+    switch (auditLog.severity) {
+      case 'critical': score += 90; break;
+      case 'high': score += 70; break;
+      case 'medium': score += 50; break;
+      case 'low': score += 30; break;
       default: score += 40;
     }
-
-    // Additional risk factors
-    if (transaction.type === 'withdrawal') score += 20;
-    if (transaction.amount > 1000) score += 15;
-    if (transaction.status === 'pending') score += 25;
-
+    
+    // Status-based scoring
+    switch (auditLog.status) {
+      case 'failure': score += 20; break;
+      case 'pending': score += 15; break;
+      case 'success': score += 5; break;
+      default: score += 10;
+    }
+    
+    // Event type-based scoring
+    if (auditLog.event_type?.includes('security')) score += 25;
+    if (auditLog.event_type?.includes('fraud')) score += 30;
+    
     return Math.min(100, score);
   };
 
