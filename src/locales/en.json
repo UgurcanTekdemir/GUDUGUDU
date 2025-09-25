@@ -400,7 +400,22 @@
       "paymentMethodError": "Check payment information",
       "profileError": "Profile error",
       "unknownError": "Unknown error occurred",
-      "checkErrorDetails": "Check the error message below for details"
+      "checkErrorDetails": "Check the error message below for details",
+      "table": {
+        "amount": "Amount",
+        "method": "Method",
+        "status": "Status",
+        "date": "Date"
+      },
+      "status": {
+        "pending": "Pending",
+        "approved": "Approved",
+        "rejected": "Rejected",
+        "processing": "Processing",
+        "completed": "Completed",
+        "paid": "Paid",
+        "failed": "Failed"
+      }
     },
     "deposit": {
       "title": "Request Deposit",
