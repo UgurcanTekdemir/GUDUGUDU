@@ -154,7 +154,7 @@ const Index = () => {
             style={{ transform: `translateX(-${currentSlide * 100}%)` }}
           >
               {/* Slide 1 - Main Bonus Banner */}
-              <div className="w-full flex-shrink-0 h-80 md:h-96">
+              <div className="w-full flex-shrink-0 h-64 sm:h-80 md:h-96">
                 <div className="relative h-full bg-gradient-to-br from-red-800 via-red-600 to-orange-500 overflow-hidden">
                   <div className="absolute inset-0 bg-gradient-to-r from-black/30 via-transparent to-black/30"></div>
                   
@@ -173,6 +173,7 @@ const Index = () => {
                         imageRendering: 'crisp-edges',
                         objectPosition: 'center top'
                       }}
+                      loading="lazy"
                       onError={(e) => {
                         e.currentTarget.src = getPlaceholderImage(800, 400);
                       }}
@@ -182,8 +183,8 @@ const Index = () => {
               </div>
 
               {/* Slide 2 - VIP Program */}
-              <div className="w-full flex-shrink-0 h-80 md:h-96">
-                <div className="relative h-80 md:h-96 bg-gradient-to-br from-purple-800 via-purple-600 to-pink-500 overflow-hidden">
+              <div className="w-full flex-shrink-0 h-64 sm:h-80 md:h-96">
+                <div className="relative h-64 sm:h-80 md:h-96 bg-gradient-to-br from-purple-800 via-purple-600 to-pink-500 overflow-hidden">
                   <div className="absolute inset-0 bg-gradient-to-r from-black/30 via-transparent to-black/30"></div>
                   
                   <div className="absolute top-10 right-10 w-20 h-20 rounded-full bg-purple-400/20"></div>
@@ -196,14 +197,15 @@ const Index = () => {
                       src={vipBannerGif} 
                       alt="VIP Banner" 
                       className="w-full h-full object-cover hover:opacity-90 transition-opacity"
+                      loading="lazy"
                     />
                   </div>
                 </div>
               </div>
 
               {/* Slide 3 - Live Casino */}
-              <div className="w-full flex-shrink-0 h-80 md:h-96">
-                <div className="relative h-80 md:h-96 bg-gradient-to-br from-green-800 via-green-600 to-emerald-500 overflow-hidden">
+              <div className="w-full flex-shrink-0 h-64 sm:h-80 md:h-96">
+                <div className="relative h-64 sm:h-80 md:h-96 bg-gradient-to-br from-green-800 via-green-600 to-emerald-500 overflow-hidden">
                   <div className="absolute inset-0 bg-gradient-to-r from-black/30 via-transparent to-black/30"></div>
                   
                   <div className="absolute top-15 left-15 w-14 h-14 rounded-full bg-green-400/20"></div>
@@ -222,8 +224,8 @@ const Index = () => {
               </div>
 
               {/* Slide 4 - Sports Betting */}
-              <div className="w-full flex-shrink-0 h-80 md:h-96">
-                <div className="relative h-80 md:h-96 bg-gradient-to-br from-blue-800 via-blue-600 to-cyan-500 overflow-hidden">
+              <div className="w-full flex-shrink-0 h-64 sm:h-80 md:h-96">
+                <div className="relative h-64 sm:h-80 md:h-96 bg-gradient-to-br from-blue-800 via-blue-600 to-cyan-500 overflow-hidden">
                   <div className="absolute inset-0 bg-gradient-to-r from-black/30 via-transparent to-black/30"></div>
                   
                   <div className="absolute top-12 right-12 w-16 h-16 rounded-full bg-blue-400/20"></div>
@@ -242,8 +244,8 @@ const Index = () => {
               </div>
 
               {/* Slide 5 - Jackpot */}
-              <div className="w-full flex-shrink-0 h-80 md:h-96">
-                <div className="relative h-80 md:h-96 bg-gradient-to-br from-yellow-800 via-yellow-600 to-amber-500 overflow-hidden">
+              <div className="w-full flex-shrink-0 h-64 sm:h-80 md:h-96">
+                <div className="relative h-64 sm:h-80 md:h-96 bg-gradient-to-br from-yellow-800 via-yellow-600 to-amber-500 overflow-hidden">
                   <div className="absolute inset-0 bg-gradient-to-r from-black/30 via-transparent to-black/30"></div>
                   
                   <div className="absolute top-8 left-8 w-20 h-20 rounded-full bg-yellow-400/20"></div>
@@ -262,8 +264,8 @@ const Index = () => {
               </div>
 
               {/* Slide 6 - Mobile App */}
-              <div className="w-full flex-shrink-0 h-80 md:h-96">
-                <div className="relative h-80 md:h-96 bg-gradient-to-br from-indigo-800 via-indigo-600 to-blue-500 overflow-hidden">
+              <div className="w-full flex-shrink-0 h-64 sm:h-80 md:h-96">
+                <div className="relative h-64 sm:h-80 md:h-96 bg-gradient-to-br from-indigo-800 via-indigo-600 to-blue-500 overflow-hidden">
                   <div className="absolute inset-0 bg-gradient-to-r from-black/30 via-transparent to-black/30"></div>
                   
                   <div className="absolute top-10 left-10 w-18 h-18 rounded-lg bg-indigo-400/20"></div>
@@ -282,8 +284,8 @@ const Index = () => {
               </div>
 
               {/* Slide 7 - Weekly Tournament */}
-              <div className="w-full flex-shrink-0 h-80 md:h-96">
-                <div className="relative h-80 md:h-96 bg-gradient-to-br from-rose-800 via-rose-600 to-pink-500 overflow-hidden">
+              <div className="w-full flex-shrink-0 h-64 sm:h-80 md:h-96">
+                <div className="relative h-64 sm:h-80 md:h-96 bg-gradient-to-br from-rose-800 via-rose-600 to-pink-500 overflow-hidden">
                   <div className="absolute inset-0 bg-gradient-to-r from-black/30 via-transparent to-black/30"></div>
                   
                   <div className="absolute top-12 right-12 w-16 h-16 rounded-full bg-rose-400/20"></div>
@@ -302,8 +304,8 @@ const Index = () => {
               </div>
 
               {/* Slide 8 - Cashback Bonus */}
-              <div className="w-full flex-shrink-0 h-80 md:h-96">
-                <div className="relative h-80 md:h-96 bg-gradient-to-br from-teal-800 via-teal-600 to-cyan-500 overflow-hidden">
+              <div className="w-full flex-shrink-0 h-64 sm:h-80 md:h-96">
+                <div className="relative h-64 sm:h-80 md:h-96 bg-gradient-to-br from-teal-800 via-teal-600 to-cyan-500 overflow-hidden">
                   <div className="absolute inset-0 bg-gradient-to-r from-black/30 via-transparent to-black/30"></div>
                   
                   <div className="absolute top-14 left-14 w-16 h-16 rounded-full bg-teal-400/20"></div>
@@ -348,7 +350,7 @@ const Index = () => {
           </div>
 
           {/* Three Banner Row */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
             {/* Telegram Channel */}
             <Card className="border-none overflow-hidden cursor-pointer hover:opacity-90 transition-opacity" onClick={() => window.open('https://t.me/gudubet', '_blank')}>
               <CardContent className="p-0">
@@ -396,7 +398,7 @@ const Index = () => {
           {/* Winners Section */}
           <div className="mb-8">
             <h2 className="text-yellow-400 text-xl font-bold mb-4">{t('sections.winners.title')}</h2>
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
               {[{
               name: 'Y.S.',
               game: 'Golden Penny x1000',
