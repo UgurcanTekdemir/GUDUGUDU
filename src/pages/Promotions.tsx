@@ -583,6 +583,9 @@ const Promotions = () => {
         {/* Promotion Details Modal */}
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogContent className="sm:max-w-4xl max-w-[95vw] max-h-[90vh] overflow-hidden p-0">
+            <DialogHeader className="sr-only">
+              <DialogTitle>Promotion Details</DialogTitle>
+            </DialogHeader>
             {selectedPromotion && (
               <div className="flex flex-col lg:flex-row h-full">
                 {/* Left Side - Image */}
