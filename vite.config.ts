@@ -21,4 +21,18 @@ export default defineConfig(({ mode }) => ({
   },
   publicDir: "public",
   assetsInclude: ["**/*.png", "**/*.jpg", "**/*.jpeg", "**/*.gif", "**/*.svg"],
+  build: {
+    chunkSizeWarningLimit: 2000, // Increase from default 500kb to 2000kb
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          // Split vendor libraries into separate chunks
+          'react-vendor': ['react', 'react-dom'],
+          'supabase-vendor': ['@supabase/supabase-js'],
+          'ui-vendor': ['@radix-ui/react-dialog', '@radix-ui/react-dropdown-menu', '@radix-ui/react-select'],
+          'utils-vendor': ['date-fns', 'clsx', 'tailwind-merge']
+        }
+      }
+    }
+  }
 }));
