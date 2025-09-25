@@ -21,6 +21,7 @@ export interface Bonus {
   type: BonusType;
   name: string;
   description?: string;
+  image_url?: string;
   amount_type: 'percent' | 'fixed';
   amount_value: number;
   max_cap?: number;
@@ -127,6 +128,7 @@ export interface BonusFormData {
   type: BonusType;
   name: string;
   description?: string;
+  image_url?: string;
   amount_type: 'percent' | 'fixed';
   amount_value: number;
   max_cap?: number;

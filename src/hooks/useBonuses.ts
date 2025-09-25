@@ -6,11 +6,18 @@ export function useAdminBonuses() {
   return useQuery({
     queryKey: ["admin","bonuses"],
     queryFn: async (): Promise<Bonus[]> => {
+      console.log('📊 Admin bonusları yükleniyor...');
       const { data, error } = await supabase
         .from("bonuses_new")
         .select("*")
         .order("created_at", { ascending: false });
-      if (error) throw error;
+      
+      if (error) {
+        console.error('❌ Admin bonusları yükleme hatası:', error);
+        throw error;
+      }
+      
+      console.log('✅ Admin bonusları yüklendi:', data?.length || 0, 'adet');
       return data as Bonus[];
     }
   });
@@ -23,6 +30,19 @@ export function useCreateBonus() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (payload: any): Promise<Bonus> => {
+      // Eğer kod varsa benzersizlik kontrolü yap
+      if (payload.code) {
+        const { data: existing } = await supabase
+          .from("bonuses_new")
+          .select("id")
+          .eq("code", payload.code)
+          .single();
+        
+        if (existing) {
+          throw new Error(`Bu kod zaten kullanılıyor: ${payload.code}`);
+        }
+      }
+      
       const { data, error } = await supabase.from("bonuses_new").insert(payload).select("*").single();
       if (error) throw error;
       return data as Bonus;
@@ -47,10 +67,99 @@ export function useDeleteBonus() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (id: string): Promise<void> => {
-      const { error } = await supabase.from("bonuses_new").delete().eq("id", id);
-      if (error) throw error;
+      console.log('🗑️ Bonus silme işlemi başlatılıyor:', id);
+      
+      // Önce mevcut kullanıcının admin olup olmadığını kontrol et
+      const { data: { user }, error: authError } = await supabase.auth.getUser();
+      if (authError || !user) {
+        console.error('❌ Kullanıcı doğrulanamadı:', authError);
+        throw new Error('Kullanıcı doğrulanamadı');
+      }
+      
+      console.log('👤 Mevcut kullanıcı:', user.id);
+      
+      // Kullanıcının admin olup olmadığını kontrol et
+      const { data: admin, error: adminError } = await supabase
+        .from("admins")
+        .select("id, role_type, is_active")
+        .eq("id", user.id)
+        .eq("is_active", true)
+        .single();
+      
+      console.log('🔐 Admin kontrolü:', { admin, adminError });
+      
+      if (adminError) {
+        if (adminError.code === 'PGRST116') {
+          console.error('❌ Admin kaydı bulunamadı:', user.id);
+          throw new Error('Bu işlem için admin yetkisi gereklidir');
+        } else {
+          console.error('❌ Admin kontrol hatası:', adminError);
+          throw new Error('Admin kontrolü yapılamadı');
+        }
+      }
+      
+      if (!admin || !admin.is_active) {
+        console.error('❌ Admin kaydı aktif değil:', admin);
+        throw new Error('Admin hesabı aktif değil');
+      }
+      
+      console.log('✅ Admin yetkisi onaylandı:', admin.role_type);
+      
+      // Önce bonusun var olup olmadığını kontrol et
+      const { data: existingBonus, error: checkError } = await supabase
+        .from("bonuses_new")
+        .select("*")
+        .eq("id", id)
+        .single();
+      
+      console.log('🔍 Mevcut bonus kontrolü:', { existingBonus, checkError });
+      
+      if (checkError && checkError.code !== 'PGRST116') {
+        console.error('❌ Bonus kontrol hatası:', checkError);
+        throw checkError;
+      }
+      
+      if (!existingBonus) {
+        console.warn('⚠️ Bonus bulunamadı, zaten silinmiş olabilir:', id);
+        return; // Bonus zaten yok, başarılı say
+      }
+      
+      console.log('✅ Bonus bulundu, silme işlemi başlatılıyor:', existingBonus.name);
+      
+      const { data, error } = await supabase
+        .from("bonuses_new")
+        .delete()
+        .eq("id", id)
+        .select(); // Silinen kayıtları döndür
+      
+      console.log('🗑️ Silme sonucu:', { data, error });
+      
+      if (error) {
+        console.error('❌ Bonus silme hatası:', error);
+        throw error;
+      }
+      
+      if (!data || data.length === 0) {
+        console.warn('⚠️ Silme işlemi hiçbir kayıt etkilemedi:', id);
+        throw new Error('Bonus silinemedi - kayıt bulunamadı');
+      }
+      
+      console.log('✅ Bonus başarıyla silindi:', data[0].name);
     },
-    onSuccess: () => { qc.invalidateQueries({ queryKey: ["admin","bonuses"] }); }
+    onSuccess: (data, id) => { 
+      console.log('🎉 Bonus silme başarılı, cache invalidate ediliyor:', id);
+      
+      // Tüm bonus ile ilgili query'leri invalidate et
+      qc.invalidateQueries({ queryKey: ["admin","bonuses"] });
+      qc.invalidateQueries({ queryKey: ["bonuses", "available"] });
+      qc.invalidateQueries({ queryKey: ["bonuses"] });
+      qc.invalidateQueries({ queryKey: ["promotions", "combined"] });
+      
+      console.log('🔄 Cache invalidate tamamlandı');
+    },
+    onError: (error, id) => {
+      console.error('💥 Bonus silme hatası:', { error, id });
+    }
   });
 }
 
@@ -73,6 +182,7 @@ export const useAvailableBonuses = () => {
   return useQuery({
     queryKey: ["bonuses", "available"],
     queryFn: async (): Promise<Bonus[]> => {
+      console.log('🎁 Mevcut bonuslar yükleniyor...');
       const now = new Date().toISOString();
       const { data, error } = await supabase
         .from("bonuses_new")
@@ -81,8 +191,74 @@ export const useAvailableBonuses = () => {
         .or(`valid_from.is.null,valid_from.lte.${now}`)
         .or(`valid_to.is.null,valid_to.gte.${now}`)
         .order("created_at", { ascending: false });
-      if (error) throw error;
+      
+      if (error) {
+        console.error('❌ Mevcut bonuslar yükleme hatası:', error);
+        throw error;
+      }
+      
+      console.log('✅ Mevcut bonuslar yüklendi:', data?.length || 0, 'adet');
       return data as Bonus[];
+    }
+  });
+};
+
+// Promotions sayfası için özel hook - Sadece admin panelden oluşturulan bonusları göster
+export const usePromotionsData = () => {
+  return useQuery({
+    queryKey: ["promotions", "combined"],
+    queryFn: async () => {
+      console.log('🎯 Admin panelden oluşturulan bonuslar yükleniyor...');
+      
+      // Sadece bonuses_new tablosundan veri çek
+      const bonusesResult = await supabase
+        .from('bonuses_new')
+        .select('*')
+        .eq('is_active', true)
+        .order('created_at', { ascending: false });
+
+      if (bonusesResult.error) {
+        console.error('❌ Bonuses yükleme hatası:', bonusesResult.error);
+        throw bonusesResult.error;
+      }
+
+      const bonuses = bonusesResult.data || [];
+
+      console.log('🎁 Admin panelden oluşturulan bonuslar:', bonuses.length, 'adet');
+
+      // Transform bonuses to match promotion structure
+      const transformedBonuses = bonuses.map(bonus => {
+        const category = bonus.name.toLowerCase().includes('vip') ? 'vip' :
+                        bonus.type.toLowerCase().includes('first') ? 'welcome' : 
+                        bonus.type.toLowerCase().includes('reload') ? 'deposit' :
+                        bonus.type.toLowerCase().includes('cashback') ? 'cashback' :
+                        bonus.type.toLowerCase().includes('freebet') ? 'freebet' : 'special';
+        
+        return {
+          id: bonus.id,
+          title: bonus.name,
+          description: bonus.description || `${bonus.type} - ${bonus.amount_type === 'percent' ? `%${bonus.amount_value}` : `₺${bonus.amount_value}`} bonus`,
+          detailed_description: bonus.description || '',
+          image_url: bonus.image_url || '', // Use bonus image if available
+          category,
+          bonus_amount: bonus.amount_type === 'fixed' ? bonus.amount_value : null,
+          bonus_percentage: bonus.amount_type === 'percent' ? bonus.amount_value : null,
+          min_deposit: bonus.min_deposit,
+          max_bonus: bonus.max_cap,
+          wagering_requirement: bonus.rollover_multiplier,
+          promo_code: bonus.code,
+          terms_conditions: `Wagering requirement: ${bonus.rollover_multiplier}x. Min. deposit: ₺${bonus.min_deposit}. ${bonus.max_cap ? `Max bonus: ₺${bonus.max_cap}` : ''}`,
+          start_date: bonus.valid_from || bonus.created_at,
+          end_date: bonus.valid_to || new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(), // 30 days default
+          max_participants: null,
+          current_participants: 0,
+          source: 'bonus' // Mark as coming from bonuses_new table
+        };
+      });
+
+      // Sadece admin panelden oluşturulan bonusları döndür
+      console.log('✅ Admin panelden oluşturulan bonuslar:', transformedBonuses.length, 'adet');
+      return transformedBonuses;
     }
   });
 };

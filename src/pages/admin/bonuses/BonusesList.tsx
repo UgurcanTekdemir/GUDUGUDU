@@ -44,6 +44,7 @@ export default function BonusesList() {
         <table className="min-w-full text-sm">
           <thead className="bg-slate-900/50">
             <tr>
+              <th className="px-4 py-2 text-left">Resim</th>
               <th className="px-4 py-2 text-left">Name</th>
               <th className="px-4 py-2">Type</th>
               <th className="px-4 py-2">Amount</th>
@@ -56,6 +57,19 @@ export default function BonusesList() {
           <tbody>
             {data?.map((b) => (
               <tr key={b.id} className="border-t border-slate-800">
+                <td className="px-4 py-2">
+                  {b.image_url ? (
+                    <img 
+                      src={b.image_url} 
+                      alt={b.name}
+                      className="w-12 h-12 object-cover rounded"
+                    />
+                  ) : (
+                    <div className="w-12 h-12 bg-gray-200 rounded flex items-center justify-center text-gray-400 text-xs">
+                      Resim Yok
+                    </div>
+                  )}
+                </td>
                 <td className="px-4 py-2">{b.name}</td>
                 <td className="px-4 py-2 text-center">{b.type}</td>
                 <td className="px-4 py-2 text-center">

@@ -52,7 +52,7 @@ const Header = () => {
     name: t('navigation.bonuses'),
     href: '/promotions'
   }, {
-    name: t('banners.vip.program'),
+    name: t('banners.vipBanner.program'),
     href: '/vip'
   }];
   useEffect(() => {

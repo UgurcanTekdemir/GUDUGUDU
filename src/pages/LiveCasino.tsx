@@ -6,6 +6,9 @@ import { Play, Users, Star, Crown } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/sections/Footer';
 import { useI18n } from '@/hooks/useI18n';
+import lightningRuletImage from '@/assets/gudubet_lightning_rulet.png';
+import vipBlackjackImage from '@/assets/gudubet_vip,_blackjack.png';
+import turnuvaImage from '@/assets/TURNUVA.png';
 
 interface LiveTable {
   id: string;
@@ -52,7 +55,7 @@ const LiveCasino = () => {
       minBet: 5,
       maxBet: 2500,
       viewers: 856,
-      thumbnail: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=250&fit=crop',
+      thumbnail: vipBlackjackImage,
       isVip: true,
       provider: 'pragmatic'
     },
@@ -64,7 +67,7 @@ const LiveCasino = () => {
       minBet: 25,
       maxBet: 10000,
       viewers: 287,
-      thumbnail: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=250&fit=crop',
+      thumbnail: vipBlackjackImage,
       isVip: true,
       provider: 'authentic'
     }
@@ -81,28 +84,12 @@ const LiveCasino = () => {
       {/* Hero Banner */}
       <div className="relative h-80 md:h-96 bg-gradient-to-r from-red-900 via-purple-900 to-blue-900 overflow-hidden">
         <div className="absolute inset-0 bg-black/40"></div>
-        <div className="relative z-10 h-full flex items-center justify-center text-center text-white px-4">
-          <div>
-            <h1 className="text-4xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-yellow-400 to-orange-500 bg-clip-text text-transparent">
-              {t('casino.liveCasino', 'Live Casino')}
-            </h1>
-            <p className="text-xl md:text-2xl mb-6 text-white/90">
-              {t('casino.realDealersLiveExperience', 'Live casino experience with real dealers')}
-            </p>
-            <div className="flex justify-center items-center gap-6 mb-6">
-              <div className="flex items-center gap-2">
-                <Users className="w-5 h-5" />
-                <span>{liveTables.reduce((sum, table) => sum + table.viewers, 0).toLocaleString()} {t('casino.activePlayers', 'active players')}</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Play className="w-5 h-5" />
-                <span>{liveTables.length} {t('casino.tables', 'tables')}</span>
-              </div>
-            </div>
-            <Button size="lg" className="bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-black font-bold">
-              {t('casino.playNow', 'Play Now')}
-            </Button>
-          </div>
+        <div className="relative z-10 h-full flex items-center justify-center">
+          <img 
+            src={turnuvaImage} 
+            alt="Turnuva" 
+            className="w-full h-full object-cover"
+          />
         </div>
       </div>
 
@@ -132,16 +119,11 @@ const LiveCasino = () => {
             <Card key={table.id} className="group hover:shadow-xl transition-all duration-300 hover:scale-105 bg-black border-gray-800 overflow-hidden">
               <div className="relative">
                 <img
-                  src={table.thumbnail}
+                  src={table.game === 'blackjack' ? vipBlackjackImage : lightningRuletImage}
                   alt={table.name}
                   className="w-full h-48 object-cover"
                 />
                 
-                <div className="absolute top-3 left-3">
-                  <Badge className="bg-red-500 text-white animate-pulse">
-                    🔴 {t('casino.live', 'LIVE')}
-                  </Badge>
-                </div>
                 
                 {table.isVip && (
                   <div className="absolute top-3 right-3">

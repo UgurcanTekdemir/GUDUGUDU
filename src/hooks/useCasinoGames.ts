@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { resolveSiteImageUrl } from '@/utils/resolveSiteImageUrl';
+import lightningRuletImage from '@/assets/gudubet_lightning_rulet.png';
+import vipBlackjackImage from '@/assets/gudubet_vip,_blackjack.png';
 
 interface CasinoGame {
   id: string;
@@ -50,6 +52,25 @@ export const useCasinoGames = () => {
   const [categories, setCategories] = useState<string[]>([]);
   const [providers, setProviders] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
+
+  // Function to get custom image based on game name
+  const getCustomGameImage = (gameName: string): string | undefined => {
+    const name = gameName.toLowerCase();
+    
+    // BlackJack games
+    if (name.includes('blackjack') || name.includes('özel') || name.includes('stüdyo') || name.includes('vip')) {
+      return vipBlackjackImage;
+    }
+    
+    // Roulette games
+    if (name.includes('lightning') || name.includes('rulet') || name.includes('roulette') || 
+        name.includes('dream') || name.includes('catcher') || name.includes('gonzo') || 
+        name.includes('treasure') || name.includes('hunt')) {
+      return lightningRuletImage;
+    }
+    
+    return undefined; // Use default image
+  };
   const [error, setError] = useState<string | null>(null);
 
   const loadGames = async () => {
@@ -106,6 +127,9 @@ export const useCasinoGames = () => {
         const keyByName = normalizeKey(game.name);
         const matchingSiteImage = imageMap.get(keyBySlug) || imageMap.get(keyByName);
         
+        // Get custom image based on game name
+        const customImage = getCustomGameImage(game.name);
+        
         return {
           ...game,
           category: game.casino_categories?.name || 'Unknown',
@@ -117,8 +141,8 @@ export const useCasinoGames = () => {
           background_url: game.background_url || undefined,
           external_game_id: game.external_game_id || undefined,
           game_url: game.game_url || undefined,
-          // Use site image if available, otherwise use original thumbnail_url. Resolve legacy asset paths.
-          thumbnail_url: resolveSiteImageUrl(matchingSiteImage || game.thumbnail_url || undefined) || undefined,
+          // Use custom image first, then site image, then original thumbnail_url. Resolve legacy asset paths.
+          thumbnail_url: customImage || resolveSiteImageUrl(matchingSiteImage || game.thumbnail_url || undefined) || undefined,
           rtp_percentage: game.rtp_percentage || undefined,
           jackpot_amount: game.jackpot_amount || undefined
         };

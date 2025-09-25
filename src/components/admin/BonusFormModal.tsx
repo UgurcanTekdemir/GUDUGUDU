@@ -8,7 +8,7 @@ import { Switch } from '@/components/ui/switch';
 import { Textarea } from '@/components/ui/textarea';
 import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { CalendarIcon, Loader2 } from 'lucide-react';
+import { CalendarIcon, Loader2, Upload, X, Image as ImageIcon } from 'lucide-react';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
 import { supabase } from '@/integrations/supabase/client';
@@ -56,7 +56,8 @@ export const BonusFormModal: React.FC<BonusFormModalProps> = ({
     max_per_user: 1,
     cooldown_hours: 0,
     is_active: true,
-    description: ''
+    description: '',
+    image_url: ''
   });
 
   useEffect(() => {
@@ -75,7 +76,8 @@ export const BonusFormModal: React.FC<BonusFormModalProps> = ({
         max_per_user: bonus.max_per_user || 1,
         cooldown_hours: bonus.cooldown_hours || 0,
         is_active: bonus.is_active || true,
-        description: bonus.description || ''
+        description: bonus.description || '',
+        image_url: bonus.image_url || ''
       });
       
       if (bonus.valid_from) setValidFrom(new Date(bonus.valid_from));
@@ -375,6 +377,113 @@ export const BonusFormModal: React.FC<BonusFormModalProps> = ({
               placeholder="Bonus açıklaması..."
               rows={3}
             />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="image_url">Bonus Resmi</Label>
+            <div className="space-y-4">
+              <div className="flex items-center space-x-4">
+                <Input
+                  type="file"
+                  accept="image/*"
+                  onChange={async (e) => {
+                    const file = e.target.files?.[0];
+                    if (!file) return;
+
+                    if (file.size > 5 * 1024 * 1024) {
+                      toast({
+                        title: "Hata",
+                        description: "Dosya boyutu 5MB'dan büyük olamaz.",
+                        variant: "destructive"
+                      });
+                      e.target.value = ''; // Input'u temizle
+                      return;
+                    }
+
+                    try {
+                      const fileExt = file.name.split('.').pop()?.toLowerCase();
+                      const cleanExt = fileExt?.replace(/[^a-z0-9]/g, '') || 'jpg'; // Clean extension
+                      const fileName = `${Date.now()}-${Math.random().toString(36).substring(2)}.${cleanExt}`;
+                      const filePath = `bonus-images/${fileName}`;
+
+                      const { data, error } = await supabase.storage
+                        .from('bonus-images')
+                        .upload(filePath, file);
+
+                      if (error) throw error;
+
+                      const { data: { publicUrl } } = supabase.storage
+                        .from('bonus-images')
+                        .getPublicUrl(filePath);
+
+                      setFormData({...formData, image_url: publicUrl});
+                      
+                      // Input'u temizle ki aynı dosya tekrar seçilebilsin
+                      e.target.value = '';
+                      toast({
+                        title: "Başarılı",
+                        description: "Resim başarıyla yüklendi.",
+                      });
+                    } catch (error: any) {
+                      toast({
+                        title: "Hata",
+                        description: error.message || "Resim yüklenirken bir hata oluştu.",
+                        variant: "destructive"
+                      });
+                      e.target.value = ''; // Hata durumunda da input'u temizle
+                    }
+                  }}
+                  className="hidden"
+                  id="image_url"
+                />
+                
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => document.getElementById('image_url')?.click()}
+                  className="flex items-center space-x-2"
+                >
+                  <Upload className="h-4 w-4" />
+                  <span>Resim Seç</span>
+                </Button>
+
+                {formData.image_url && (
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => setFormData({...formData, image_url: ''})}
+                    className="flex items-center space-x-2 text-red-600 hover:text-red-700"
+                  >
+                    <X className="h-4 w-4" />
+                    <span>Kaldır</span>
+                  </Button>
+                )}
+              </div>
+
+              {formData.image_url && (
+                <div className="mt-4">
+                  <div className="relative w-48 h-32 border rounded-lg overflow-hidden">
+                    <img
+                      src={formData.image_url}
+                      alt="Preview"
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <p className="text-sm text-gray-500 mt-2">
+                    Resim boyutu: 5MB'a kadar
+                  </p>
+                </div>
+              )}
+
+              {!formData.image_url && (
+                <div className="w-48 h-32 border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center">
+                  <div className="text-center">
+                    <ImageIcon className="h-8 w-8 text-gray-400 mx-auto mb-2" />
+                    <p className="text-sm text-gray-500">Resim yok</p>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
 
           <div className="flex justify-end space-x-2">

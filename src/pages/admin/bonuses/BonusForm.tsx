@@ -10,6 +10,7 @@ import { supabase } from "@/integrations/supabase/client";
 const schema = z.object({
   name: z.string().min(2),
   description: z.string().optional(),
+  image_url: z.string().optional(),
   type: z.enum(["FIRST_DEPOSIT","RELOAD","CASHBACK","FREEBET"]),
   amount_type: z.enum(["percent","fixed"]),
   amount_value: z.coerce.number().min(0),
@@ -45,7 +46,7 @@ export default function BonusForm() {
     }
   });
 
-  const { register, handleSubmit, formState: { errors }, reset } = useForm<FormValues>({ resolver: zodResolver(schema) });
+  const { register, handleSubmit, formState: { errors }, reset, getValues, setValue } = useForm<FormValues>({ resolver: zodResolver(schema) });
 
   // set default values when existing loaded
   React.useEffect(() => {
@@ -53,6 +54,7 @@ export default function BonusForm() {
       reset({
         name: existing.name,
         description: existing.description,
+        image_url: existing.image_url,
         type: existing.type as "FIRST_DEPOSIT" | "RELOAD" | "CASHBACK" | "FREEBET",
         amount_type: existing.amount_type as "percent" | "fixed",
         amount_value: existing.amount_value,
@@ -75,7 +77,9 @@ export default function BonusForm() {
     if (id) {
       await updateM.mutateAsync({ id, ...values });
     } else {
-      await createM.mutateAsync(values);
+      // Yeni bonus için benzersiz kod oluştur
+      const bonusCode = values.code || `BONUS_${Date.now()}_${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
+      await createM.mutateAsync({ ...values, code: bonusCode });
     }
     navigate("/admin/bonuses/list");
   };
@@ -128,8 +132,61 @@ export default function BonusForm() {
           <input type="checkbox" {...register("requires_code")} /> <span>Requires Code</span>
         </label>
         <label className="flex flex-col gap-1 md:col-span-2">
-          <span>Code (optional)</span>
-          <input className="rounded bg-slate-900 p-2" {...register("code")} />
+          <span>Code (boş bırakılırsa otomatik oluşturulur)</span>
+          <input 
+            className="rounded bg-slate-900 p-2" 
+            placeholder="Örn: WELCOME2025"
+            {...register("code")} 
+          />
+          <small className="text-xs text-gray-400">
+            Benzersiz bir kod girin veya boş bırakın (otomatik oluşturulur)
+          </small>
+        </label>
+        <label className="flex flex-col gap-1 md:col-span-2">
+          <span>Bonus Resmi</span>
+          <input 
+            type="file" 
+            accept="image/*" 
+            className="rounded bg-slate-900 p-2" 
+            onChange={async (e) => {
+              const file = e.target.files?.[0];
+              if (!file) return;
+
+              if (file.size > 5 * 1024 * 1024) {
+                alert("Dosya boyutu 5MB'dan büyük olamaz.");
+                e.target.value = ''; // Input'u temizle
+                return;
+              }
+
+              try {
+                const fileExt = file.name.split('.').pop()?.toLowerCase();
+                const cleanExt = fileExt?.replace(/[^a-z0-9]/g, '') || 'jpg'; // Clean extension
+                const fileName = `${Date.now()}-${Math.random().toString(36).substring(2)}.${cleanExt}`;
+                const filePath = `bonus-images/${fileName}`;
+
+                const { data, error } = await supabase.storage
+                  .from('bonus-images')
+                  .upload(filePath, file);
+
+                if (error) throw error;
+
+                const { data: { publicUrl } } = supabase.storage
+                  .from('bonus-images')
+                  .getPublicUrl(filePath);
+
+                // Form değerini güncelle
+                setValue('image_url', publicUrl);
+                
+                // Input'u temizle ki aynı dosya tekrar seçilebilsin
+                e.target.value = '';
+              } catch (error: any) {
+                alert(error.message || "Resim yüklenirken bir hata oluştu.");
+                e.target.value = ''; // Hata durumunda da input'u temizle
+              }
+            }}
+          />
+          <input type="hidden" {...register("image_url")} />
+          {errors.image_url && <span className="text-xs text-red-400">{errors.image_url.message as string}</span>}
         </label>
         <label className="flex flex-col gap-1">
           <span>Valid From</span>

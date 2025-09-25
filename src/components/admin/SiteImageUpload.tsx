@@ -57,9 +57,21 @@ export const SiteImageUpload: React.FC<SiteImageUploadProps> = ({
     setUploading(true); // Loading'i başlat
     
     try {
-      // Generate unique filename
+      // Generate unique filename - clean Turkish characters and special chars
       const fileExt = croppedFile.name.split('.').pop();
-      const fileName = `${category}/${name.toLowerCase().replace(/\s+/g, '-')}-${Date.now()}.${fileExt}`;
+      const cleanName = name.toLowerCase()
+        .replace(/\s+/g, '-')           // Replace spaces with hyphens
+        .replace(/[çğıöşü]/g, (match) => {  // Replace Turkish characters
+          const map: { [key: string]: string } = {
+            'ç': 'c', 'ğ': 'g', 'ı': 'i', 'ö': 'o', 'ş': 's', 'ü': 'u'
+          };
+          return map[match] || match;
+        })
+        .replace(/[^a-z0-9-]/g, '')     // Remove any other special characters
+        .replace(/-+/g, '-')           // Replace multiple hyphens with single
+        .replace(/^-|-$/g, '');        // Remove leading/trailing hyphens
+      
+      const fileName = `${category}/${cleanName}-${Date.now()}.${fileExt}`;
       
       // Upload to Supabase Storage - use site-images bucket
       const { data, error } = await supabase.storage

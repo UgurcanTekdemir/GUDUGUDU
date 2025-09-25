@@ -3,7 +3,7 @@
     "welcome-bonus": {
       "alt": "Gudubet Welcome Bonus 500 TL"
     },
-    "vip": {
+    "vipHero": {
       "special-advantages": "SPECIAL ADVANTAGES",
       "become-vip": "BECOME VIP"
     },
@@ -53,7 +53,7 @@
       "channel": "CHANNEL",
       "subscribers": "+200K SUBSCRIBERS"
     },
-    "vip": {
+    "vipBanner": {
       "program": "VIP PROGRAM"
     },
     "live-casino": {
@@ -338,7 +338,7 @@
       "title": "Profile",
       "subtitle": "Manage your account settings"
     },
-    "vip": {
+    "vipSection": {
       "title": "VIP Program",
       "subtitle": "Exclusive benefits for VIP members"
     },

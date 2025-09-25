@@ -15,11 +15,70 @@ import { CasinoOrganizationSchema, FAQSchema } from '@/components/seo/Structured
 
 import { useI18n } from '@/hooks/useI18n';
 import { useCasinoGames } from '@/hooks/useCasinoGames';
-import { useSiteImages } from '@/hooks/useSiteImages';
+import { useSiteImages, useSiteImageByCategory } from '@/hooks/useSiteImages';
 import { addSmartCacheBuster, getPlaceholderImage } from '@/utils/imageUtils';
 import { generateCasinoFAQs } from '@/utils/seoUtils';
 import { Send, Play, Star, Eye } from 'lucide-react';
 import treasureImage from '@/assets/treasure.png';
+import vipProgramImage from '@/assets/vip_program.png';
+
+// Popular Sidebar Component
+const PopularSidebar = () => {
+  const navigate = useNavigate();
+  const { t } = useI18n();
+  const { data: popularImage, isLoading } = useSiteImageByCategory('popular');
+
+  return (
+    <div className="relative h-full bg-gradient-to-b from-gray-800 to-gray-900 rounded-lg overflow-hidden border border-gray-700 ml-4">
+      {/* Background Image from admin panel */}
+      {popularImage?.image_url && (
+        <div 
+          className="absolute inset-0 bg-cover bg-center opacity-20"
+          style={{
+            backgroundImage: `url(${addSmartCacheBuster(popularImage.image_url)})`
+          }}
+        ></div>
+      )}
+      
+      {/* Fallback background if no image */}
+      {!popularImage?.image_url && !isLoading && (
+        <div 
+          className="absolute inset-0 bg-cover bg-center opacity-20"
+          style={{
+            backgroundImage: `url('/gudubet_logo.png')`
+          }}
+        ></div>
+      )}
+      
+      <div className="relative p-6 h-full flex flex-col justify-between">
+        <div className="text-center">
+          <h3 className="text-white text-2xl font-bold mb-4">{t('sidebar.popular.title')}</h3>
+          <div className="w-32 h-32 mx-auto mb-4 rounded-full flex items-center justify-center">
+          </div>
+        </div>
+        <Button 
+          onClick={() => navigate('/casino?category=popular')}
+          className="bg-white text-black hover:bg-gray-100 font-bold w-full"
+        >
+          {t('sidebar.popular.view-all')}
+        </Button>
+      </div>
+    </div>
+  );
+};
+import telegramImage from '@/assets/telegrama_katıl.png';
+import mobileAppImage from '@/assets/mobil_uuygulama_yakında.png';
+import vipBannerGif from '@/assets/vıp_banner.gif';
+import hosgeldinizBanner from '@/assets/hosgeldiniz_banner.png';
+import mobilUygulama from '@/assets/mobil_uygulama.png';
+import turnuvaImage from '@/assets/TURNUVA.png';
+// gudubet_logo.png public klasöründe, doğrudan URL ile erişilecek
+import jackpotImage from '@/assets/jackpot.png';
+import kayipBonusu from '@/assets/kayıp_bonusu.png';
+import canliCasinoBanner from '@/assets/canlı_casino_banner.png';
+import sporCanliBanner from '@/assets/spor_canlı_banner.png';
+import vipBlackjackImage from '@/assets/gudubet_vip,_blackjack.png';
+import lightningRuletImage from '@/assets/gudubet_lightning_rulet.png';
 const Index = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isRegistrationModalOpen, setIsRegistrationModalOpen] = useState(false);
@@ -107,8 +166,8 @@ const Index = () => {
                   
                   <div className="relative z-10 h-full w-full cursor-pointer" onClick={() => setIsRegistrationModalOpen(true)}>
                     <img 
-                      src={getHeroImage('welcome-bonus', '/lovable-uploads/ea4401d0-dccf-4923-b1f3-c6fe9f5412a8.png')} 
-                      alt={t('hero.welcome-bonus.alt')} 
+                      src={hosgeldinizBanner} 
+                      alt="Hoşgeldiniz Banner" 
                       className="w-full h-full object-cover"
                       style={{ 
                         imageRendering: 'crisp-edges',
@@ -132,33 +191,12 @@ const Index = () => {
                   <div className="absolute top-1/4 left-1/3 text-5xl opacity-30">💎</div>
                   <div className="absolute bottom-1/4 right-1/3 text-4xl opacity-30">👑</div>
                   
-                  <div className="relative z-10 h-full flex items-center justify-center px-8 md:px-16">
-                    <div className="flex-1 flex flex-col items-center justify-center text-center">
-                      <h1 className="text-5xl md:text-7xl font-bold text-white mb-4">
-                        <span className="text-yellow-300">VIP</span>
-                      </h1>
-                      <div className="bg-black/80 rounded-lg px-6 py-3 inline-block mb-6">
-                        <h2 className="text-xl md:text-2xl font-bold text-purple-300">
-                          {t('hero.vip.special-advantages')}
-                        </h2>
-                      </div>
-                      <div className="flex justify-center items-center space-x-4 mb-6">
-                        <div className="text-center">
-                          <div className="text-3xl mb-1">💎</div>
-                          <div className="text-lg font-bold text-yellow-300">%25</div>
-                        </div>
-                        <div className="text-center">
-                          <div className="text-3xl mb-1">🎁</div>
-                          <div className="text-lg font-bold text-yellow-300">BONUS</div>
-                        </div>
-                      </div>
-                      <Button className="bg-purple-500 hover:bg-purple-600 text-white font-bold px-8 py-3 text-lg rounded-full hover:scale-105 transition-transform" onClick={() => navigate('/vip')}>
-                        {t('hero.vip.become-vip')}
-                      </Button>
-                    </div>
-                    <div className="flex-1 flex justify-center items-center">
-                      <div className="text-8xl md:text-9xl opacity-80">👑</div>
-                    </div>
+                  <div className="relative z-10 h-full flex items-center justify-center cursor-pointer" onClick={() => navigate('/vip')}>
+                    <img 
+                      src={vipBannerGif} 
+                      alt="VIP Banner" 
+                      className="w-full h-full object-cover hover:opacity-90 transition-opacity"
+                    />
                   </div>
                 </div>
               </div>
@@ -173,23 +211,12 @@ const Index = () => {
                   <div className="absolute top-1/3 left-1/4 text-5xl opacity-30">🃏</div>
                   <div className="absolute bottom-1/3 right-1/4 text-4xl opacity-30">🎯</div>
                   
-                  <div className="relative z-10 h-full flex items-center justify-center px-8 md:px-16">
-                    <div className="flex-1 flex flex-col items-center justify-center text-center">
-                      <h1 className="text-4xl md:text-6xl font-bold text-white mb-4">
-                        <span className="text-emerald-300">CANLI</span>
-                      </h1>
-                      <div className="bg-black/80 rounded-lg px-6 py-3 inline-block mb-6">
-                        <h2 className="text-xl md:text-2xl font-bold text-emerald-300">
-                          {t('hero.live-casino.experience')}
-                        </h2>
-                      </div>
-                      <Button className="bg-emerald-500 hover:bg-emerald-600 text-white font-bold px-8 py-3 text-lg rounded-full hover:scale-105 transition-transform" onClick={() => navigate('/live-casino')}>
-                        {t('hero.live-casino.play')}
-                      </Button>
-                    </div>
-                    <div className="flex-1 flex justify-center items-center">
-                      <div className="text-8xl md:text-9xl opacity-80">🎲</div>
-                    </div>
+                  <div className="relative z-10 h-full flex items-center justify-center cursor-pointer" onClick={() => navigate('/live-casino')}>
+                    <img 
+                      src={canliCasinoBanner} 
+                      alt="Canlı Casino Banner" 
+                      className="w-full h-full object-cover hover:opacity-90 transition-opacity"
+                    />
                   </div>
                 </div>
               </div>
@@ -204,20 +231,12 @@ const Index = () => {
                   <div className="absolute top-1/4 right-1/3 text-5xl opacity-30">⚽</div>
                   <div className="absolute bottom-1/4 left-1/3 text-4xl opacity-30">🏀</div>
                   
-                  <div className="relative z-10 h-full flex items-center justify-center px-8 md:px-16">
-                    <div className="w-full flex flex-col items-center justify-center text-center">
-                      <h1 className="text-4xl md:text-6xl font-bold text-white mb-4">
-                        <span className="text-cyan-300">SPOR</span>
-                      </h1>
-                      <div className="bg-black/80 rounded-lg px-6 py-3 inline-block mb-6">
-                        <h2 className="text-xl md:text-2xl font-bold text-cyan-300">
-                          {t('hero.sports-betting.excitement')}
-                        </h2>
-                      </div>
-                      <Button className="bg-cyan-500 hover:bg-cyan-600 text-white font-bold px-8 py-3 text-lg rounded-full hover:scale-105 transition-transform" onClick={() => navigate('/sports-betting')}>
-                        {t('hero.sports-betting.place-bet')}
-                      </Button>
-                    </div>
+                  <div className="relative z-10 h-full flex items-center justify-center cursor-pointer" onClick={() => navigate('/live-betting')}>
+                    <img 
+                      src={sporCanliBanner} 
+                      alt="Spor Canlı Banner" 
+                      className="w-full h-full object-cover hover:opacity-90 transition-opacity"
+                    />
                   </div>
                 </div>
               </div>
@@ -232,21 +251,12 @@ const Index = () => {
                   <div className="absolute top-1/5 right-1/4 text-6xl opacity-40">💰</div>
                   <div className="absolute bottom-1/5 left-1/4 text-5xl opacity-40">🎰</div>
                   
-                  <div className="relative z-10 h-full flex items-center justify-center px-8 md:px-16">
-                    <div className="w-full flex flex-col items-center justify-center text-center">
-                      <h1 className="text-5xl md:text-7xl font-bold text-white mb-4">
-                        <span className="text-yellow-300">JACKPOT</span>
-                      </h1>
-                      <div className="bg-black/80 rounded-lg px-6 py-3 inline-block mb-4">
-                        <h2 className="text-2xl md:text-3xl font-bold text-yellow-300">
-                          ₺5.847.293
-                        </h2>
-                      </div>
-                      <p className="text-white text-lg mb-6">{t('hero.jackpot.waiting')}</p>
-                      <Button className="bg-yellow-500 hover:bg-yellow-600 text-black font-bold px-8 py-3 text-lg rounded-full hover:scale-105 transition-transform" onClick={() => navigate('/casino')}>
-                        {t('hero.jackpot.try-luck')}
-                      </Button>
-                    </div>
+                  <div className="relative z-10 h-full flex items-center justify-center cursor-pointer" onClick={() => navigate('/casino')}>
+                    <img 
+                      src={jackpotImage} 
+                      alt="Jackpot" 
+                      className="w-full h-full object-cover hover:opacity-90 transition-opacity"
+                    />
                   </div>
                 </div>
               </div>
@@ -261,21 +271,12 @@ const Index = () => {
                   <div className="absolute top-1/3 left-1/4 text-5xl opacity-30">📱</div>
                   <div className="absolute bottom-1/3 right-1/4 text-4xl opacity-30">📲</div>
                   
-                  <div className="relative z-10 h-full flex items-center justify-center px-8 md:px-16">
-                    <div className="w-full flex flex-col items-center justify-center text-center">
-                      <h1 className="text-4xl md:text-6xl font-bold text-white mb-4">
-                        <span className="text-blue-300">MOBİL</span>
-                      </h1>
-                      <div className="bg-black/80 rounded-lg px-6 py-3 inline-block mb-4">
-                        <h2 className="text-xl md:text-2xl font-bold text-blue-300">
-                          UYGULAMA
-                        </h2>
-                      </div>
-                      <p className="text-white text-lg mb-6">{t('hero.mobile-app.everywhere')}</p>
-                      <Button className="bg-blue-500 hover:bg-blue-600 text-white font-bold px-8 py-3 text-lg rounded-full hover:scale-105 transition-transform">
-                        {t('hero.mobile-app.download')}
-                      </Button>
-                    </div>
+                  <div className="relative z-10 h-full flex items-center justify-center">
+                    <img 
+                      src={mobilUygulama} 
+                      alt="Mobil Uygulama" 
+                      className="w-full h-full object-cover"
+                    />
                   </div>
                 </div>
               </div>
@@ -290,21 +291,12 @@ const Index = () => {
                   <div className="absolute top-1/4 left-1/3 text-5xl opacity-30">🏆</div>
                   <div className="absolute bottom-1/4 right-1/3 text-4xl opacity-30">⭐</div>
                   
-                  <div className="relative z-10 h-full flex items-center justify-center px-8 md:px-16">
-                    <div className="w-full flex flex-col items-center justify-center text-center">
-                      <h1 className="text-4xl md:text-6xl font-bold text-white mb-4">
-                        <span className="text-pink-300">TURNUVA</span>
-                      </h1>
-                      <div className="bg-black/80 rounded-lg px-6 py-3 inline-block mb-4">
-                        <h2 className="text-xl md:text-2xl font-bold text-pink-300">
-                          {t('hero.tournament.weekly-competition')}
-                        </h2>
-                      </div>
-                      <p className="text-white text-lg mb-6">{t('hero.tournament.prize-pool')}</p>
-                      <Button className="bg-pink-500 hover:bg-pink-600 text-white font-bold px-8 py-3 text-lg rounded-full hover:scale-105 transition-transform">
-                        {t('hero.tournament.join')}
-                      </Button>
-                    </div>
+                  <div className="relative z-10 h-full flex items-center justify-center">
+                    <img 
+                      src={turnuvaImage} 
+                      alt="Turnuva" 
+                      className="w-full h-full object-cover"
+                    />
                   </div>
                 </div>
               </div>
@@ -319,21 +311,12 @@ const Index = () => {
                   <div className="absolute top-1/3 right-1/4 text-5xl opacity-30">💸</div>
                   <div className="absolute bottom-1/3 left-1/4 text-4xl opacity-30">🔄</div>
                   
-                  <div className="relative z-10 h-full flex items-center justify-center px-8 md:px-16">
-                    <div className="w-full flex flex-col items-center justify-center text-center">
-                      <h1 className="text-4xl md:text-6xl font-bold text-white mb-4">
-                        <span className="text-teal-300">%20</span>
-                      </h1>
-                      <div className="bg-black/80 rounded-lg px-6 py-3 inline-block mb-4">
-                        <h2 className="text-xl md:text-2xl font-bold text-teal-300">
-                          {t('hero.cashback.loss-bonus')}
-                        </h2>
-                      </div>
-                      <p className="text-white text-lg mb-6">{t('hero.cashback.get-back')}</p>
-                      <Button className="bg-teal-500 hover:bg-teal-600 text-white font-bold px-8 py-3 text-lg rounded-full hover:scale-105 transition-transform">
-                        {t('hero.cashback.get')}
-                      </Button>
-                    </div>
+                  <div className="relative z-10 h-full flex items-center justify-center cursor-pointer" onClick={() => navigate('/bonuses')}>
+                    <img 
+                      src={kayipBonusu} 
+                      alt="Kayıp Bonusu" 
+                      className="w-full h-full object-cover hover:opacity-90 transition-opacity"
+                    />
                   </div>
                 </div>
               </div>
@@ -367,73 +350,35 @@ const Index = () => {
           {/* Three Banner Row */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
             {/* Telegram Channel */}
-            <Card className="bg-gradient-to-r from-blue-600 to-cyan-500 border-none text-white overflow-hidden">
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h3 className="text-2xl font-bold mb-2">{t('banners.telegram.join-channel')}</h3>
-                    <h3 className="text-2xl font-bold mb-2">{t('banners.telegram.channel')}</h3>
-                    <p className="text-sm opacity-90">{t('banners.telegram.subscribers')}</p>
-                    <p className="text-xs opacity-75 mt-2">{t('gudubet_telegram')}</p>
-                  </div>
-                  <Send className="w-16 h-16 opacity-80" />
-                </div>
+            <Card className="border-none overflow-hidden cursor-pointer hover:opacity-90 transition-opacity" onClick={() => window.open('https://t.me/gudubet', '_blank')}>
+              <CardContent className="p-0">
+                <img 
+                  src={telegramImage} 
+                  alt="Telegram Kanalı" 
+                  className="w-full h-auto object-cover"
+                />
               </CardContent>
             </Card>
 
             {/* VIP Program */}
-            <Card className="bg-gradient-to-r from-green-600 to-emerald-500 border-none text-white overflow-hidden">
-              <CardContent className="p-6 relative bg-cover bg-center bg-no-repeat" style={{
-              backgroundImage: `url(${treasureImage})`
-            }}>
-                <div className="text-center">
-                  <div className="flex justify-center space-x-4 mb-4">
-                    <div className="text-center">
-                      <div className="text-2xl mb-1">💎</div>
-                      <div className="text-sm font-bold">%15</div>
-                    </div>
-                    <div className="text-center">
-                      <div className="text-2xl mb-1">💎</div>
-                      <div className="text-sm font-bold">%20</div>
-                    </div>
-                    <div className="text-center">
-                      <div className="text-2xl mb-1">💎</div>
-                      <div className="text-sm font-bold">%25</div>
-                    </div>
-                  </div>
-                  <Button className="bg-white text-green-600 font-bold hover:bg-gray-100 no-underline" onClick={() => navigate('/vip')}>
-                    {t('banners.vip.program')} →
-                  </Button>
-                </div>
+            <Card className="border-none overflow-hidden cursor-pointer hover:opacity-90 transition-opacity" onClick={() => navigate('/vip')}>
+              <CardContent className="p-0">
+                <img 
+                  src={vipProgramImage} 
+                  alt="VIP Program" 
+                  className="w-full h-auto object-cover"
+                />
               </CardContent>
             </Card>
 
             {/* Mobile App */}
-            <Card className="bg-gradient-to-r from-orange-600 to-red-500 border-none text-white overflow-hidden relative">
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-4">
-                    <div className="text-6xl animate-bounce">📱</div>
-                    <div>
-                      <h3 className="text-xl font-bold mb-2">{t('banners.mobile.title-1')}</h3>
-                      <h3 className="text-xl font-bold mb-2">{t('banners.mobile.title-2')}</h3>
-                    </div>
-                  </div>
-                  <div className="text-right">
-                    <div className="bg-white/20 rounded-lg p-4 backdrop-blur-sm">
-                      <div className="flex items-center justify-center mb-2">
-                        <div className="w-3 h-3 bg-yellow-400 rounded-full animate-pulse mr-2"></div>
-                        <span className="text-yellow-300 font-bold text-sm">{t('banners.mobile.coming-soon')}</span>
-                      </div>
-                      <div className="text-xs text-white/80" dangerouslySetInnerHTML={{ __html: t('banners.mobile.description') }} />
-                    </div>
-                  </div>
-                </div>
-                
-                {/* Animated background elements */}
-                <div className="absolute top-2 right-2 w-8 h-8 bg-white/10 rounded-full animate-ping"></div>
-                <div className="absolute bottom-2 left-2 w-4 h-4 bg-yellow-400/30 rounded-full animate-pulse"></div>
-                <div className="absolute top-1/2 left-1/4 w-2 h-2 bg-white/20 rounded-full animate-bounce" style={{animationDelay: '0.5s'}}></div>
+            <Card className="border-none overflow-hidden cursor-pointer hover:opacity-90 transition-opacity">
+              <CardContent className="p-0">
+                <img 
+                  src={mobileAppImage} 
+                  alt="Mobil Uygulama Yakında" 
+                  className="w-full h-auto object-cover"
+                />
               </CardContent>
             </Card>
           </div>
@@ -508,28 +453,7 @@ const Index = () => {
             <div className="relative">
               {/* POPÜLER Sidebar - Desktop Only - Fixed to left edge */}
               <div className="hidden lg:block absolute left-0 top-0 w-64 h-full z-10">
-                <div className="relative h-full bg-gradient-to-b from-gray-800 to-gray-900 rounded-lg overflow-hidden border border-gray-700 ml-4">
-                  <div 
-                    className="absolute inset-0 bg-cover bg-center opacity-20"
-                    style={{
-                      backgroundImage: `url('https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=600&fit=crop')`
-                    }}
-                  ></div>
-                  <div className="relative p-6 h-full flex flex-col justify-between">
-                    <div className="text-center">
-                      <h3 className="text-white text-2xl font-bold mb-4">{t('sidebar.popular.title')}</h3>
-                      <div className="w-32 h-32 mx-auto mb-4 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center">
-                        <div className="text-6xl">👑</div>
-                      </div>
-                    </div>
-                    <Button 
-                      onClick={() => navigate('/casino?category=popular')}
-                      className="bg-white text-black hover:bg-gray-100 font-bold w-full"
-                    >
-                      {t('sidebar.popular.view-all')}
-                    </Button>
-                  </div>
-                </div>
+                <PopularSidebar />
               </div>
 
               {/* Games Grid with left margin for sidebar */}
@@ -671,15 +595,12 @@ const Index = () => {
                   <div 
                     className="absolute inset-0 bg-cover bg-center opacity-20"
                     style={{
-                      backgroundImage: `url('https://images.unsplash.com/photo-1596838132731-3301c3fd4317?w=400&h=600&fit=crop')`
+                      backgroundImage: `url(${turnuvaImage})`
                     }}
                   ></div>
                   <div className="relative p-6 h-full flex flex-col justify-between">
                     <div className="text-center">
                       <h3 className="text-white text-2xl font-bold mb-4">{t('banners.live-casino.title')}</h3>
-                      <div className="w-32 h-32 mx-auto mb-4 bg-gradient-to-br from-green-400 to-blue-500 rounded-full flex items-center justify-center">
-                        <div className="text-6xl">👩‍💼</div>
-                      </div>
                     </div>
                     <Button 
                       onClick={() => navigate('/live-casino')}
@@ -700,21 +621,21 @@ const Index = () => {
                   id: 'live-1',
                   name: t('games.live.lightning-roulette'),
                   provider: 'Evolution',
-                  thumbnail: 'https://images.unsplash.com/photo-1596838132731-3301c3fd4317?w=400&h=300&fit=crop',
+                  thumbnail: vipBlackjackImage,
                   slug: 'lightning-rulet'
                 },
                 {
                   id: 'live-2',
                   name: t('games.live.special-studio'),
                   provider: 'Evolution',
-                  thumbnail: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=300&fit=crop',
+                  thumbnail: vipBlackjackImage,
                   slug: 'ozel-studio'
                 },
                 {
                   id: 'live-3',
                   name: t('games.live.blackjack-lobby'),
                   provider: 'Evolution',
-                  thumbnail: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=300&fit=crop',
+                  thumbnail: vipBlackjackImage,
                   slug: 'blackjack-lobby'
                 },
                 {
@@ -728,7 +649,7 @@ const Index = () => {
                   id: 'live-5',
                   name: t('games.live.dream-catcher'),
                   provider: 'Evolution',
-                  thumbnail: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=300&fit=crop',
+                  thumbnail: lightningRuletImage,
                   slug: 'dream-catcher'
                 },
                 {
@@ -785,21 +706,21 @@ const Index = () => {
                       id: 'live-7',
                       name: t('games.live.speed-roulette'),
                       provider: 'Evolution',
-                      thumbnail: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=300&fit=crop',
+                      thumbnail: lightningRuletImage,
                       slug: 'speed-roulette'
                     },
                     {
                       id: 'live-8',
                       name: t('games.live.vip-blackjack'),
                       provider: 'Evolution',
-                      thumbnail: 'https://images.unsplash.com/photo-1596838132731-3301c3fd4317?w=400&h=300&fit=crop',
+                      thumbnail: vipBlackjackImage,
                       slug: 'vip-blackjack'
                     },
                     {
                       id: 'live-9',
                       name: t('games.live.immersive-roulette'),
                       provider: 'Evolution',
-                      thumbnail: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=300&fit=crop',
+                      thumbnail: lightningRuletImage,
                       slug: 'immersive-roulette'
                     },
                     {
@@ -813,7 +734,7 @@ const Index = () => {
                       id: 'live-11',
                       name: t('games.live.gonzos-treasure-hunt'),
                       provider: 'Evolution',
-                      thumbnail: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=300&fit=crop',
+                      thumbnail: lightningRuletImage,
                       slug: 'gonzos-treasure-hunt'
                     },
                     {

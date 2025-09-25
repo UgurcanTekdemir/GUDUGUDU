@@ -7,12 +7,14 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Progress } from '@/components/ui/progress';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
-import { useClaimBonus } from '@/hooks/useBonuses';
+import { useClaimBonus, usePromotionsData } from '@/hooks/useBonuses';
 import { useMyBonusRequests } from '@/hooks/useBonusRequests';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/sections/Footer';
 import gudubetBonusImage from '@/assets/gudubet-bonus.png';
 import vipBonusImage from '@/assets/vip-bonus-new.png';
+import dogumGunuBonusImage from '@/assets/dogum_gunu_bonusu.jpeg';
+import ilkYatirimImage from '@/assets/ilk_yatirim.png';
 import { useI18n } from '@/hooks/useI18n';
 import { 
   Gift, 
@@ -62,16 +64,17 @@ interface UserPromotion {
 
 const Promotions = () => {
   const { t } = useI18n();
-  const [promotions, setPromotions] = useState<Promotion[]>([]);
   const [userPromotions, setUserPromotions] = useState<UserPromotion[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [selectedPromotion, setSelectedPromotion] = useState<Promotion | null>(null);
-  const [loading, setLoading] = useState(true);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [copiedCode, setCopiedCode] = useState<string>('');
   const { toast } = useToast();
   const claimBonusMutation = useClaimBonus();
   const { data: bonusRequests } = useMyBonusRequests();
+  
+  // React Query ile veri çekme
+  const { data: promotions = [], isLoading: loading, error } = usePromotionsData();
 
   const categories = [
     { id: 'all', name: t('casino.all', 'All'), icon: Zap },
@@ -148,75 +151,14 @@ const Promotions = () => {
     );
   };
 
-  // Fetch promotions
-  const fetchPromotions = async () => {
-    try {
-      setLoading(true);
-      
-      // Fetch both promotions and bonuses
-      const [promotionsResult, bonusesResult] = await Promise.all([
-        supabase
-          .from('promotions')
-          .select('*')
-          .eq('is_active', true)
-          .order('created_at', { ascending: false }),
-        supabase
-          .from('bonuses_new')
-          .select('*')
-          .eq('is_active', true)
-          .order('created_at', { ascending: false })
-      ]);
-
-      if (promotionsResult.error) throw promotionsResult.error;
-      if (bonusesResult.error) throw bonusesResult.error;
-
-      const existingPromotions = promotionsResult.data || [];
-      const bonuses = bonusesResult.data || [];
-
-      // Transform bonuses to match promotion structure
-      const transformedBonuses = bonuses.map(bonus => {
-        const category = bonus.name.toLowerCase().includes('vip') ? 'vip' :
-                        bonus.type.toLowerCase().includes('first') ? 'welcome' : 
-                        bonus.type.toLowerCase().includes('reload') ? 'deposit' :
-                        bonus.type.toLowerCase().includes('cashback') ? 'cashback' :
-                        bonus.type.toLowerCase().includes('freebet') ? 'freebet' : 'special';
-        
-        return {
-          id: bonus.id,
-          title: bonus.name,
-          description: bonus.description || `${bonus.type} - ${bonus.amount_type === 'percent' ? `%${bonus.amount_value}` : `₺${bonus.amount_value}`} bonus`,
-          detailed_description: bonus.description || '',
-          image_url: '', // Bonuses don't have images yet
-          category,
-          bonus_amount: bonus.amount_type === 'fixed' ? bonus.amount_value : null,
-          bonus_percentage: bonus.amount_type === 'percent' ? bonus.amount_value : null,
-          min_deposit: bonus.min_deposit,
-          max_bonus: bonus.max_cap,
-          wagering_requirement: bonus.rollover_multiplier,
-          promo_code: bonus.code,
-          terms_conditions: `${t('casino.wageringRequirement', 'Wagering requirement')}: ${bonus.rollover_multiplier}x. ${t('casino.minDeposit', 'Min. deposit')}: ₺${bonus.min_deposit}. ${bonus.max_cap ? `${t('casino.maxBonus', 'Max bonus')}: ₺${bonus.max_cap}` : ''}`,
-          start_date: bonus.valid_from || bonus.created_at,
-          end_date: bonus.valid_to || new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(), // 30 days default
-          max_participants: null,
-          current_participants: 0,
-          source: 'bonus' // Mark as coming from bonuses_new table
-        };
-      });
-
-      // Combine both arrays
-      const allPromotions = [...existingPromotions, ...transformedBonuses];
-      setPromotions(allPromotions);
-    } catch (error) {
-      console.error('Error fetching promotions:', error);
-      toast({
-        title: t('casino.error', 'Error'),
-        description: t('casino.errorLoadingPromotions', 'An error occurred while loading promotions.'),
-        variant: "destructive"
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
+  // Error handling for React Query
+  if (error) {
+    toast({
+      title: t('casino.error', 'Error'),
+      description: t('casino.errorLoadingPromotions', 'An error occurred while loading promotions.'),
+      variant: "destructive"
+    });
+  }
 
   // Fetch user promotions
   const fetchUserPromotions = async () => {
@@ -237,7 +179,6 @@ const Promotions = () => {
   };
 
   useEffect(() => {
-    fetchPromotions();
     fetchUserPromotions();
   }, []);
 
@@ -444,27 +385,76 @@ const Promotions = () => {
                       </div>
 
                       <div className="h-40 bg-slate-700 rounded-lg mb-3 flex items-center justify-center relative overflow-hidden">
-                        {promotion.category === 'welcome' && (
+                        {/* Admin panelden eklenen resim varsa onu göster */}
+                        {promotion.image_url ? (
                           <div 
                             className="absolute inset-0 rounded-lg overflow-hidden" 
                             style={{
-                              backgroundImage: `url(${gudubetBonusImage})`,
+                              backgroundImage: `url(${promotion.image_url})`,
                               backgroundSize: 'cover',
                               backgroundPosition: 'center',
                               backgroundRepeat: 'no-repeat'
                             }}
                           ></div>
-                        )}
-                        {promotion.category === 'vip' && (
-                          <div 
-                            className="absolute inset-0 rounded-lg overflow-hidden" 
-                            style={{
-                              backgroundImage: `url(${vipBonusImage})`,
-                              backgroundSize: 'cover', 
-                              backgroundPosition: 'center',
-                              backgroundRepeat: 'no-repeat'
-                            }}
-                          ></div>
+                        ) : (
+                          <>
+                            {/* Varsayılan resimler */}
+                            {promotion.category === 'welcome' && (
+                              <div 
+                                className="absolute inset-0 rounded-lg overflow-hidden" 
+                                style={{
+                                  backgroundImage: `url(${gudubetBonusImage})`,
+                                  backgroundSize: 'cover',
+                                  backgroundPosition: 'center',
+                                  backgroundRepeat: 'no-repeat'
+                                }}
+                              ></div>
+                            )}
+                            {promotion.category === 'vip' && (
+                              <div 
+                                className="absolute inset-0 rounded-lg overflow-hidden" 
+                                style={{
+                                  backgroundImage: `url(${vipBonusImage})`,
+                                  backgroundSize: 'cover', 
+                                  backgroundPosition: 'center',
+                                  backgroundRepeat: 'no-repeat'
+                                }}
+                              ></div>
+                            )}
+                            {promotion.category === 'special' && (
+                              <div 
+                                className="absolute inset-0 rounded-lg overflow-hidden" 
+                                style={{
+                                  backgroundImage: `url(${dogumGunuBonusImage})`,
+                                  backgroundSize: 'cover',
+                                  backgroundPosition: 'center',
+                                  backgroundRepeat: 'no-repeat'
+                                }}
+                              ></div>
+                            )}
+                            {promotion.category === 'first_deposit' && (
+                              <div 
+                                className="absolute inset-0 rounded-lg overflow-hidden" 
+                                style={{
+                                  backgroundImage: `url(${ilkYatirimImage})`,
+                                  backgroundSize: 'cover',
+                                  backgroundPosition: 'center',
+                                  backgroundRepeat: 'no-repeat'
+                                }}
+                              ></div>
+                            )}
+                            {promotion.category === 'deposit' && (
+                              <div 
+                                className="absolute inset-0 rounded-lg overflow-hidden" 
+                                style={{
+                                  backgroundImage: `url(${ilkYatirimImage})`,
+                                  backgroundSize: 'cover',
+                                  backgroundPosition: 'center',
+                                  backgroundRepeat: 'no-repeat'
+                                }}
+                              ></div>
+                            )}
+                          </>
                         )}
                         {getCategoryIcon(promotion.category)}
                       </div>
@@ -616,6 +606,42 @@ const Promotions = () => {
                         className="absolute inset-0" 
                         style={{
                           backgroundImage: `url(${vipBonusImage})`,
+                          backgroundSize: 'cover',
+                          backgroundPosition: 'center',
+                          backgroundRepeat: 'no-repeat',
+                          opacity: 0.3
+                        }}
+                      ></div>
+                    )}
+                    {selectedPromotion.category === 'special' && (
+                      <div 
+                        className="absolute inset-0" 
+                        style={{
+                          backgroundImage: `url(${dogumGunuBonusImage})`,
+                          backgroundSize: 'cover',
+                          backgroundPosition: 'center',
+                          backgroundRepeat: 'no-repeat',
+                          opacity: 0.3
+                        }}
+                      ></div>
+                    )}
+                    {selectedPromotion.category === 'first_deposit' && (
+                      <div 
+                        className="absolute inset-0" 
+                        style={{
+                          backgroundImage: `url(${ilkYatirimImage})`,
+                          backgroundSize: 'cover',
+                          backgroundPosition: 'center',
+                          backgroundRepeat: 'no-repeat',
+                          opacity: 0.3
+                        }}
+                      ></div>
+                    )}
+                    {selectedPromotion.category === 'deposit' && (
+                      <div 
+                        className="absolute inset-0" 
+                        style={{
+                          backgroundImage: `url(${ilkYatirimImage})`,
                           backgroundSize: 'cover',
                           backgroundPosition: 'center',
                           backgroundRepeat: 'no-repeat',

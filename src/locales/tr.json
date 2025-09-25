@@ -3,7 +3,7 @@
     "welcome-bonus": {
       "alt": "Gudubet Hoşgeldin Bonusu 500 TL"
     },
-    "vip": {
+    "vipHero": {
       "special-advantages": "ÖZEL AVANTAJLAR",
       "become-vip": "VIP OL"
     },
@@ -53,7 +53,7 @@
       "channel": "KATIL",
       "subscribers": "+200K ABONE"
     },
-    "vip": {
+    "vipBanner": {
       "program": "VIP PROGRAM"
     },
     "live-casino": {
@@ -349,7 +349,7 @@
       "title": "Para Yatırma ve Çekme",
       "subtitle": "Hesap bakiyenizi yönetin"
     },
-    "vip": {
+    "vipSection": {
       "title": "VIP Programı",
       "subtitle": "VIP üyeler için özel avantajlar"
     },

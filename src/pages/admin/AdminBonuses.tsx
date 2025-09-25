@@ -11,6 +11,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { BonusFormModal } from '@/components/admin/BonusFormModal';
 import { useAdminBonusRequests, useApproveBonusRequest, useRejectBonusRequest } from '@/hooks/useBonusRequests';
+import { useAdminBonuses, useDeleteBonus } from '@/hooks/useBonuses';
 import { Plus, Edit, Trash2, Settings, Copy, Calendar, Users, Check, X, Gift, HandHeart, Coins, Trophy, CreditCard } from 'lucide-react';
 
 interface Bonus {
@@ -57,8 +58,6 @@ const STATUS_LABELS = {
 };
 
 const AdminBonuses = () => {
-  const [bonuses, setBonuses] = useState<Bonus[]>([]);
-  const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [editingBonus, setEditingBonus] = useState<Bonus | null>(null);
   const [activeTab, setActiveTab] = useState("bonuses");
@@ -68,6 +67,9 @@ const AdminBonuses = () => {
   const [rejectionReason, setRejectionReason] = useState("");
   const { toast } = useToast();
   
+  // React Query hooks
+  const { data: bonuses = [], isLoading: loading, error } = useAdminBonuses();
+  const deleteBonus = useDeleteBonus();
   const { data: pendingRequests, refetch: refetchRequests } = useAdminBonusRequests('pending');
   const approveRequest = useApproveBonusRequest();
   const rejectRequest = useRejectBonusRequest();
@@ -86,29 +88,16 @@ const AdminBonuses = () => {
     console.log('📊 Bekleyen bonus talepleri:', pendingRequests?.length || 0);
   }, [pendingRequests]);
 
+  // Error handling for React Query
   useEffect(() => {
-    loadBonuses();
-  }, []);
-
-  const loadBonuses = async () => {
-    try {
-      const { data, error } = await supabase
-        .from('bonuses_new')
-        .select('*')
-        .order('created_at', { ascending: false });
-
-      if (error) throw error;
-      setBonuses(data || []);
-    } catch (error) {
+    if (error) {
       toast({
         title: "Hata",
         description: "Bonuslar yüklenirken bir hata oluştu.",
         variant: "destructive"
       });
-    } finally {
-      setLoading(false);
     }
-  };
+  }, [error, toast]);
 
   const handleEdit = (bonus: Bonus) => {
     setEditingBonus(bonus);
@@ -123,14 +112,7 @@ const AdminBonuses = () => {
   const handleDelete = async (id: string) => {
     if (confirm('Bu bonusu silmek istediğinizden emin misiniz?')) {
       try {
-        const { error } = await supabase
-          .from('bonuses_new')
-          .delete()
-          .eq('id', id);
-
-        if (error) throw error;
-        
-        setBonuses(bonuses.filter(b => b.id !== id));
+        await deleteBonus.mutateAsync(id);
         toast({
           title: "Başarılı",
           description: "Bonus silindi.",
@@ -163,7 +145,7 @@ const AdminBonuses = () => {
   const handleModalSave = () => {
     setShowModal(false);
     setEditingBonus(null);
-    loadBonuses();
+    // React Query otomatik olarak cache'i güncelleyecek
   };
 
   const copyBonusCode = async (code: string) => {

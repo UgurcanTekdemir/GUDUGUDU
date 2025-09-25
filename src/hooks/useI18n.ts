@@ -52,16 +52,9 @@ export const I18nProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const t = useCallback((key: string, fallback?: string): string => {
     const current = getNestedValue(translations[currentLanguage], key);
+    
     if (typeof current === 'string' || typeof current === 'number') {
       return String(current);
-    }
-
-    // Fallback to English for missing Turkish keys or when found value is non-string
-    if (currentLanguage === 'tr') {
-      const en = getNestedValue(translations.en, key);
-      if (typeof en === 'string' || typeof en === 'number') {
-        return String(en);
-      }
     }
 
     return fallback !== undefined ? fallback : key;
