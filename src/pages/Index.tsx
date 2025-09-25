@@ -169,11 +169,12 @@ const Index = () => {
                       src={hosgeldinizBanner} 
                       alt="Hoşgeldiniz Banner" 
                       className="w-full h-full object-cover"
+                      loading="lazy"
+                      decoding="async"
                       style={{ 
                         imageRendering: 'crisp-edges',
                         objectPosition: 'center top'
                       }}
-                      loading="lazy"
                       onError={(e) => {
                         e.currentTarget.src = getPlaceholderImage(800, 400);
                       }}

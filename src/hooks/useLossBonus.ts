@@ -21,7 +21,7 @@ export const useLossBonus = (userId?: string) => {
       if (!userId) return null;
 
       const { data, error } = await supabase.functions.invoke('calculate-loss-bonus', {
-        body: { userId }
+        body: { user_id: userId }
       });
 
       if (error) {
@@ -40,7 +40,7 @@ export const useLossBonus = (userId?: string) => {
       if (!userId) throw new Error('User ID required');
 
       const { data, error } = await supabase.functions.invoke('claim-loss-bonus', {
-        body: { userId }
+        body: { user_id: userId }
       });
 
       if (error) throw error;
