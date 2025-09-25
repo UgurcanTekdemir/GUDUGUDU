@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Search, User, LogOut } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -17,6 +18,22 @@ interface AdminHeaderProps {
 
 const AdminHeader = ({ onLogout }: AdminHeaderProps) => {
   const [searchQuery, setSearchQuery] = useState('');
+  const navigate = useNavigate();
+
+  const handleProfileClick = () => {
+    // Ana sayfaya yeni sekmede açılacak şekilde yönlendir
+    window.open('/', '_blank');
+  };
+
+  const handleLogoutClick = async () => {
+    try {
+      await onLogout();
+      // Çıkış yaptıktan sonra ana sayfaya yönlendir
+      navigate('/');
+    } catch (error) {
+      console.error('Logout error:', error);
+    }
+  };
 
   return (
     <header className="h-16 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -56,11 +73,11 @@ const AdminHeader = ({ onLogout }: AdminHeaderProps) => {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-56">
-              <DropdownMenuItem>
+              <DropdownMenuItem onClick={handleProfileClick}>
                 <User className="mr-2 h-4 w-4" />
                 <span>Profil</span>
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={onLogout}>
+              <DropdownMenuItem onClick={handleLogoutClick}>
                 <LogOut className="mr-2 h-4 w-4" />
                 <span>Çıkış Yap</span>
               </DropdownMenuItem>

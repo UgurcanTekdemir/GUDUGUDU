@@ -46,6 +46,8 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
   const handleLogout = async () => {
     try {
       await supabase.auth.signOut();
+      // Çıkış yaptıktan sonra sayfayı yenile veya yönlendir
+      window.location.reload();
     } catch (error) {
       console.error('Logout error:', error);
     }
