@@ -149,11 +149,7 @@ export const useRealTimeAdminData = () => {
         .from('payments')
         .select(`
           *,
-          profiles:users (
-            first_name,
-            last_name,
-            email
-          )
+          user:users!inner (first_name,last_name,email)
         `)
         .eq('status', 'pending')
         .order('created_at', { ascending: false })
@@ -171,11 +167,7 @@ export const useRealTimeAdminData = () => {
         .from('withdrawals')
         .select(`
           *,
-          profiles:users (
-            first_name,
-            last_name,
-            email
-          )
+          user:users!inner (first_name,last_name,email)
         `)
         .eq('status', 'pending')
         .order('created_at', { ascending: false })
