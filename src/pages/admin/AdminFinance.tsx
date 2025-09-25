@@ -451,14 +451,15 @@ const AdminFinance = () => {
     const checkSuperAdmin = async () => {
       try {
         const { data: { session } } = await supabase.auth.getSession();
-        if (session?.user) {
+        if (session?.user?.email) {
           const { data } = await supabase
             .from('admins')
             .select('role_type')
-            .eq('id', session.user.id)
+            .eq('email', session.user.email)
             .single();
-          
           setIsSuperAdmin(data?.role_type === 'super_admin');
+        } else {
+          setIsSuperAdmin(false);
         }
       } catch (error) {
         console.error('Error checking super admin status:', error);

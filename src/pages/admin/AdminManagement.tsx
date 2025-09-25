@@ -91,14 +91,15 @@ const AdminManagement = () => {
     const checkSuperAdmin = async () => {
       try {
         const { data: { user } } = await supabase.auth.getUser();
-        if (user) {
+        if (user?.email) {
           const { data: adminData } = await supabase
             .from('admins')
             .select('role_type')
-            .eq('id', user.id)
+            .eq('email', user.email)
             .single();
-          
           setIsSuperAdmin(adminData?.role_type === 'super_admin');
+        } else {
+          setIsSuperAdmin(false);
         }
       } catch (error) {
         console.error('Error checking super admin status:', error);

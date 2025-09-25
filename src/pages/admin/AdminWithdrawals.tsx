@@ -119,7 +119,7 @@ export default function AdminWithdrawals() {
         const { data: admin } = await supabase
           .from("admins")
           .select("role_type")
-          .eq("id", user.id)
+          .eq("email", user.email)
           .single();
 
         setHasAccess(admin?.role_type === "super_admin" || admin?.role_type === "finance");
