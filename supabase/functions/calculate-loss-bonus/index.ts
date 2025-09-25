@@ -26,24 +26,39 @@ serve(async (req) => {
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     )
 
-    // Get request data - support both old format (userId) and new format (user_id)
-    const requestData = await req.json()
-    const user_id = requestData.user_id || requestData.userId
-    const { loss_amount, period_days = 30, should_grant = true }: LossBonusRequest = requestData
+    // Read Authorization header to identify auth user
+    const authHeader = req.headers.get('Authorization') || ''
+    const bearer = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : undefined
 
-    if (!user_id) {
-      return new Response(
-        JSON.stringify({ error: 'Kullanıcı ID gerekli' }),
-        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      )
+    // Get request data (optional body)
+    const requestData = await req.json().catch(() => ({}))
+    const requestedAuthUserId = requestData.user_id || requestData.userId
+    const { period_days = 30, should_grant = false }: LossBonusRequest = requestData
+
+    // Resolve auth user id: prefer body param, else decode token
+    let authUserId: string | undefined = requestedAuthUserId
+    if (!authUserId && bearer) {
+      const { data: userInfo } = await supabaseClient.auth.getUser(bearer)
+      authUserId = userInfo?.user?.id
+    }
+    if (!authUserId) {
+      return new Response(JSON.stringify({ error: 'Kullanıcı doğrulanamadı' }), { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } })
     }
 
     // Calculate user losses using the existing function
+    // Map auth user to public.users via auth_user_id
+    const { data: profile, error: profileError } = await supabaseClient
+      .from('users')
+      .select('id, auth_user_id, first_name, last_name, created_at, bonus_balance')
+      .eq('auth_user_id', authUserId)
+      .single()
+
+    if (profileError || !profile) {
+      return new Response(JSON.stringify({ success: false, totalLoss: 0, isEligible: false, bonusAmount: 0 }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } })
+    }
+
     const { data: totalLosses, error: lossError } = await supabaseClient
-      .rpc('calculate_user_losses', {
-        p_user_id: user_id,
-        p_days: period_days
-      })
+      .rpc('calculate_user_losses', { p_user_id: profile.id, p_days: period_days })
 
     if (lossError) {
       console.error('Loss calculation error:', lossError)
@@ -67,20 +82,7 @@ serve(async (req) => {
       )
     }
 
-    // Get user profile for bonus calculation (users table)
-    const { data: profile, error: profileError } = await supabaseClient
-      .from('users')
-      .select('id, first_name, last_name, created_at, bonus_balance')
-      .eq('id', user_id)
-      .single()
-
-    if (profileError || !profile) {
-      console.error('Profile error:', profileError)
-      return new Response(
-        JSON.stringify({ error: 'Kullanıcı profili bulunamadı' }),
-        { status: 404, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      )
-    }
+    // profile already fetched above
 
     // Optional: skip duplicate within last 7 days if you store somewhere; if not, continue
     let recentBonus: any[] = []
@@ -123,7 +125,7 @@ serve(async (req) => {
 
     // Only grant bonus if losses are significant enough
     if (bonus_percentage === 0 || totalLosses < 500) {
-      console.log(`User ${user_id} losses (${totalLosses}) not significant enough for bonus`)
+      console.log(`User ${profile.id} losses (${totalLosses}) not significant enough for bonus`)
       return new Response(
         JSON.stringify({ 
           success: false, 
@@ -164,7 +166,7 @@ serve(async (req) => {
     const { error: balanceUpdateError } = await supabaseClient
       .from('users')
       .update({ bonus_balance: newBonusBalance })
-      .eq('id', user_id)
+      .eq('id', profile.id)
     if (balanceUpdateError) {
       console.error('Bonus balance update error:', balanceUpdateError)
     }
@@ -176,7 +178,7 @@ serve(async (req) => {
     await supabaseClient
       .from('bonus_events')
       .insert({
-        user_id: user_id,
+        user_id: profile.id,
         type: 'loss_bonus_claimed',
         payload: {
           bonus_amount: bonus_amount,
@@ -190,18 +192,18 @@ serve(async (req) => {
     await supabaseClient
       .from('user_behavior_logs')
       .insert({
-        user_id: user_id,
+        user_id: profile.id,
         action_type: 'loss_bonus_granted',
         metadata: {
           bonus_amount: bonus_amount,
           total_losses: totalLosses,
           bonus_percentage: bonus_percentage,
-          bonus_request_id: bonusRequest.id
+          bonus_request_id: null
         },
         amount: bonus_amount
       })
 
-    console.log(`Loss bonus granted: ${bonus_amount} to user ${user_id} for losses: ${totalLosses}`)
+    console.log(`Loss bonus granted: ${bonus_amount} to user ${profile.id} for losses: ${totalLosses}`)
 
     return new Response(
       JSON.stringify({
@@ -210,7 +212,7 @@ serve(async (req) => {
         isEligible: true,
         bonusAmount: bonus_amount,
         bonus_percentage: bonus_percentage,
-        bonus_request_id: bonusRequest.id,
+        bonus_request_id: null,
         message: `Tebrikler! ${bonus_percentage}% cashback bonusu hesabınıza yatırıldı (₺${bonus_amount})`,
         lastClaimDate: new Date().toISOString()
       }),
