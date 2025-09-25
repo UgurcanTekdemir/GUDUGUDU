@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 import AdminSidebar from '@/components/admin/AdminSidebar';
 import AdminHeader from '@/components/admin/AdminHeader';
 import { supabase } from '@/integrations/supabase/client';
-import { useAdminAccess } from '@/hooks/useAdminAccess';
+import { Shield } from 'lucide-react';
 
 interface AdminLayoutProps {
   children?: React.ReactNode;
@@ -11,31 +11,43 @@ interface AdminLayoutProps {
 
 const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
-  const [user, setUser] = useState<any>(null);
-  const navigate = useNavigate();
-  const { isAdmin, loading } = useAdminAccess(user);
+  const [loading, setLoading] = useState(true);
+  const [isAdmin, setIsAdmin] = useState<boolean>(false);
+  const [userEmail, setUserEmail] = useState<string | null>(null);
 
   useEffect(() => {
-    const getUser = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      setUser(user);
+    const checkAdmin = async () => {
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user?.email) {
+          setIsAdmin(false);
+          setUserEmail(null);
+          setLoading(false);
+          return;
+        }
+        setUserEmail(user.email);
+        const { data } = await supabase
+          .from('admins')
+          .select('role_type')
+          .eq('email', user.email)
+          .single();
+        setIsAdmin(data?.role_type === 'super_admin' || !!data);
+      } catch (e) {
+        setIsAdmin(false);
+      } finally {
+        setLoading(false);
+      }
     };
-    getUser();
+    checkAdmin();
   }, []);
 
-  useEffect(() => {
-    if (!loading && !isAdmin) {
-      navigate('/');
-    }
-  }, [isAdmin, loading, navigate]);
+  // Removed silent redirects to avoid invisible failures
 
   const handleLogout = async () => {
     try {
       await supabase.auth.signOut();
-      navigate('/');
     } catch (error) {
       console.error('Logout error:', error);
-      navigate('/');
     }
   };
 
@@ -52,10 +64,22 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
     );
   }
 
-  // Redirect if not admin (temporarily disabled for testing)
-  // if (!isAdmin) {
-  //   return null;
-  // }
+  if (!isAdmin) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center space-y-4">
+          <Shield className="w-16 h-16 text-red-500 mx-auto" />
+          <h2 className="text-2xl font-bold text-red-600">Erişim Reddedildi</h2>
+          <p className="text-muted-foreground">
+            Bu sayfaya erişim için admin yetkisi gereklidir.
+          </p>
+          {userEmail && (
+            <p className="text-xs text-muted-foreground">Giriş: {userEmail}</p>
+          )}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="h-screen flex bg-background">

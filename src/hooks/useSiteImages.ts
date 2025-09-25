@@ -79,7 +79,7 @@ export const useSiteImageByCategory = (category: string) => {
         .eq('category', category)
         .order('created_at', { ascending: false })
         .limit(1)
-        .single();
+        .maybeSingle();
 
       if (error) {
         // If no image found, return null instead of throwing error
