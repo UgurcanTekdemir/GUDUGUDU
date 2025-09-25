@@ -145,17 +145,40 @@ export const useRealTimeAdminData = () => {
 
   const fetchPendingDeposits = async () => {
     try {
-      const { data } = await supabase
+      // Step 1: fetch payments
+      const { data: rows, error } = await supabase
         .from('payments')
-        .select(`
-          *,
-          user:users!inner (first_name,last_name,email)
-        `)
+        .select('*')
         .eq('status', 'pending')
         .order('created_at', { ascending: false })
         .limit(10);
+      if (error) throw error;
 
-      setPendingDeposits(data || []);
+      // Step 2: fetch users for those payments
+      const userIds = [...new Set((rows || []).map(r => r.user_id).filter(Boolean))];
+      let usersMap: Record<string, any> = {};
+      if (userIds.length) {
+        const { data: users } = await supabase
+          .from('users')
+          .select('id, first_name, last_name, email')
+          .in('id', userIds);
+        usersMap = (users || []).reduce((acc: Record<string, any>, u: any) => {
+          acc[u.id] = u; return acc;
+        }, {});
+      }
+
+      const combined = (rows || []).map(r => ({
+        ...r,
+        profiles: usersMap[r.user_id]
+          ? {
+              first_name: usersMap[r.user_id].first_name,
+              last_name: usersMap[r.user_id].last_name,
+              email: usersMap[r.user_id].email,
+            }
+          : null,
+      }));
+
+      setPendingDeposits(combined);
     } catch (error) {
       console.error('Error fetching pending deposits:', error);
     }
@@ -163,17 +186,40 @@ export const useRealTimeAdminData = () => {
 
   const fetchPendingWithdrawals = async () => {
     try {
-      const { data } = await supabase
+      // Step 1: fetch withdrawals
+      const { data: rows, error } = await supabase
         .from('withdrawals')
-        .select(`
-          *,
-          user:users!inner (first_name,last_name,email)
-        `)
+        .select('*')
         .eq('status', 'pending')
         .order('created_at', { ascending: false })
         .limit(10);
+      if (error) throw error;
 
-      setPendingWithdrawals(data || []);
+      // Step 2: fetch users
+      const userIds = [...new Set((rows || []).map(r => r.user_id).filter(Boolean))];
+      let usersMap: Record<string, any> = {};
+      if (userIds.length) {
+        const { data: users } = await supabase
+          .from('users')
+          .select('id, first_name, last_name, email')
+          .in('id', userIds);
+        usersMap = (users || []).reduce((acc: Record<string, any>, u: any) => {
+          acc[u.id] = u; return acc;
+        }, {});
+      }
+
+      const combined = (rows || []).map(r => ({
+        ...r,
+        profiles: usersMap[r.user_id]
+          ? {
+              first_name: usersMap[r.user_id].first_name,
+              last_name: usersMap[r.user_id].last_name,
+              email: usersMap[r.user_id].email,
+            }
+          : null,
+      }));
+
+      setPendingWithdrawals(combined);
     } catch (error) {
       console.error('Error fetching pending withdrawals:', error);
     }
