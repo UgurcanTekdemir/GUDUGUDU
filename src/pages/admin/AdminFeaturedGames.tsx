@@ -29,16 +29,25 @@ const AdminFeaturedGames = () => {
     setUpdating(prev => [...prev, gameId]);
     
     try {
-      const { error } = await supabase
+      console.log('Updating game status:', { gameId, field, value });
+      
+      const { data, error } = await supabase
         .from('casino_games')
         .update({ [field]: value })
-        .eq('id', gameId);
+        .eq('id', gameId)
+        .select();
 
-      if (error) throw error;
+      console.log('Update result:', { data, error });
+
+      if (error) {
+        console.error('Supabase error:', error);
+        throw error;
+      }
       
       toast.success(`Oyun başarıyla ${value ? 'eklendi' : 'kaldırıldı'}`);
       await loadGames(); // Reload games to get updated data
     } catch (error: any) {
+      console.error('Update error:', error);
       toast.error('İşlem sırasında hata oluştu: ' + error.message);
     } finally {
       setUpdating(prev => prev.filter(id => id !== gameId));
