@@ -77,24 +77,7 @@ const AdminFinance = () => {
         `)
         .order('created_at', { ascending: false });
 
-      // Fetch new deposits from deposits table
-      let depositsQuery = supabase
-        .from('deposits')
-        .select(`
-          id,
-          user_id,
-          amount,
-          status,
-          user_account_name,
-          created_at,
-          reviewed_at,
-          bank_accounts!inner (
-            bank_name,
-            account_holder_name,
-            iban
-          )
-        `)
-        .order('created_at', { ascending: false });
+      // No separate deposits table anymore
 
       // Fetch withdrawals - join with profiles  
       let withdrawalsQuery = supabase
@@ -115,53 +98,44 @@ const AdminFinance = () => {
       
       if (statusFilter) {
         paymentsQuery = paymentsQuery.eq('status', statusFilter);
-        depositsQuery = depositsQuery.eq('status', statusFilter);
+        // depositsQuery removed
         withdrawalsQuery = withdrawalsQuery.eq('status', statusFilter);
       }
       
       if (dateFrom) {
         paymentsQuery = paymentsQuery.gte('created_at', dateFrom.toISOString());
-        depositsQuery = depositsQuery.gte('created_at', dateFrom.toISOString());
+        // depositsQuery removed
         withdrawalsQuery = withdrawalsQuery.gte('created_at', dateFrom.toISOString());
       }
       
       if (dateTo) {
         paymentsQuery = paymentsQuery.lte('created_at', dateTo.toISOString());
-        depositsQuery = depositsQuery.lte('created_at', dateTo.toISOString());
+        // depositsQuery removed
         withdrawalsQuery = withdrawalsQuery.lte('created_at', dateTo.toISOString());
       }
 
       // Execute queries
-      const [paymentsResult, depositsResult, withdrawalsResult] = await Promise.all([
+      const [paymentsResult, withdrawalsResult] = await Promise.all([
         paymentsQuery,
-        depositsQuery,
         withdrawalsQuery
       ]);
 
       if (paymentsResult.error) throw paymentsResult.error;
-      if (depositsResult.error) throw depositsResult.error;
       if (withdrawalsResult.error) throw withdrawalsResult.error;
 
       // Get unique user IDs from all datasets
       const paymentsUserIds = (paymentsResult.data || []).map((p: any) => p.user_id);
-      const depositsUserIds = (depositsResult.data || []).map((d: any) => d.user_id);
       const withdrawalsUserIds = (withdrawalsResult.data || []).map((w: any) => w.user_id);
-      const allUserIds = [...new Set([...paymentsUserIds, ...depositsUserIds, ...withdrawalsUserIds])];
+      const allUserIds = [...new Set([...paymentsUserIds, ...withdrawalsUserIds])];
 
       // Fetch user profiles for all transactions
       let profilesData: any[] = [];
       if (allUserIds.length > 0) {
-        const { data: profiles } = await supabase
-          .from('profiles')
-          .select(`
-            id,
-            user_id,
-            first_name,
-            last_name,
-            email
-          `)
+        const { data: users } = await supabase
+          .from('users')
+          .select('id, first_name, last_name, email')
           .in('id', allUserIds);
-        profilesData = profiles || [];
+        profilesData = users || [];
       }
 
       // Create a map for quick lookup
@@ -182,33 +156,6 @@ const AdminFinance = () => {
           payment_method: payment.payment_method,
           created_at: payment.created_at,
           processed_at: payment.processed_at,
-          profiles: userProfile ? {
-            id: userProfile.id,
-            username: userProfile.email?.split('@')[0] || 'Unknown',
-            email: userProfile.email || '',
-            first_name: userProfile.first_name || '',
-            last_name: userProfile.last_name || ''
-          } : null
-        };
-      });
-
-      const deposits: Transaction[] = (depositsResult.data || []).map((deposit: any) => {
-        const userProfile = profilesMap[deposit.user_id];
-        return {
-          id: deposit.id,
-          user_id: deposit.user_id,
-          type: 'deposit' as const,
-          amount: deposit.amount,
-          status: deposit.status,
-          payment_method: `Bank Transfer (${deposit.bank_accounts?.bank_name})`,
-          account_details: {
-            user_account_name: deposit.user_account_name,
-            bank_name: deposit.bank_accounts?.bank_name,
-            account_holder_name: deposit.bank_accounts?.account_holder_name,
-            iban: deposit.bank_accounts?.iban
-          },
-          created_at: deposit.created_at,
-          processed_at: deposit.reviewed_at,
           profiles: userProfile ? {
             id: userProfile.id,
             username: userProfile.email?.split('@')[0] || 'Unknown',
@@ -242,7 +189,7 @@ const AdminFinance = () => {
       });
 
       // Combine and sort by date
-      const allTransactions = [...payments, ...deposits, ...withdrawals];
+      const allTransactions = [...payments, ...withdrawals];
       
       // Apply search filter on combined data
       let filteredTransactions = allTransactions;
@@ -288,13 +235,6 @@ const AdminFinance = () => {
         .gte('created_at', today.toISOString())
         .lt('created_at', tomorrow.toISOString());
 
-      // Get daily deposits (new deposits)
-      const { data: dailyDeposits } = await supabase
-        .from('deposits')
-        .select('amount, status')
-        .gte('created_at', today.toISOString())
-        .lt('created_at', tomorrow.toISOString());
-
       // Get daily withdrawals
       const { data: dailyWithdrawals } = await supabase
         .from('withdrawals')
@@ -307,11 +247,6 @@ const AdminFinance = () => {
         .from('payments')
         .select('status');
 
-      // Get all deposits status counts
-      const { data: depositsStatusCounts } = await supabase
-        .from('deposits')
-        .select('status');
-
       // Get all withdrawals status counts
       const { data: withdrawalsStatusCounts } = await supabase
         .from('withdrawals')
@@ -321,17 +256,12 @@ const AdminFinance = () => {
         ?.filter(t => t.status === 'completed')
         .reduce((sum, t) => sum + Number(t.amount), 0) || 0;
 
-      const dailyDepositsSum = dailyDeposits
-        ?.filter(t => t.status === 'confirmed')
-        .reduce((sum, t) => sum + Number(t.amount), 0) || 0;
-
       const dailyWithdrawalsSum = dailyWithdrawals
         ?.filter(t => t.status === 'approved')
         .reduce((sum, t) => sum + Number(t.amount), 0) || 0;
 
       // Count pending, approved, and rejected across all tables
       const paymentsPending = paymentsStatusCounts?.filter(t => t.status === 'pending').length || 0;
-      const depositsPending = depositsStatusCounts?.filter(t => t.status === 'pending').length || 0;
       const withdrawalsPending = withdrawalsStatusCounts?.filter(t => t.status === 'pending').length || 0;
       
       const paymentsApproved = paymentsStatusCounts?.filter(t => t.status === 'completed').length || 0;
@@ -341,9 +271,9 @@ const AdminFinance = () => {
       const withdrawalsRejected = withdrawalsStatusCounts?.filter(t => t.status === 'rejected').length || 0;
 
       return {
-        dailyDeposits: dailyPaymentsSum + dailyDepositsSum,
+        dailyDeposits: dailyPaymentsSum,
         dailyWithdrawals: dailyWithdrawalsSum,
-        pendingCount: paymentsPending + depositsPending + withdrawalsPending,
+        pendingCount: paymentsPending + withdrawalsPending,
         approvedCount: paymentsApproved + withdrawalsApproved,
         rejectedCount: paymentsRejected + withdrawalsRejected,
       } as DashboardStats;

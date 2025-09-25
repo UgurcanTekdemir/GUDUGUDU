@@ -26,14 +26,14 @@ const RecentActivityCard = () => {
     try {
       // Get recent user registrations
       const { data: newUsers } = await supabase
-        .from('profiles')
+        .from('users')
         .select('id, first_name, last_name, created_at')
         .order('created_at', { ascending: false })
         .limit(10);
 
       // Get recent deposits (from deposits table)
       const { data: deposits } = await supabase
-        .from('deposits')
+        .from('payments')
         .select('id, amount, created_at, user_id, status')
         .order('created_at', { ascending: false })
         .limit(10);
@@ -68,7 +68,7 @@ const RecentActivityCard = () => {
 
       // Get user profiles
       const { data: userProfiles } = await supabase
-        .from('profiles')
+        .from('users')
         .select('id, first_name, last_name')
         .in('id', Array.from(userIds));
 
@@ -176,32 +176,32 @@ const RecentActivityCard = () => {
   };
 
   const setupRealtimeSubscription = () => {
-    // Subscribe to profiles (new users)
+    // Subscribe to users (new users)
     const profilesChannel = supabase
-      .channel('profiles_changes')
+      .channel('users_changes')
       .on('postgres_changes', { 
         event: 'INSERT', 
         schema: 'public', 
-        table: 'profiles' 
+        table: 'users' 
       }, () => {
         loadActivities();
       })
       .subscribe();
 
-    // Subscribe to deposits
+    // Subscribe to payments
     const depositsChannel = supabase
-      .channel('deposits_changes')
+      .channel('payments_changes')
       .on('postgres_changes', { 
         event: 'INSERT', 
         schema: 'public', 
-        table: 'deposits' 
+        table: 'payments' 
       }, () => {
         loadActivities();
       })
       .on('postgres_changes', { 
         event: 'UPDATE', 
         schema: 'public', 
-        table: 'deposits' 
+        table: 'payments' 
       }, () => {
         loadActivities();
       })

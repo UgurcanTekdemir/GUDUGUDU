@@ -39,9 +39,9 @@ export const useRealTimeAdminData = () => {
   // Fetch initial data
   const fetchStats = async () => {
     try {
-      // Get pending deposits count
+      // Get pending deposits count (payments)
       const { count: depositsCount } = await supabase
-        .from('deposits')
+        .from('payments')
         .select('*', { count: 'exact', head: true })
         .eq('status', 'pending');
 
@@ -60,15 +60,15 @@ export const useRealTimeAdminData = () => {
       // Get new users today
       const today = new Date().toISOString().split('T')[0];
       const { count: newUsersCount } = await supabase
-        .from('profiles')
+        .from('users')
         .select('*', { count: 'exact', head: true })
         .gte('created_at', today + 'T00:00:00.000Z');
 
       // Get today's confirmed deposits sum
       const { data: revenueData } = await supabase
-        .from('deposits')
+        .from('payments')
         .select('amount')
-        .eq('status', 'confirmed')
+        .eq('status', 'completed')
         .gte('created_at', today + 'T00:00:00.000Z');
 
       const totalRevenue = revenueData?.reduce((sum, dep) => sum + (dep.amount || 0), 0) || 0;
@@ -146,10 +146,10 @@ export const useRealTimeAdminData = () => {
   const fetchPendingDeposits = async () => {
     try {
       const { data } = await supabase
-        .from('deposits')
+        .from('payments')
         .select(`
           *,
-          profiles:user_id (
+          profiles:users (
             first_name,
             last_name,
             email
@@ -171,7 +171,7 @@ export const useRealTimeAdminData = () => {
         .from('withdrawals')
         .select(`
           *,
-          profiles:user_id (
+          profiles:users (
             first_name,
             last_name,
             email
@@ -203,13 +203,13 @@ export const useRealTimeAdminData = () => {
 
     // Set up real-time subscriptions
     const depositChannel = supabase
-      .channel('deposits_changes')
+      .channel('payments_changes')
       .on(
         'postgres_changes',
         {
           event: '*',
           schema: 'public',
-          table: 'deposits'
+          table: 'payments'
         },
         () => {
           fetchStats();

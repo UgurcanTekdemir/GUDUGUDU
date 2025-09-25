@@ -23,11 +23,8 @@ export function useMyDeposits() {
       if (!user) return [];
 
       const { data, error } = await supabase
-        .from('deposits')
-        .select(`
-          *,
-          bank_accounts(bank_name, account_holder_name, iban)
-        `)
+        .from('payments')
+        .select('*')
         .eq('user_id', user.id)
         .order('created_at', { ascending: false });
       
