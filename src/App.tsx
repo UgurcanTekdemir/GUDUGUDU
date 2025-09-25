@@ -72,6 +72,7 @@ import AdminAuditTrail from "./pages/admin/AdminAuditTrail";
 import AdminAuditReports from "./pages/admin/AdminAuditReports";
 import AdminSecurityAudit from "./pages/admin/AdminSecurityAudit";
 import AdminDataRetention from "./pages/admin/AdminDataRetention";
+import AdminTest from "./pages/admin/AdminTest";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -159,6 +160,7 @@ const App = () => {
             <Route path="audit-reports" element={<AdminAuditReports />} />
             <Route path="security-audit" element={<AdminSecurityAudit />} />
             <Route path="data-retention" element={<AdminDataRetention />} />
+            <Route path="test" element={<AdminTest />} />
           </Route>
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
